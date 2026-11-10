@@ -2,7 +2,7 @@
 import { el } from '../dom.js';
 import { JAAR_MIN, JAAR_MAX, NU, AANBODJAREN, VRAAGJAREN, isDatapunt } from '../model.js';
 import { AFSPEEL_MS, RESERVE_FACTOR } from '../config.js';
-import { attachTip, showTip, moveTip, hideTip, tipSleutel, f1, kv } from './tooltip.js';
+import { attachTip, showTip, moveTip, hideTip, tipSleutel, esc, f1, kv } from './tooltip.js';
 
 const $ = (s) => document.querySelector(s);
 const JAREN = Array.from({ length: JAAR_MAX - JAAR_MIN + 1 }, (_, i) => JAAR_MIN + i);
@@ -149,7 +149,7 @@ const lkey = (stroke, w, dash) => `<svg width="18" height="6"><line x1="1" y1="3
 function chartTip(t) {
   const c = app.zicht(t), sh = app.state.show, dp = isDatapunt(t);
   const soort = (echt) => (echt ? '' : ' <i style="color:var(--muted);font-style:normal">(geïnterpoleerd)</i>');
-  let h = `<div class="th">${t} · ${t <= NU ? 'huidig' : 'projectie'}${app.state.cluster ? ' · ' + app.clusterNaam() : ''}</div>`;
+  let h = `<div class="th">${t} · ${t <= NU ? 'huidig' : 'projectie'}${app.state.cluster ? ' · ' + esc(app.clusterNaam()) : ''}</div>`;
   if (sh.vraag) h += `<div class="tr">${lkey('#4AA8E0', 3)}<b>${f1(c.vraag)}</b><span>Vraag${soort(dp.vraag)}</span></div>`;
   if (sh.aanbod) h += `<div class="tr">${lkey('#0E3150', 3.5)}<b>${f1(c.aanbod)}</b><span>Aanbod${soort(dp.aanbod)}</span></div>`;
   if (sh.zonder) h += `<div class="tr">${lkey('#7F93A6', 1.7, '1.5 3.5')}<b>${f1(c.aanbod0)}</b><span>Zonder maatregelen</span></div>`;
@@ -232,7 +232,7 @@ export function bouw(a) {
   hit.addEventListener('click', (ev) => { speel(false); app.kies({ jaar: jaarVanEvent(ev) }); });
   attachTip($('#bar'), () => {
     const c = app.zicht(app.state.jaar);
-    return `<div class="th">Invulling drinkwateropgave ${c.jaar}${app.state.cluster ? ' · ' + app.clusterNaam() : ''}</div>`
+    return `<div class="th">Invulling drinkwateropgave ${c.jaar}${app.state.cluster ? ' · ' + esc(app.clusterNaam()) : ''}</div>`
       + '<div class="tm">Opgave = vraag zonder besparing − aanbod zonder maatregelen. Gedekt = bijdrage maatregelen ÷ opgave.</div>'
       + kv('Vraag zonder besparing', f1(c.vraag0)) + kv('Aanbod zonder maatregelen', f1(c.aanbod0))
       + kv('Opgave', f1(c.opgave)) + kv('Besparing (vraag)', f1(c.besparing)) + kv('Extra aanbod', f1(c.levering)) + kv('Tekort', f1(c.tekort));
