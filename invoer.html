@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Invoer – Visualisatie tool DWR</title>
+<link rel="stylesheet" href="css/invoer.css">
+</head>
+<body>
+<header id="kop">
+  <div class="titel">
+    <h1><span class="accent">Invoer |</span> Basisdata en maatregelen</h1>
+    <div class="sub">Visualisatie tool DWR · data blijft in deze browser (geen server)</div>
+  </div>
+  <div class="dataset">
+    <label for="dsNaam">Dataset</label>
+    <input id="dsNaam" type="text" maxlength="60" aria-describedby="dsInfo">
+    <span id="dsInfo" class="klein"></span>
+  </div>
+</header>
+
+<div id="werkbalk" role="toolbar" aria-label="Import en export">
+  <button class="knop pri" id="btnImport" type="button" title="Importeer een dataset (.xlsx of .json) of een maatregelen-bestand (.xlsx met alleen het tabblad Maatregelen)">Importeren…</button>
+  <span class="scheiding"></span>
+  <span class="groeplabel">Download huidige data</span>
+  <button class="knop" id="btnXlsx" type="button">.xlsx</button>
+  <button class="knop" id="btnJson" type="button">.json</button>
+  <span class="scheiding"></span>
+  <button class="knop" id="btnTemplate" type="button" title="Leeg Excel-bestand met één tabblad per tabel en een tabblad Uitleg">Download leeg template (.xlsx)</button>
+  <span class="scheiding"></span>
+  <button class="knop" id="btnTotalen" type="button" title="Aantal winningen en maatregelen en het totale aanbod per narratief en peiljaar, om te vergelijken met de Excel">Controletotalen</button>
+  <span class="rek"></span>
+  <span id="status" class="klein" role="status" aria-live="polite"></span>
+  <button class="knop gevaar" id="btnWis" type="button" title="Verwijder de dataset uit deze browser">Alles wissen</button>
+  <input id="bestand" type="file" accept=".xlsx,.json" hidden>
+</div>
+
+<nav id="tabs" role="tablist" aria-label="Tabellen"></nav>
+
+<main>
+  <section id="paneel" aria-live="off"></section>
+  <aside id="validatie" aria-label="Validatie">
+    <div class="vkop">
+      <h2>Validatie</h2>
+      <div id="vTelling"></div>
+    </div>
+    <div class="vfilter" role="group" aria-label="Filter">
+      <button class="chip" data-f="alle" aria-pressed="true" type="button">Alle</button>
+      <button class="chip" data-f="fout" aria-pressed="false" type="button">Blokkerend</button>
+      <button class="chip" data-f="waarschuwing" aria-pressed="false" type="button">Waarschuwing</button>
+      <button class="chip" data-f="tab" aria-pressed="false" type="button">Deze tabel</button>
+    </div>
+    <ul id="vLijst"></ul>
+  </aside>
+</main>
+
+<dialog id="dlg" aria-labelledby="dlgTitel">
+  <h2 id="dlgTitel"></h2>
+  <div id="dlgInhoud"></div>
+  <form method="dialog" class="dlgknoppen"><button class="knop pri" value="ok">Sluiten</button></form>
+</dialog>
+
+<script src="vendor/xlsx.full.min.js"></script>
+<script type="module" src="js/invoer.js"></script>
+</body>
+</html>

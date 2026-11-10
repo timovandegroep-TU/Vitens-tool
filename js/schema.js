@@ -248,6 +248,165 @@ export function valideerMaatregel(m, ctx) {
   return uit;
 }
 
+// ------------------------------------------------------------------ tabellen
+// Eén definitie per basistabel: naam van het tabblad (Excel + invoerpagina) en per
+// kolom het type en de uitlegtekst. Types: tekst | getal | geheel | janee | keuze | ref.
+// `ref` verwijst naar een andere tabel (keuzelijst wordt daaruit opgebouwd).
+
+export const TABELLEN = [
+  {
+    id: 'narratieven', blad: 'Narratieven', sleutel: 'id', vast: true,
+    uitleg: 'De vier narratieven. Elk narratief heeft eigen reductiefactoren en een eigen vraagontwikkeling.',
+    kolommen: [
+      { veld: 'id', label: 'Id', type: 'geheel', uitleg: 'Nummer van het narratief (1–4). Niet wijzigen.' },
+      { veld: 'naam', label: 'Naam', type: 'tekst', uitleg: 'Ruim in conflict / Stoom in conflict / Ruim in harmonie / Stoom in harmonie.' },
+      { veld: 'deltascenario', label: 'Vraag-deltascenario', type: 'tekst', uitleg: 'Deltascenario waarop de vraagprognose is gebaseerd (werkdocument: "Vraag - Deltascenario").' },
+      { veld: 'lpppd_doel', label: 'lpppd-doel', type: 'getal', uitleg: 'Doel voor het huishoudelijk verbruik in liter per persoon per dag in 2040 (werkdocument: "lpppd target").' },
+      { veld: 'toelichting', label: 'Toelichting', type: 'tekst', uitleg: 'Korte toelichting; verschijnt bij de narratiefkeuze in de visualisatie.' },
+    ],
+  },
+  {
+    id: 'clusters', blad: 'Clusters', sleutel: 'id',
+    uitleg: 'Vitens-clusters. Aanbod, vraag en opgave worden per cluster berekend.',
+    kolommen: [
+      { veld: 'id', label: 'Id', type: 'tekst', uitleg: 'Vast id (kleine letters, cijfers, streepjes). Andere tabellen verwijzen hiernaar.' },
+      { veld: 'naam', label: 'Weergavenaam', type: 'tekst', uitleg: 'Naam zoals getoond in de tool.' },
+    ],
+  },
+  {
+    id: 'gemeenten', blad: 'Gemeenten', sleutel: 'gemeente',
+    uitleg: 'Koppeltabel gemeente → cluster. Hiermee bepaalt de tool het cluster van een maatregel. Eén cluster per gemeente.',
+    kolommen: [
+      { veld: 'gemeente', label: 'Gemeente', type: 'tekst', uitleg: 'Naam van de gemeente.' },
+      { veld: 'cluster', label: 'Cluster', type: 'ref', ref: 'clusters', uitleg: 'Cluster waar de gemeente onder valt.' },
+      { veld: 'lat', label: 'Lat', type: 'getal', uitleg: 'Breedtegraad van het middelpunt (WGS84), alleen voor de kaart.' },
+      { veld: 'lon', label: 'Lon', type: 'getal', uitleg: 'Lengtegraad van het middelpunt (WGS84), alleen voor de kaart.' },
+      { veld: 'te_controleren', label: 'Te controleren', type: 'janee', uitleg: 'Ja zolang cluster of coördinaten nog niet door een deskundige zijn bevestigd.' },
+    ],
+  },
+  {
+    id: 'criteria', blad: 'Criteria', sleutel: 'id',
+    uitleg: 'Criteria waarop de capaciteit van een winning kan afnemen. Het slechtste criterium bepaalt de reductiefactor (minimum, niet vermenigvuldigd).',
+    kolommen: [
+      { veld: 'id', label: 'Id', type: 'tekst', uitleg: 'Vast id. De volgorde van deze tabel is de volgorde van de kolomgroepen in de reductiefactoren.' },
+      { veld: 'naam', label: 'Naam', type: 'tekst', uitleg: 'Korte naam, getoond als bindend criterium.' },
+      { veld: 'groep', label: 'Groep', type: 'keuze', keuzes: KEUZES.groep, uitleg: 'Assets / Grondwaterkwantiteit / Grondwaterkwaliteit / Oppervlaktewaterkwaliteit.' },
+      { veld: 'toelichting', label: 'Toelichting', type: 'tekst', uitleg: 'Koptekst uit het werkdocument.' },
+    ],
+  },
+  {
+    id: 'winningen', blad: 'Winningen', sleutel: 'id',
+    uitleg: 'Bestaande winningen. Het model rekent met de inzetbare productiecapaciteit; "huidig" (2026) = capaciteit.',
+    kolommen: [
+      { veld: 'id', label: 'Id', type: 'tekst', uitleg: 'Uniek id. Let op: "Fledite ROL" komt twee keer voor met een verschillend cluster.' },
+      { veld: 'locatie', label: 'Locatie', type: 'tekst', uitleg: 'Naam van de winning (werkdocument kolom A).' },
+      { veld: 'gemeente', label: 'Gemeente', type: 'ref', ref: 'gemeenten', uitleg: 'Gemeente waarin de winning ligt. Staat niet in het werkdocument; initieel benaderd.' },
+      { veld: 'type', label: 'Type', type: 'tekst', uitleg: 'Werkdocument kolom B.' },
+      { veld: 'cluster', label: 'Cluster', type: 'ref', ref: 'clusters', uitleg: 'Vitens Cluster (gebruik): het cluster dat het water gebruikt (werkdocument kolom C).' },
+      { veld: 'watersysteem', label: 'Watersysteem', type: 'tekst', uitleg: 'Watersysteem van de winning: Flanken / Heuvelrug / Polder / Riviergebied (kolom D).' },
+      { veld: 'vergunning', label: 'Vergunning', type: 'getal', eenheid: 'Mm³/j', uitleg: 'Inzetbare vergunning: vergunning minus bestuurlijke beperkingen (kolom E "Huidig aanbod").' },
+      { veld: 'niet_inzetbaar', label: 'Niet inzetbaar', type: 'getal', eenheid: 'Mm³/j', uitleg: 'Aftrek op de vergunning die in het werkdocument in de formule van kolom F zit (bv. Bilthoven 0,8). Alleen ter documentatie.' },
+      { veld: 'capaciteit', label: 'Inzetbare productiecapaciteit', type: 'getal', eenheid: 'Mm³/j', uitleg: 'Hiermee rekent het model (kolom F). Aanbod = capaciteit × reductiefactor.' },
+      { veld: 'lat', label: 'Lat', type: 'getal', uitleg: 'Breedtegraad (WGS84) voor de kaart.' },
+      { veld: 'lon', label: 'Lon', type: 'getal', uitleg: 'Lengtegraad (WGS84) voor de kaart.' },
+      { veld: 'te_controleren', label: 'Te controleren', type: 'janee', uitleg: 'Ja zolang gemeente en coördinaten benaderd zijn.' },
+      { veld: 'toelichting', label: 'Toelichting', type: 'tekst', uitleg: 'Vrije toelichting.' },
+    ],
+  },
+];
+
+export const UITLEG_REDUCTIEFACTOREN = 'Per narratief: rijen = winningen, kolomgroepen = criteria × 2030 / 2040 / 2050, zelfde indeling als kolommen H–AP van "Naratief N - winningen". Waarde tussen 0 en 1: het deel van de capaciteit dat overblijft. Leeg = 1. De factor van een winning is het minimum over de criteria.';
+export const UITLEG_VRAAG = 'Drinkwatervraag per narratief en cluster in Mm³/j voor 2025–2050 (per 5 jaar). Bron: tabblad "Ontwikkeling van de vraag".';
+
+const STANDAARD_NARRATIEVEN = ['Ruim in conflict', 'Stoom in conflict', 'Ruim in harmonie', 'Stoom in harmonie'];
+const STANDAARD_CRITERIA = [
+  ['instandhouding-intern', 'Instandhouding (intern)', 'Assets', 'EOL en herbouwpotentie assets'],
+  ['instandhouding-extern', 'Instandhouding (extern)', 'Assets', 'Overstromingsrisico, bedrijfszekerheid winveld, grondpositie, ontwikkelingen in de omgeving'],
+  ['natuur', 'Natuur', 'Grondwaterkwantiteit', 'Effect op (grondwaterafhankelijke) natuur: verdroging'],
+  ['landbouw', 'Landbouw', 'Grondwaterkwantiteit', 'Effect op landbouw: landbouwschade'],
+  ['bebouwing', 'Bebouwing (paalrot)', 'Grondwaterkwantiteit', 'Effect op bebouwing: paalrot'],
+  ['bodemdaling', 'Bodemdaling', 'Grondwaterkwantiteit', 'Bodemdalingsschade'],
+  ['grondwaterkwaliteit', 'Grondwaterkwaliteit', 'Grondwaterkwaliteit', 'Wincapaciteit neemt af door risico op verontreiniging'],
+  ['onbekend', '?? (betekenis onbekend)', 'Grondwaterkwaliteit', 'Zie OPEN-VRAGEN B1'],
+  ['oppervlaktewaterkwaliteit', 'Oppervlaktewaterkwaliteit', 'Oppervlaktewaterkwaliteit', 'Wincapaciteit uit oppervlaktewater neemt (tijdelijk) af door verontreiniging'],
+];
+
+/** Lege dataset: alleen de vaste structuur (narratieven en criteria). */
+export function legeDataset() {
+  return {
+    meta: { naam: 'Nieuwe dataset', schema_versie: 1, datum_import: null, bron: '', voorbeelddata: false },
+    narratieven: STANDAARD_NARRATIEVEN.map((naam, i) => ({ id: i + 1, naam, deltascenario: '', lpppd_doel: null, toelichting: '' })),
+    clusters: [], gemeenten: [],
+    criteria: STANDAARD_CRITERIA.map(([id, naam, groep, toelichting]) => ({ id, naam, groep, toelichting })),
+    winningen: [], reductiefactoren: {}, vraag: {}, maatregelen: [],
+  };
+}
+
+/**
+ * Breng een dataset in de vaste vorm: alle tabellen aanwezig, reductiefactoren en
+ * vraag volledig uitgeschreven (lege cellen = null), maatregelen met alle velden.
+ * Wijzigt `data` zelf en geeft het terug.
+ */
+export function normaliseer(data) {
+  const leegDs = legeDataset();
+  for (const k of Object.keys(leegDs)) if (data[k] == null) data[k] = leegDs[k];
+  data.meta = { ...leegDs.meta, ...data.meta };
+
+  const rf = {}, vraag = {};
+  for (const n of data.narratieven) {
+    const N = String(n.id);
+    rf[N] = {};
+    for (const w of data.winningen) {
+      rf[N][w.id] = {};
+      for (const c of data.criteria) {
+        const rij = data.reductiefactoren?.[N]?.[w.id]?.[c.id];
+        rf[N][w.id][c.id] = PEILJAREN.map((_, i) => rij?.[i] ?? null);
+      }
+    }
+    vraag[N] = {};
+    for (const c of data.clusters) {
+      const rij = data.vraag?.[N]?.[c.id] ?? {};
+      vraag[N][c.id] = Object.fromEntries(VRAAGJAREN.map((j) => [String(j), rij[j] ?? null]));
+    }
+  }
+  data.reductiefactoren = rf;
+  data.vraag = vraag;
+  data.maatregelen = data.maatregelen.map(normaliseerMaatregel);
+  return data;
+}
+
+/** Maatregel met alle velden in vaste volgorde (ontbrekend = null / leeg). */
+export function normaliseerMaatregel(m) {
+  const loc = m.locatie;
+  const heeftLoc = loc && !(leeg(loc.lat) && leeg(loc.lon));
+  const vo = m.voetafdruk;
+  const heeftVo = vo && Object.keys(VOETAFDRUK).some((t) => vo[t] && ['beoordeling', 'toelichting', 'bron'].some((k) => !leeg(vo[t][k])));
+  return {
+    id: m.id ?? '', naam: m.naam ?? '', omschrijving: m.omschrijving ?? '',
+    leverancier: m.leverancier ?? 'Vitens', soort: m.soort ?? null, spoor: m.spoor ?? null,
+    narratieven: Array.isArray(m.narratieven) ? [...m.narratieven] : [1, 2, 3, 4],
+    standaard_aan: !!m.standaard_aan, status: leeg(m.status) ? null : m.status,
+    locatie: heeftLoc ? { lat: loc.lat ?? null, lon: loc.lon ?? null } : null,
+    gemeente: leeg(m.gemeente) ? null : m.gemeente,
+    cluster: leeg(m.cluster) ? null : m.cluster,
+    bron: leeg(m.bron) ? null : m.bron,
+    volume: m.volume ?? null, ruimtebeslag: m.ruimtebeslag ?? null, stroomvraag: m.stroomvraag ?? null,
+    ingangsjaar: m.ingangsjaar ?? null,
+    voetafdruk: heeftVo ? Object.fromEntries(Object.keys(VOETAFDRUK).map((t) => [t, {
+      beoordeling: leeg(vo[t]?.beoordeling) ? null : vo[t].beoordeling,
+      toelichting: vo[t]?.toelichting ?? '', bron: vo[t]?.bron ?? '',
+    }])) : null,
+    overige_effecten: {
+      politiek: m.overige_effecten?.politiek ?? '',
+      lijst: (m.overige_effecten?.lijst ?? []).map((e) => ({ label: e.label ?? '', beoordeling: e.beoordeling ?? null, tekst: e.tekst ?? '' })),
+    },
+    meta: {
+      aangeleverd_door: m.meta?.aangeleverd_door ?? '', datum: m.meta?.datum ?? '', bron: m.meta?.bron ?? '',
+      onvolledig: !!m.meta?.onvolledig,
+    },
+  };
+}
+
 /** Telt fouten en waarschuwingen. */
 export const telling = (meldingen) => ({
   fouten: meldingen.filter((m) => m.niveau === FOUT).length,

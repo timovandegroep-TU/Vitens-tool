@@ -26,3 +26,5 @@ Versie 1 bouwt alleen wat in de opdracht staat. Alles hieronder is bewust uitges
 - **Maatregel "Oplossen ruimtegebruik (min)"** en een min/max-bandbreedte per maatregel.
 - **Echte provincie- en gemeentegrenzen** op de kaart. Nu: schematisch kader.
 - **Versiebeheer van aanleveringen** (wie heeft wat wanneer overschreven). Nu: laatste aanlevering per id wint.
+- **Datasetnaam en -datum in de .xlsx**: de Excel-export bevat geen meta-tabblad; bij import wordt de bestandsnaam de datasetnaam. De .json-export bewaart de meta wel.
+- **Maatregelen bewerken en verwijderen op de invoerpagina**: komt met het formulier in stap 4; nu alleen overzicht en import.
