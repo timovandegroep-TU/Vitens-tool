@@ -1,0 +1,9 @@
+Lettertypen van de Visualisatie tool DWR (zelf gehost, geen externe verzoeken).
+
+baloo2-600.woff2   Baloo 2, gewicht 600    Copyright 2019 The Baloo 2 Project Authors
+barlow-400.woff2   Barlow, gewicht 400     Copyright 2017 The Barlow Project Authors
+barlow-500.woff2   Barlow, gewicht 500
+barlow-700.woff2   Barlow, gewicht 700
+
+Licentie: SIL Open Font License 1.1 (https://openfontlicense.org).
+Bron: Google Fonts, latijnse subset, gedownload op 10-11-2026.

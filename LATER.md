@@ -35,7 +35,6 @@ Versie 1 bouwt alleen wat in de opdracht staat. Alles hieronder is bewust uitges
 - **Alles aan / alles uit** en zoeken in de maatregelenlijst.
 - **Stand onthouden** (narratief, zichtjaar, schakelaars) na herladen of delen via de adresbalk. Nu: elke keer de beginstand.
 - **Pins die elkaar overlappen** op de kaart uit elkaar schuiven; nu liggen dichtbij gelegen winningen deels over elkaar.
-- **Lettertypen zelf hosten** (Baloo en Barlow als woff2 in `fonts/`, met `@font-face` in `css/tokens.css`). Nu: Arial als terugval.
 - **Officieel Vitens-logo als svg** (`assets/vitens-logo.svg`). Nu: tijdelijk png uit het voorbeeld.
 - **Status ook met een icoon** in plaats van alleen kleur plus tekst (de huisstijl vraagt: nooit alleen kleur). Nu: kleur met het woord erbij in de lijst en de legenda; de pins op de kaart hebben alleen kleur.
 - **Bandbreedte van de vraag** in de grafiek (staat in de huisstijlreferentie, zit niet in het model).

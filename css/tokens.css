@@ -1,6 +1,13 @@
 /* Huisstijl Vitens – design tokens voor de Visualisatie tool DWR.
    Overgenomen uit de huisstijlreferentie (versie 0.1, 10-11-2026). Gebruik in de
    componenten alleen deze variabelen, geen losse kleurwaarden. */
+/* Lettertypen: zelf gehost (geen externe verzoeken). Baloo 2 en Barlow, SIL Open Font License 1.1;
+   latijnse subset, zie fonts/LEESMIJ.txt. */
+@font-face{font-family:"Baloo 2";font-weight:600;font-style:normal;font-display:swap;src:url("../fonts/baloo2-600.woff2") format("woff2")}
+@font-face{font-family:"Barlow";font-weight:400;font-style:normal;font-display:swap;src:url("../fonts/barlow-400.woff2") format("woff2")}
+@font-face{font-family:"Barlow";font-weight:500;font-style:normal;font-display:swap;src:url("../fonts/barlow-500.woff2") format("woff2")}
+@font-face{font-family:"Barlow";font-weight:700;font-style:normal;font-display:swap;src:url("../fonts/barlow-700.woff2") format("woff2")}
+
 :root{
   /* kleur – gemeten op vitens.nl */
   --vt-blauw:        #2C3C8A;  /* primair: tekst, koppen, navigatie, donkere vlakken */
@@ -30,7 +37,7 @@
   --tool-aandacht-rand:   #F0C463;
   --tool-aandacht-tekst:  #8A5A00;
 
-  /* typografie – valt terug op Arial zolang de lettertypen niet in /fonts staan */
+  /* typografie – bestanden in /fonts; Arial als terugval */
   --vt-font-kop:   "Baloo", "Baloo 2", Arial, sans-serif;
   --vt-font-tekst: "Barlow", Arial, sans-serif;
 

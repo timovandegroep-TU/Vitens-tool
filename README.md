@@ -78,6 +78,7 @@ en open `http://localhost:8765/`.
 | `js/viz/` | Panelen van de visualisatie |
 | `js/config.js` | Instellingen en drempels van de visualisatie |
 | `css/tokens.css` | Huisstijl Vitens: kleuren, lettertypen, vormen |
+| `fonts/` | Lettertypen Baloo 2 en Barlow (woff2) |
 | `data/voorbeeld.json` | Fictieve voorbeelddata |
 | `docs/` | JSON-schema van de dataset en een klein voorbeeld |
 | `vendor/` | SheetJS 0.20.3, lokaal opgeslagen |
@@ -106,4 +107,4 @@ python tools/convert_werkdocument.py
 
 zet `private/werkdocument.xlsx` om naar `private/data.json` en een gevuld template, en controleert de totalen tegen het werkdocument. Vereist `openpyxl`.
 
-**Huisstijl.** Kleuren en lettertypen komen uit `css/tokens.css`. De lettertypen Baloo en Barlow staan nog niet in de repo; tot die tijd valt de tool terug op Arial. Het logo is een tijdelijk bestand. Beide punten staan in OPEN-VRAGEN.md (I1 en I2).
+**Huisstijl.** Kleuren en lettertypen komen uit `css/tokens.css`. De lettertypen Baloo 2 en Barlow staan in `fonts/` (SIL Open Font License) en worden niet van een andere site geladen. Het logo is een tijdelijk bestand; zie OPEN-VRAGEN.md (I2).
