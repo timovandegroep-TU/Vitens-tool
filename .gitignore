@@ -1,0 +1,12 @@
+# Interne Vitens-data (werkdocument, geconverteerde data): NOOIT committen
+private/
+
+# Excel-lockbestanden
+~$*
+
+# Lokaal
+__pycache__/
+*.pyc
+node_modules/
+.DS_Store
+Thumbs.db
