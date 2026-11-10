@@ -78,6 +78,9 @@ export function valideer(data) {
   dubbel('Winningen', lijst('winningen'));
   dubbel('Gemeenten', lijst('gemeenten'), 'gemeente');
 
+  for (const n of lijst('narratieven')) {
+    if (!leeg(n.id) && !(Number.isInteger(n.id) && n.id >= 1 && n.id <= 4)) fout('Narratieven', n.id, 'id', `Id "${n.id}" moet een geheel getal van 1 t/m 4 zijn.`);
+  }
   for (const c of lijst('criteria')) {
     if (!KEUZES.groep.includes(c.groep)) fout('Criteria', c.id, 'groep', `Onbekende groep "${c.groep}".`);
   }
@@ -150,14 +153,26 @@ export function valideer(data) {
 
   // ---------------------------------------------------------- maatregelen
   dubbel('Maatregelen', lijst('maatregelen'));
-  for (const m of lijst('maatregelen')) uit.push(...valideerMaatregel(m, { clusters, gemeenten, narratieven }));
+  const ctx = contextVoorMaatregel(data);
+  for (const m of lijst('maatregelen')) uit.push(...valideerMaatregel(m, ctx));
 
   return uit;
 }
 
+/** Naslag voor `valideerMaatregel`: bekende clusters, gemeenten en narratieven van de dataset. */
+export function contextVoorMaatregel(data) {
+  const lijst = (naam) => (Array.isArray(data?.[naam]) ? data[naam] : []);
+  return {
+    clusters: new Set(lijst('clusters').map((c) => c.id)),
+    gemeenten: new Set(lijst('gemeenten').map((g) => g.gemeente)),
+    narratieven: new Set(lijst('narratieven').map((n) => String(n.id))),
+    clusterVanGemeente: new Map(lijst('gemeenten').map((g) => [g.gemeente, g.cluster])),
+  };
+}
+
 /**
  * Valideer één maatregel-dataobject (ook gebruikt door het formulier).
- * @param ctx { clusters: Set, gemeenten: Set, narratieven: Set<string> }
+ * @param ctx { clusters: Set, gemeenten: Set, narratieven: Set<string>, clusterVanGemeente?: Map }
  */
 export function valideerMaatregel(m, ctx) {
   const uit = [];
@@ -205,6 +220,12 @@ export function valideerMaatregel(m, ctx) {
 
   if (leeg(m.gemeente)) { if (levering) ontbreekt('gemeente', 'Verplicht bij waterlevering.'); }
   else if (!ctx.gemeenten.has(m.gemeente)) fout('gemeente', `Gemeente "${m.gemeente}" staat niet in de koppeltabel.`);
+  else {
+    const verwacht = ctx.clusterVanGemeente?.get(m.gemeente);
+    if (verwacht && !leeg(m.cluster) && m.cluster !== ALLE_CLUSTERS && m.cluster !== verwacht) {
+      waarschuw('cluster', `Cluster "${m.cluster}" wijkt af van de koppeltabel: ${m.gemeente} valt onder "${verwacht}".`);
+    }
+  }
 
   const loc = m.locatie;
   if (loc == null || (leeg(loc.lat) && leeg(loc.lon))) { if (levering) ontbreekt('locatie', 'Verplicht bij waterlevering.'); }
@@ -247,6 +268,115 @@ export function valideerMaatregel(m, ctx) {
 
   return uit;
 }
+
+// ------------------------------------------------------- maatregel: velden
+// Eén definitie per veld van het maatregel-dataobject, in de volgorde van het formulier
+// en van het tabblad Maatregelen. `veld` = kolomnaam in het template. `levering` = alleen
+// van toepassing (en dan verplicht) bij waterlevering.
+export const MAATREGEL_BLOKKEN = ['Levering', 'Fysieke kenmerken', 'Fysieke voetafdruk', 'Overige effecten', 'Bron en eigenaar'];
+const V = (blok, veld, label, type, uitleg, extra = {}) => ({ blok, veld, label, type, uitleg, ...extra });
+export const MAATREGEL_VELDEN = [
+  V('Levering', 'id', 'Id', 'tekst', 'Uniek en stabiel kenmerk: kleine letters, cijfers en streepjes. Een nieuwe aanlevering met hetzelfde id overschrijft de oude.', { verplicht: true }),
+  V('Levering', 'naam', 'Naam', 'tekst', `Label in de tool, maximaal ${GRENZEN.naamMax} tekens.`, { verplicht: true }),
+  V('Levering', 'omschrijving', 'Omschrijving', 'langetekst', 'Eén of twee zinnen; verschijnt in de tooltip van de maatregel.'),
+  V('Levering', 'leverancier', 'Leverancier', 'keuze', 'Wie levert het water of realiseert de besparing. In versie 1 telt alleen Vitens mee in de opgave; maatregelen van Oasen en Waternet zijn wel zichtbaar.', { verplicht: true, keuzes: KEUZES.leverancier }),
+  V('Levering', 'soort', 'Soort', 'keuze', 'Waterlevering verhoogt het aanbod; waterbesparing verlaagt de vraag.', { verplicht: true, keuzes: KEUZES.soort }),
+  V('Levering', 'spoor', 'Spoor', 'keuze', 'S0 drinkwaterbesparing · S1 instandhouding bestaande capaciteit · S2 vergroten op bestaande locatie · S3 nieuwe winlocatie.', { verplicht: true, keuzes: KEUZES.spoor }),
+  V('Levering', 'narratieven', 'Narratieven', 'narratieven', 'In welke narratieven de maatregel geldt. In het template: nummers gescheiden door een komma, bv. 1,2,3,4.', { verplicht: true }),
+  V('Levering', 'standaard_aan', 'Standaard aan', 'janee', 'Beginstand van de schakelaar in de visualisatie.', { verplicht: true }),
+  V('Levering', 'status', 'Status', 'keuze', 'Alleen informatief; er wordt niet op gefilterd.', { keuzes: KEUZES.status }),
+
+  V('Fysieke kenmerken', 'volume', 'Volume', 'getal', 'Altijd een positief getal in miljoen m³ per jaar. Waterlevering: de vergunde capaciteit. Waterbesparing: de verlaging van de vraag.', { verplicht: true, eenheid: 'Mm³/j' }),
+  V('Fysieke kenmerken', 'ingangsjaar', 'Ingangsjaar', 'geheel', `Vanaf dit jaar telt het volledige volume mee (geen ingroei). ${JAAR_MIN}–${JAAR_MAX}.`, { verplicht: true }),
+  V('Fysieke kenmerken', 'gemeente', 'Gemeente', 'ref', 'Gemeente waar de maatregel ligt; moet in de koppeltabel Gemeenten staan en bepaalt het cluster.', { ref: 'gemeenten', levering: true }),
+  V('Fysieke kenmerken', 'cluster', 'Cluster', 'ref', 'Cluster waarop het volume telt. "alle" = verdeeld over alle clusters naar hun aandeel in de vraag (gebruikelijk bij waterbesparing).', { verplicht: true, ref: 'clusters' }),
+  V('Fysieke kenmerken', 'lat', 'Lat', 'getal', `Breedtegraad in WGS84 (${GRENZEN.nederland.latMin}–${GRENZEN.nederland.latMax}), bv. 52,09. Voor de pin op de kaart.`, { levering: true, alleenLevering: true }),
+  V('Fysieke kenmerken', 'lon', 'Lon', 'getal', `Lengtegraad in WGS84 (${GRENZEN.nederland.lonMin}–${GRENZEN.nederland.lonMax}), bv. 5,12.`, { levering: true, alleenLevering: true }),
+  V('Fysieke kenmerken', 'bron', 'Bron (type water)', 'keuze', 'Type water dat gewonnen wordt.', { levering: true, alleenLevering: true, keuzes: KEUZES.bron }),
+  V('Fysieke kenmerken', 'ruimtebeslag', 'Ruimtebeslag', 'getal', 'Benodigde ruimte in hectare.', { levering: true, alleenLevering: true, eenheid: 'ha' }),
+  V('Fysieke kenmerken', 'stroomvraag', 'Stroomvraag', 'getal', 'Benodigd elektrisch vermogen in megawatt.', { levering: true, alleenLevering: true, eenheid: 'MW' }),
+
+  ...Object.entries(VOETAFDRUK).flatMap(([t, def]) => [
+    V('Fysieke voetafdruk', `${t}_beoordeling`, `${def.naam} – beoordeling`, 'keuze', `Beoordeling door de informatiegevende partij; de tool rekent dit niet na.`, { levering: true, alleenLevering: true, keuzes: def.keuzes, thema: t }),
+    V('Fysieke voetafdruk', `${t}_toelichting`, `${def.naam} – toelichting`, 'tekst', 'Korte onderbouwing van de beoordeling.', { alleenLevering: true, thema: t }),
+    V('Fysieke voetafdruk', `${t}_bron`, `${def.naam} – bron`, 'tekst', 'Onderzoek of document waarop de beoordeling berust.', { alleenLevering: true, thema: t }),
+  ]),
+
+  V('Overige effecten', 'politiek', 'Politieke overwegingen', 'langetekst', 'Vrije tekst.'),
+  V('Overige effecten', 'overige_effecten', 'Overige effecten', 'effecten', 'Eén effect per regel. In het template: label | beoordeling | tekst, met beoordeling kans, aandacht of knelpunt. Meerdere effecten: nieuwe regel in dezelfde cel (Alt+Enter).'),
+
+  V('Bron en eigenaar', 'aangeleverd_door', 'Aangeleverd door', 'tekst', 'Persoon en organisatie die deze maatregel aanlevert.', { verplicht: true }),
+  V('Bron en eigenaar', 'datum', 'Datum aanlevering', 'datum', 'Datum van aanlevering (jjjj-mm-dd of dd-mm-jjjj).', { verplicht: true }),
+  V('Bron en eigenaar', 'bron_document', 'Bron (document)', 'tekst', 'Document of systeem waaruit de gegevens komen. Geen links naar interne omgevingen.', { verplicht: true }),
+  V('Bron en eigenaar', 'onvolledig', 'Onvolledig aangeleverd', 'janee', 'Ja = bewust onvolledig (bv. omgezet uit het werkdocument): ontbrekende leveringsvelden geven dan een waarschuwing in plaats van een blokkerende fout.'),
+];
+
+/** Bij welk veld (kolomnaam) hoort een validatiemelding? */
+export function veldVanMelding(veld) {
+  if (veld === 'locatie') return 'lat';
+  if (veld === 'aangeleverd door') return 'aangeleverd_door';
+  if (veld === 'bron (document)') return 'bron_document';
+  if (veld === 'datum aanlevering') return 'datum';
+  if (veld.startsWith('overig effect')) return 'overige_effecten';
+  if (veld.startsWith('voetafdruk ')) {
+    const t = Object.keys(VOETAFDRUK).find((k) => VOETAFDRUK[k].naam === veld.slice('voetafdruk '.length));
+    return t ? `${t}_beoordeling` : veld;
+  }
+  return veld;
+}
+
+const nl = (v, decimalen = 1) => new Intl.NumberFormat('nl-NL', { minimumFractionDigits: decimalen, maximumFractionDigits: 3 }).format(v);
+
+/**
+ * Hoe een maatregel in de visualisatie verschijnt: de rij in de maatregelenlijst en de
+ * tooltip. Puur (geen DOM); gebruikt door de preview in het formulier en door index.html.
+ * @returns { naam, spoor, waarde, teltMee, rij: [[label, waarde]], noten: [tekst] }
+ */
+export function maatregelWeergave(m) {
+  const getal = (v) => typeof v === 'number' && Number.isFinite(v);
+  const levering = m.soort === 'waterlevering';
+  const teltMee = m.leverancier === 'Vitens';
+  const naam = String(m.naam ?? '');
+  const regels = [
+    ['Spoor', m.spoor ? SPOREN[m.spoor] ?? m.spoor : '–'],
+    ['Werkt op', m.soort === 'waterbesparing' ? 'vraag (besparing)' : levering ? 'aanbod (levering)' : '–'],
+    ['Leverancier', m.leverancier ?? '–'],
+    ['Volume', getal(m.volume) ? `${nl(m.volume)} Mm³/j` : '–'],
+    ['Vanaf', m.ingangsjaar ?? '–'],
+    ['Cluster', m.cluster === ALLE_CLUSTERS ? 'alle clusters (naar vraagaandeel)' : m.cluster ?? '–'],
+    ['Narratieven', (m.narratieven ?? []).join(', ') || '–'],
+  ];
+  if (m.gemeente) regels.push(['Gemeente', m.gemeente]);
+  if (m.status) regels.push(['Status', m.status]);
+  if (levering) {
+    if (m.bron) regels.push(['Bron', m.bron]);
+    if (getal(m.ruimtebeslag)) regels.push(['Ruimtebeslag', `${nl(m.ruimtebeslag, 0)} ha`]);
+    if (getal(m.stroomvraag)) regels.push(['Stroomvraag', `${nl(m.stroomvraag, 0)} MW`]);
+    for (const [t, def] of Object.entries(VOETAFDRUK)) {
+      const b = m.voetafdruk?.[t]?.beoordeling;
+      if (b) regels.push([def.naam, b]);
+    }
+  }
+  const noten = [];
+  if (!teltMee) noten.push('Niet meegerekend (v1): alleen maatregelen van Vitens tellen mee in de opgave.');
+  if (levering) noten.push('Volume = vergunde capaciteit.');
+  if (m.meta?.aangeleverd_door) noten.push(`Aangeleverd door ${m.meta.aangeleverd_door}` + (m.meta.datum ? `, ${m.meta.datum}` : '') + (m.meta.bron ? ` · ${m.meta.bron}` : ''));
+  return {
+    naam: naam.length > GRENZEN.naamMax ? naam.slice(0, GRENZEN.naamMax - 1) + '…' : naam,
+    omschrijving: m.omschrijving ?? '', spoor: m.spoor ?? '', teltMee,
+    waarde: getal(m.volume) ? `${m.soort === 'waterbesparing' ? '−' : '+'}${nl(m.volume)}` : '–',
+    regels, noten,
+    effecten: (m.overige_effecten?.lijst ?? []).filter((e) => e.label),
+  };
+}
+
+/** Nieuwe, lege maatregel voor het formulier. */
+export function nieuweMaatregel(datum) {
+  return normaliseerMaatregel({ leverancier: 'Vitens', narratieven: [1, 2, 3, 4], standaard_aan: true, meta: { datum } });
+}
+
+/** "Nieuwe winning B" -> "nieuwe-winning-b" (voorstel voor het id). */
+export const maakId = (tekst) => String(tekst ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 
 // ------------------------------------------------------------------ tabellen
 // Eén definitie per basistabel: naam van het tabblad (Excel + invoerpagina) en per
@@ -316,6 +446,10 @@ export const TABELLEN = [
 ];
 
 export const UITLEG_REDUCTIEFACTOREN = 'Per narratief: rijen = winningen, kolomgroepen = criteria × 2030 / 2040 / 2050, zelfde indeling als kolommen H–AP van "Naratief N - winningen". Waarde tussen 0 en 1: het deel van de capaciteit dat overblijft. Leeg = 1. De factor van een winning is het minimum over de criteria.';
+export const UITLEG_VRAAG_KOLOMMEN = [
+  { label: 'Narratief · cluster', uitleg: 'Eén rij per narratief × cluster, in de volgorde van de tabellen Narratieven en Clusters. Rijen ontstaan vanzelf; voeg een cluster toe in de tabel Clusters.' },
+  { label: '2025 – 2050', eenheid: 'Mm³/j', uitleg: 'Drinkwatervraag van het cluster in dat jaar, per 5 jaar. Verplicht: een lege cel is een blokkerende fout. Tussenliggende jaren worden lineair geïnterpoleerd.' },
+];
 export const UITLEG_VRAAG = 'Drinkwatervraag per narratief en cluster in Mm³/j voor 2025–2050 (per 5 jaar). Bron: tabblad "Ontwikkeling van de vraag".';
 
 const STANDAARD_NARRATIEVEN = ['Ruim in conflict', 'Stoom in conflict', 'Ruim in harmonie', 'Stoom in harmonie'];

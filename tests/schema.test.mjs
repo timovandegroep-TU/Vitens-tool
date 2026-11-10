@@ -19,6 +19,7 @@ test('basisdata, blokkerend', () => {
   d.reductiefactoren['1']['geen-winning'] = {};                               // onbekende winning
   d.reductiefactoren['9'] = {};                                               // onbekend narratief
   d.winningen[0].cluster = 'cluster-noord';                                   // onbekend cluster
+  d.narratieven[3].id = 5;                                                    // narratief-id buiten 1–4
   d.winningen.push({ ...d.winningen[1] });                                    // dubbele id
   d.winningen[1].capaciteit = 'veel';                                         // niet-numeriek
   delete d.vraag['2']['cluster-west']['2035'];                                // ontbrekende vraag
@@ -29,6 +30,7 @@ test('basisdata, blokkerend', () => {
   zoek('Reductiefactoren N1', /Onbekend criterium/);
   zoek('Reductiefactoren N1', /Onbekende winning/);
   zoek('Reductiefactoren N9', /Onbekend narratief/);
+  zoek('Narratieven', /1 t\/m 4/);
   zoek('Winningen', /Onbekend cluster/);
   zoek('Winningen', /Dubbele id/);
   zoek('Winningen', /geen getal/);

@@ -6,6 +6,7 @@ import { normaliseer, valideer } from '../js/schema.js';
 import {
   naarBladen, vanBladen, naarWerkboek, werkboekNaarBladen, leegTemplate, leesGetal, leesDatum,
   maatregelNaarRij, rijNaarMaatregel, voegMaatregelenSamen, isMaatregelenBestand, maatregelenUitBladen,
+  zonderScheidingskolommen, stripScheidingskolommen, controleerDataset,
 } from '../js/store.js';
 import { werkdocument, voorbeeld, SKIP_WD, kopie, maakMaatregel } from './hulp.mjs';
 
@@ -89,4 +90,34 @@ test('maatregelen-bestand: nieuwe id toevoegen, bestaande overschrijven', () => 
   assert.deepEqual(uit, { toegevoegd: ['nieuw'], bijgewerkt: [bestaand] });
   assert.equal(data.maatregelen.length, 3);
   assert.equal(data.maatregelen[0].volume, 9);
+});
+
+test('plakken reductiefactoren: scheidingskolommen uit de Excel alleen strippen als het zeker is', () => {
+  // H–AP: 9 groepen van 3 met 8 scheidingskolommen = 35 breed; past niet in 27 invulkolommen -> zeker Excel
+  const excel = [Array.from({ length: 35 }, (_, i) => (i % 4 === 3 ? '' : '0,9'))];
+  const a = zonderScheidingskolommen(excel, 27);
+  assert.equal(a.scheiding, 'ja');
+  assert.equal(a.blok[0].length, 27);
+  assert.ok(a.blok[0].every((v) => v === '0,9'));
+  // "x" in een scheidingskolom (kolom K van narratief 1) -> zeker Excel, ook bij een smal blok
+  const b = zonderScheidingskolommen([['1', '1', '0,9', 'x', '1'], ['1', '1', '1', '', '0,8']], 27);
+  assert.equal(b.scheiding, 'ja');
+  assert.deepEqual(b.blok, [['1', '1', '0,9', '1'], ['1', '1', '1', '0,8']]);
+  // getal op een scheidingspositie -> geen Excel-indeling, niets strippen
+  const c = [['1', '1', '1', '0,5', '1']];
+  assert.deepEqual(zonderScheidingskolommen(c, 27), { blok: c, scheiding: 'nee' });
+  // lege 4e cel in een smal blok: kan een lege factor zijn -> twijfel, blok ongewijzigd
+  const d = [['0,91', '0,81', '0,71', '', '0,51']];
+  assert.deepEqual(zonderScheidingskolommen(d, 27), { blok: d, scheiding: 'twijfel' });
+  assert.deepEqual(stripScheidingskolommen(d), [['0,91', '0,81', '0,71', '0,51']]);
+  // smaller dan 4 kolommen: nooit een scheidingskolom
+  assert.equal(zonderScheidingskolommen([['1', '', '1']], 27).scheiding, 'nee');
+});
+
+test('json-import: alleen een dataset van deze tool wordt geaccepteerd', () => {
+  assert.equal(controleerDataset(voorbeeld), voorbeeld);
+  assert.doesNotThrow(() => controleerDataset({ winningen: [] }));
+  for (const fout of [null, [], 'tekst', 42, {}, { iets: 1 }, { winningen: {} }, { winningen: [], vraag: [] }, { maatregelen: [1] }]) {
+    assert.throws(() => controleerDataset(fout), /geen dataset van deze tool/, JSON.stringify(fout));
+  }
 });

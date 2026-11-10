@@ -119,4 +119,55 @@ dialog ul{margin:6px 0;padding-left:18px}
 .kern div{background:var(--light);border-radius:10px;padding:8px 14px}
 .kern b{display:block;font-size:20px;color:var(--navy)}
 
+/* formulier "Maatregel aanleveren" */
+.mlayout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start}
+.mform fieldset{border:1px solid var(--lijn);border-radius:10px;margin:0 0 14px;padding:10px 14px 12px}
+.mform legend{font-weight:700;color:var(--navy);padding:0 6px}
+.mform h4{margin:8px 0 4px;font-size:13px;color:var(--navy)}
+.rooster{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px 16px}
+.rooster.drie{grid-template-columns:200px 1fr 1fr}
+.veld{display:flex;flex-direction:column;gap:3px;min-width:0}
+.veld.breed{grid-column:1/-1}
+.veld>label{font-weight:700;font-size:13px}
+.veld .eenheid{font-weight:400;color:var(--muted)}
+.veld .ster{color:var(--red)}
+.veld input[type=text],.veld input[type=date],.veld select,.veld textarea,.effect input,.effect select{border:1px solid var(--lijn);border-radius:6px;padding:6px 8px;background:#fff;width:100%;font:inherit}
+.veld input.getal{max-width:140px;text-align:right}
+.veld textarea{resize:vertical}
+.veld :focus-visible,.effect :focus-visible{outline:2px solid var(--sky);outline-offset:1px}
+.veld .hulp,.mform p.hulp{font-size:12px;color:var(--muted);line-height:1.35;margin:0}
+.veld .vmelding{font-size:12px;font-weight:700;line-height:1.35}
+.veld .vmelding:empty{display:none}
+.veld.fout .vmelding{color:var(--red)}
+.veld.waarschuwing .vmelding{color:#8A5A00}
+.veld.fout input,.veld.fout select,.veld.fout textarea,.veld.fout .vinkjes,.veld.fout .effecten{border-color:var(--red);background:var(--red-bg)}
+.veld.waarschuwing input,.veld.waarschuwing select,.veld.waarschuwing textarea{border-color:#F0C463;background:var(--amber-bg)}
+.vinkjes{display:flex;gap:6px 18px;flex-wrap:wrap;border:1px solid transparent;border-radius:6px;padding:2px 4px}
+.vink{display:inline-flex;align-items:center;gap:6px;font-weight:400;cursor:pointer}
+.effecten{display:flex;flex-direction:column;gap:6px;align-items:flex-start;border:1px solid transparent;border-radius:6px}
+.effect{display:grid;grid-template-columns:200px 130px minmax(160px,1fr) auto;gap:6px;width:100%;align-items:center}
+.mvoet{position:sticky;bottom:-24px;background:#fff;border-top:1px solid var(--lijn);padding:10px 0 12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.knop:disabled{opacity:.45;cursor:not-allowed}
+.mstatus{font-size:13px;color:var(--ink-2)}
+.mpreview{position:sticky;top:0;background:#FAFCFE;border:1px solid var(--lijn);border-radius:10px;padding:12px 14px}
+.mpreview h3{margin:0 0 6px;font-size:14px;color:var(--navy)}
+.pkop{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin:10px 0 4px}
+.pnoot{font-size:12px;color:var(--muted);font-style:italic}
+.mrow{display:grid;grid-template-columns:44px 1fr auto 40px;align-items:center;gap:6px;background:#fff;border-radius:10px;padding:8px;border:1px solid var(--grid)}
+.mrow .sw{width:34px;height:18px;border-radius:9px;background:#C9D6E0;position:relative}
+.mrow .sw::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff}
+.mrow .sw.aan{background:var(--sky)} .mrow .sw.aan::after{left:18px}
+.mrow .mname{font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mrow .mval{font-weight:700;font-variant-numeric:tabular-nums}
+.mrow.off .mval{color:#9AAABA;font-weight:400}
+.mrow .spoor{font-size:11px;font-weight:700;background:var(--pill);border-radius:8px;text-align:center;padding:2px 0}
+.ptip{background:#fff;border-radius:8px;box-shadow:0 6px 24px rgba(14,49,80,.18);padding:10px 12px;font-size:13px;line-height:1.35}
+.ptip .th{font-weight:700;margin-bottom:6px}
+.ptip .tm{color:var(--muted);margin:2px 0 6px;font-size:12px}
+.ptip .kv{display:flex;justify-content:space-between;gap:12px;margin:3px 0}
+.ptip .kv span{color:var(--ink-2)} .ptip .kv b{text-align:right}
+.ptip .sep{height:1px;background:var(--grid);margin:6px 0}
+.eff-kans{color:var(--green)} .eff-aandacht{color:var(--amber)} .eff-knelpunt{color:var(--red)}
+@media (max-width:1300px){ .mlayout{grid-template-columns:1fr} .mpreview{position:static} }
+
 @media (max-width:1100px){ main{grid-template-columns:1fr} #validatie{border-left:none;border-top:1px solid var(--lijn);max-height:260px} }

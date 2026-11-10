@@ -27,4 +27,11 @@ Versie 1 bouwt alleen wat in de opdracht staat. Alles hieronder is bewust uitges
 - **Echte provincie- en gemeentegrenzen** op de kaart. Nu: schematisch kader.
 - **Versiebeheer van aanleveringen** (wie heeft wat wanneer overschreven). Nu: laatste aanlevering per id wint.
 - **Datasetnaam en -datum in de .xlsx**: de Excel-export bevat geen meta-tabblad; bij import wordt de bestandsnaam de datasetnaam. De .json-export bewaart de meta wel.
-- **Maatregelen bewerken en verwijderen op de invoerpagina**: komt met het formulier in stap 4; nu alleen overzicht en import.
+- **Lege reductiefactor per jaar markeren**: de waarschuwing "lege factor" geldt per winning × criterium en kleurt nu alle drie de jaarcellen oranje, ook als maar één jaar leeg is. De melding zelf noemt wel de juiste jaren.
+- **Plakken van een deel van het werkdocument-blok**: bij een blok waarin elke vierde kolom leeg is en dat ook zonder strippen past, vraagt de invoerpagina of het scheidingskolommen zijn. Automatisch herkennen kan niet zonder te gokken.
+- **Testcommando in de README** (stap 6): `npm test` of `node --test`. `node --test tests/` uit het plan werkt niet op Node 22 en hoger (een map als argument wordt daar als module gelezen).
+- **Locatie kiezen op een kaart** in het formulier. Nu: lat en lon intypen.
+- **Opmaak van het maatregelen-template** (vastgezette kopregel, kleuren, voorbeeldrij). Nu: kale kopregel met keuzelijsten en een tabblad Uitleg.
+- **Alles aan / alles uit** en zoeken in de maatregelenlijst.
+- **Stand onthouden** (narratief, zichtjaar, schakelaars) na herladen of delen via de adresbalk. Nu: elke keer de beginstand.
+- **Pins die elkaar overlappen** op de kaart uit elkaar schuiven; nu liggen dichtbij gelegen winningen deels over elkaar.

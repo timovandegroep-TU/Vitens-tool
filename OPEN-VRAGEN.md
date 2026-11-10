@@ -64,6 +64,39 @@ Status: eerste versie (stap 1). Een antwoord? Zet het erachter en verplaats de v
 | E5 | Dekkingsbalk: gedekt = bijdrage maatregelen ÷ opgave, met opgave = vraag zonder besparing − aanbod zonder maatregelen (zoals in de mockup). Bij filter "per cluster" per cluster berekend. | Overgenomen uit de mockup. |
 | E6 | "Reserve +10%"-chip: in de mockup vraag × 1,1 als stippellijn, zonder effect op opgave of dekking. | Ongewijzigd overgenomen. |
 
+## F. Afwijkingen van het plan in de code
+
+| # | Vraag | Waar | Tijdelijke aanname |
+|---|---|---|---|
+| F1 | Het plan noemt `js/config.js` voor de drempels (30 Mm³-waarschuwing, jaren, pin-kleuren). Dat bestand bestaat niet. Alsnog afsplitsen? | `GRENZEN` in `js/schema.js`, jaren in `js/model.js` | Stap 5: `js/config.js` bestaat nu en bevat de instellingen van de visualisatie (pin-kleuren, drempels, startjaar). De validatiegrenzen blijven in `js/schema.js`. |
+| F2 | Het plan noemt één `css/stijl.css`; de invoerpagina heeft `css/invoer.css`. | `invoer.html` | Stap 5: `css/stijl.css` is de stijl van `index.html` (uit de mockup); `css/invoer.css` blijft voor de invoerpagina. De kleurvariabelen staan in beide. |
+| F3 | Het plan noemt `meta.versie`; schema en code gebruiken `meta.schema_versie` (+ `voorbeelddata`). | `docs/datamodel.schema.json` | Schema is leidend. |
+
+## G. Formulier en maatregelen-template (stap 4)
+
+| # | Vraag | Waar | Tijdelijke aanname |
+|---|---|---|---|
+| G1 | Welke velden vervallen bij waterbesparing? De veldentabel maakt locatie, bron, ruimtebeslag, stroomvraag en voetafdruk alleen verplicht bij waterlevering. | formulier "Maatregel aanleveren" | Bij waterbesparing toont het formulier deze velden niet en worden ze bij opslaan leeggemaakt. Gemeente en cluster blijven voor beide soorten. Via het template kunnen ze nog wel gevuld worden. |
+| G2 | Mag een maatregel met blokkerende fouten worden opgeslagen? | formulier, knop Opslaan | Ja, zodra het id uniek is (net als bij de basistabellen); de fouten staan in het validatiepaneel. Wat de visualisatie met zo'n maatregel doet, volgt in stap 5. |
+| G3 | Als het gekozen cluster afwijkt van het cluster van de gemeente in de koppeltabel: fout of toegestaan? | `valideerMaatregel` | Het formulier neemt het cluster over uit de koppeltabel; een afwijkend cluster mag en geeft een waarschuwing. |
+| G4 | De gegevensvalidatie in het template is gecontroleerd met openpyxl en LibreOffice, niet met Excel zelf. | `maatregelenTemplate` in `js/store.js` | Werkt ook in Excel (standaard OOXML). Graag één keer openen in Excel en een keuzelijst proberen. |
+| G5 | Rij + tooltip in de preview zijn een voorstel; de mockup toont een ingroeipad, dat in v1 vervalt. | `maatregelWeergave` in `js/schema.js` | Tooltip toont spoor, werking, leverancier, volume, ingangsjaar, cluster, narratieven, fysieke kenmerken, voetafdruk, effecten en bron. Stap 5 gebruikt dezelfde functie. |
+| G6 | Standaardwaarden van een nieuwe maatregel in het formulier. | `nieuweMaatregel` | Leverancier Vitens, alle vier narratieven, standaard aan = ja, datum = vandaag. |
+
+## H. Visualisatie (stap 5)
+
+| # | Vraag | Waar | Tijdelijke aanname |
+|---|---|---|---|
+| H1 | Welke data toont `index.html` als er in de browser nog geen dataset staat? | `js/viz/app.js` | Het fictieve `docs/datamodel-voorbeeld.json`, met het label VOORBEELDDATA. Stap 6 vervangt dit door `data/voorbeeld.json`. |
+| H2 | Maatregelen met blokkerende fouten (zie G2). | paneel Maatregelen | Zichtbaar, schakelaar uitgeschakeld, "niet meegerekend: fouten in de aanlevering". Fouten in de basisdata geven een rood label in de kop met een link naar Invoer. |
+| H3 | Welke maatregelen staan in de lijst? | paneel Maatregelen | Alleen die van het gekozen narratief; bij een clusterfilter alleen die van dat cluster of "alle clusters". De waarde is de bijdrage in het zichtjaar (bij een clusterfilter: het deel voor dat cluster). |
+| H4 | Wanneer telt een effect van een maatregel? | paneel Effecten, chip Maatregelen | Alleen van maatregelen die in het zichtjaar meetellen (aan, Vitens, ingangsjaar bereikt). Waterleveringen zonder aangeleverde effecten staan er als "geen effecten aangeleverd". |
+| H5 | Hoe vertaalt de fysieke voetafdruk zich naar knelpunt / aandacht? | `VOETAFDRUK_NIVEAU` in `js/config.js` | Zwaarste beoordeling = knelpunt, middelste en "onbekend" = aandacht, lichtste = geen melding. Beschermingszone "in of grenst aan" = aandacht. |
+| H6 | Drempels voor de kleur van een winning. | `AFNAME_DREMPELS` in `js/config.js` | Afname ≥ 25% van de capaciteit = rood, elke afname daaronder = oranje, geen afname = grijs. Het bindende criterium is dat van het eerstvolgende peiljaar. |
+| H7 | Het ingaan van een maatregel is in de grafiek een verticale sprong op het ingangsjaar (stapfunctie). Zo gewenst? | grafiek | Ja, volgt uit de modelregel; ingroei staat in LATER. |
+| H8 | Logo "De Kleine Consultant" uit de mockup staat in de voet; het paginanummer is vervangen door de naam van de dataset. | `index.html` | Overgenomen uit de mockup. |
+| H9 | Kaart: omtrek van Utrecht uit de mockup in een kader dat meeschaalt met alle punten in de dataset; Flevoland en Gelderland alleen als label. | `js/viz/kaart.js` | Schematisch; echte grenzen staan in LATER. |
+
 ## Beantwoord
 
 *(nog leeg)*
