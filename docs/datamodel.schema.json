@@ -228,13 +228,14 @@
           "properties": {
             "aangeleverd_door": { "type": "string", "minLength": 1, "description": "Persoon / organisatie." },
             "datum": { "type": "string", "format": "date" },
-            "bron": { "type": "string", "minLength": 1, "description": "Document of systeem." }
+            "bron": { "type": "string", "minLength": 1, "description": "Document of systeem." },
+            "onvolledig": { "type": "boolean", "description": "true = bewust onvolledig aangeleverd (bv. omgezet uit het werkdocument): ontbrekende fysieke kenmerken en voetafdruk geven een waarschuwing in plaats van een blokkerende fout. Zie OPEN-VRAGEN D6." }
           }
         }
       },
       "allOf": [
         {
-          "if": { "properties": { "soort": { "const": "waterlevering" } } },
+          "if": { "properties": { "soort": { "const": "waterlevering" }, "meta": { "not": { "required": ["onvolledig"], "properties": { "onvolledig": { "const": true } } } } } },
           "then": {
             "required": ["locatie", "gemeente", "bron", "ruimtebeslag", "stroomvraag", "voetafdruk"],
             "properties": {

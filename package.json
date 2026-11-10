@@ -1,0 +1,9 @@
+{
+  "name": "visualisatietool-dwr",
+  "private": true,
+  "type": "module",
+  "description": "Geen build en geen dependencies. Dit bestand bestaat alleen zodat Node de js/-modules als ES modules leest en `npm test` de tests draait.",
+  "scripts": {
+    "test": "node --test"
+  }
+}

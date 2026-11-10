@@ -8,7 +8,9 @@ Status: eerste versie (stap 1). Een antwoord? Zet het erachter en verplaats de v
 
 | # | Vraag | Waar | Tijdelijke aanname |
 |---|---|---|---|
-| A1 | De slide `referentie/dataobject-maatregel.png` ontbreekt in de repo. Wijkt die af van de veldentabel in de opdracht? | opdracht, "Bronnen in de repo" | Het maatregel-dataobject volgt de veldentabel uit de opdracht. Na aanlevering van de slide: velden en bloknamen vergelijken. |
+| A1 | De slide `referentie/dataobject-maatregel.png` staat nog niet in de repo (wel gezien in de chat; komt overeen met de veldentabel). | opdracht, "Bronnen in de repo" | Het maatregel-dataobject volgt de veldentabel uit de opdracht. Bestand zelf nog toevoegen aan `referentie/`. |
+| A3 | De slide noemt volume in **m³/jaar**, de opdracht en de tool gebruiken **Mm³/j**. In welke eenheid levert Vitens aan? | slide "Dataobject", veld Volume | Mm³/j. De validatie waarschuwt bij volume > 30 (mogelijk in m³ ingevuld). |
+| A4 | De slide noemt bij "Water aanbod" een **vraagprognose per gemeente**. | slide "Dataobject", blok Water aanbod | Niet in v1: vraag per cluster (zie LATER.md). |
 | A2 | Is het bestand "…nieuwste versie V04 (1).xlsx" hetzelfde als "V04_1"? | bestandsnaam | Ja: alle acceptatietotalen uit de opdracht kloppen met dit bestand. |
 
 ## B. Werkdocument – basislijn
@@ -48,7 +50,7 @@ Status: eerste versie (stap 1). Een antwoord? Zet het erachter en verplaats de v
 | D3 | "Waterbesparing bedrijven 10%" heeft geen narratief; het volume (totaal 1) is verdeeld naar het vraagaandeel van narratief 4 in 2040. | rij 30 | Geldt voor alle narratieven, met de volumes per cluster uit de Excel. |
 | D4 | Welke maatregelen staan standaard aan? Alleen rij 33 heeft "toepassen?" = 1. | kolom C | `standaard_aan` = (kolom C > 0): alleen "Oplossen ruimtegebruik (max)" staat aan. |
 | D5 | "Oplossen ruimtegebruik productielocaties (min)" (rij 32): ook omzetten? | rij 32 | Nee, alleen (max) zoals de opdracht vraagt. |
-| D6 | Van "Oplossen ruimtegebruik" zijn locatie, bron, ruimtebeslag, stroomvraag en voetafdruk onbekend. | rij 33 | Leeg gelaten; de validatie toont dit als waarschuwing in plaats van blokkerend (uitzondering voor bron "werkdocument"). **Ter review**: volgens de veldentabel zijn dit verplichte velden bij waterlevering. |
+| D6 | Van "Oplossen ruimtegebruik" zijn locatie, bron, ruimtebeslag, stroomvraag en voetafdruk onbekend. | rij 33 | Leeg gelaten. Deze objecten krijgen het kenmerk `meta.onvolledig = ja`; daarmee toont de validatie de ontbrekende velden als waarschuwing in plaats van blokkerend. **Ter review**: volgens de veldentabel zijn dit verplichte velden bij waterlevering. |
 | D7 | De besparing huishoudens is 13% (narratief 1–2) resp. 12% (3–4) van de **totale** vraag 2040 per cluster, met als toelichting "van 134 lpppd naar 115" resp. "115 naar 100". Klopt een percentage van de totale vraag voor een maatregel op huishoudens? | rij 26–29, kolom J | Volumes ongewijzigd overgenomen. |
 
 ## E. Rekenregels voor maatregelen
