@@ -10,7 +10,7 @@ import * as effecten from './effecten.js';
 import { hideTip, ververs } from './tooltip.js';
 
 const $ = (s) => document.querySelector(s);
-const VOORBEELD = 'docs/datamodel-voorbeeld.json';      // tot stap 6: data/voorbeeld.json
+const VOORBEELD = 'data/voorbeeld.json';      // fictieve data, getoond zolang er geen eigen dataset is
 
 /** Stage van 1600×900 die meeschaalt met het venster (uit de mockup). */
 function fit() {
@@ -80,7 +80,7 @@ function start({ data, voorbeeld }) {
   // kop: datasetnaam of VOORBEELDDATA, en een waarschuwing bij fouten in de basisdata
   const badge = $('#badge');
   const isVoorbeeld = voorbeeld || data.meta.voorbeelddata;
-  badge.textContent = isVoorbeeld ? 'VOORBEELDDATA' : data.meta.naam || 'Dataset';
+  badge.textContent = isVoorbeeld ? 'Voorbeelddata' : data.meta.naam || 'Dataset';
   badge.classList.toggle('naam', !isVoorbeeld);
   badge.title = isVoorbeeld ? 'Alle cijfers, maatregelen en effecten zijn fictief. Voer eigen data in via Invoer.' : `Dataset uit deze browser${data.meta.datum_import ? ', geïmporteerd op ' + data.meta.datum_import.split('-').reverse().join('-') : ''}`;
   if (basisfouten) {

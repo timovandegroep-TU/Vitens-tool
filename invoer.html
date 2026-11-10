@@ -4,18 +4,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Invoer – Visualisatie tool DWR</title>
+<link rel="stylesheet" href="css/tokens.css">
 <link rel="stylesheet" href="css/invoer.css">
 </head>
 <body>
 <header id="kop">
   <div class="titel">
-    <h1><span class="accent">Invoer |</span> Basisdata en maatregelen</h1>
-    <div class="sub">Visualisatie tool DWR · data blijft in deze browser (geen server)</div>
+    <img class="logo" alt="Vitens" src="assets/vitens-logo.png"><span class="sep" aria-hidden="true"></span>
+    <div>
+      <h1>Invoer basisdata en maatregelen</h1>
+      <div class="sub">Visualisatie tool DWR · data blijft in deze browser (geen server)</div>
+    </div>
   </div>
   <div class="dataset">
     <label for="dsNaam">Dataset</label>
     <input id="dsNaam" type="text" maxlength="60" aria-describedby="dsInfo">
     <span id="dsInfo" class="klein"></span>
+    <a class="knop sec" href="index.html" title="Open de visualisatie met de data uit deze browser">Naar visualisatie</a>
   </div>
 </header>
 

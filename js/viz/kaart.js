@@ -24,10 +24,10 @@ export function bouw(data) {
   const d = OMTREK_UTRECHT.map((p, i) => (i ? 'L' : 'M') + project(p).map((v) => v.toFixed(1)).join(',')).join('') + 'Z';
   const binnen = ([lon, lat]) => lon >= lo0 && lon <= lo1 && lat >= la0 && lat <= la1;
   document.querySelector('#mapG').innerHTML =
-    `<rect x="1" y="1" width="${W - 2}" height="${H - 2}" rx="10" fill="rgba(93,183,230,.10)" stroke="rgba(93,183,230,.35)" stroke-dasharray="3 4"/>`
+    `<rect x="1" y="1" width="${W - 2}" height="${H - 2}" rx="10" fill="rgba(74,175,224,.10)" stroke="rgba(74,175,224,.35)" stroke-dasharray="3 4"/>`
     + `<path d="${d}" fill="var(--map)" stroke="var(--map)" stroke-width="5" stroke-linejoin="round" opacity=".9"/>`
     + data.gemeenten.filter((g) => isPunt([g.lon, g.lat])).map((g) => { const [x, y] = project([g.lon, g.lat]); return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="1.3" fill="#fff" opacity=".45"/>`; }).join('')
-    + KAARTLABELS.filter((l) => binnen(l.punt)).map((l) => { const [x, y] = project(l.punt); return `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="middle"${l.tekst === 'UTRECHT' ? ' style="fill:#0E3150;opacity:.55"' : ''}>${esc(l.tekst)}</text>`; }).join('');
+    + KAARTLABELS.filter((l) => binnen(l.punt)).map((l) => { const [x, y] = project(l.punt); return `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="middle"${l.tekst === 'UTRECHT' ? ' style="fill:#2C3C8A;opacity:.6"' : ''}>${esc(l.tekst)}</text>`; }).join('');
 }
 
 /**

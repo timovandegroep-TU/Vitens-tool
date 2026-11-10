@@ -87,7 +87,7 @@ Status: eerste versie (stap 1). Een antwoord? Zet het erachter en verplaats de v
 
 | # | Vraag | Waar | Tijdelijke aanname |
 |---|---|---|---|
-| H1 | Welke data toont `index.html` als er in de browser nog geen dataset staat? | `js/viz/app.js` | Het fictieve `docs/datamodel-voorbeeld.json`, met het label VOORBEELDDATA. Stap 6 vervangt dit door `data/voorbeeld.json`. |
+| H1 | Welke data toont `index.html` als er in de browser nog geen dataset staat? | `js/viz/app.js` | Stap 6: het fictieve `data/voorbeeld.json`, met het gele label Voorbeelddata. |
 | H2 | Maatregelen met blokkerende fouten (zie G2). | paneel Maatregelen | Zichtbaar, schakelaar uitgeschakeld, "niet meegerekend: fouten in de aanlevering". Fouten in de basisdata geven een rood label in de kop met een link naar Invoer. |
 | H3 | Welke maatregelen staan in de lijst? | paneel Maatregelen | Alleen die van het gekozen narratief; bij een clusterfilter alleen die van dat cluster of "alle clusters". De waarde is de bijdrage in het zichtjaar (bij een clusterfilter: het deel voor dat cluster). |
 | H4 | Wanneer telt een effect van een maatregel? | paneel Effecten, chip Maatregelen | Alleen van maatregelen die in het zichtjaar meetellen (aan, Vitens, ingangsjaar bereikt). Waterleveringen zonder aangeleverde effecten staan er als "geen effecten aangeleverd". |
@@ -100,3 +100,16 @@ Status: eerste versie (stap 1). Een antwoord? Zet het erachter en verplaats de v
 ## Beantwoord
 
 *(nog leeg)*
+
+## I. Huisstijl Vitens en afronding (stap 6)
+
+| # | Vraag | Waar | Tijdelijke aanname |
+|---|---|---|---|
+| I1 | Lettertypen Baloo en Barlow staan niet in de repo. Ze mogen niet van een CDN komen (geen externe verzoeken) en zijn nog niet gedownload. | `css/tokens.css` | De tool valt terug op Arial (of op Baloo/Barlow als die op de computer staan). Zelf hosten in `fonts/` volgt zodra de bestanden er zijn; zie ook open punt 4 van de huisstijlreferentie (Baloo of Baloo 2). |
+| I2 | Het Vitens-logo is een tijdelijk bestand, uit het aangeleverde voorbeeld (schermafdruk, 181×79 px). Mag het logo in een openbare repo en op GitHub Pages, en wie is de afzender (Vitens, DWR/provincie, DKC)? | `assets/vitens-logo.png`, kop van beide pagina's | Logo staat linksboven, zoals in het voorbeeld. Vervangen door het officiële bestand; bij "nee" de `<img>` in `index.html` en `invoer.html` weghalen. |
+| I3 | Het logo "De Kleine Consultant" in de voet is vervallen (het voorbeeld in huisstijl heeft het niet). Zie H8. | `index.html` | Geen logo in de voet; rechtsonder staat de naam van de dataset. |
+| I4 | Statuskleuren oranje (aandacht) en donker turquoise (kans) zijn een voorstel uit de huisstijlreferentie, geen Vitens-kleuren. | `--tool-status-*` in `css/tokens.css`, `NIVEAUS` in `js/config.js` | Overgenomen. De kleuren staan op twee plekken omdat de kaart ze als SVG-attribuut zet. |
+| I5 | Eigen aanvullingen op de tokens voor de invoerpagina: vlak- en tekstkleur voor fouten en waarschuwingen, omdat signaalrood als kleine tekst op wit te weinig contrast heeft. | `--tool-fout-*`, `--tool-aandacht-*` | Voorstel; graag akkoord. |
+| I6 | De titel van `index.html` is nu "Visualisatie tool DWR" (zoals het voorbeeld); de lange zin uit de mockup staat als ondertitel onder de lijn. | `index.html` | Overgenomen uit het voorbeeld. |
+| I7 | De invoerpagina had geen link naar de visualisatie. | `invoer.html` | Knop "Naar visualisatie" in de kop toegevoegd. |
+| I8 | `referentie/` (mockup) en `docs/` worden door GitHub Pages mee gepubliceerd. | repo | Geen bezwaar aangenomen: beide bevatten alleen fictieve data. `private/` staat in `.gitignore` en komt niet op Pages. |

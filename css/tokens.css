@@ -1,0 +1,50 @@
+/* Huisstijl Vitens – design tokens voor de Visualisatie tool DWR.
+   Overgenomen uit de huisstijlreferentie (versie 0.1, 10-11-2026). Gebruik in de
+   componenten alleen deze variabelen, geen losse kleurwaarden. */
+:root{
+  /* kleur – gemeten op vitens.nl */
+  --vt-blauw:        #2C3C8A;  /* primair: tekst, koppen, navigatie, donkere vlakken */
+  --vt-geel:         #EDE412;  /* accent: hoofdactie, labels. Altijd met blauwe tekst */
+  --vt-lichtblauw:   #4AAFE0;  /* secundair: subtitels, accentlijnen, 2e dataserie */
+  --vt-helderblauw:  #1590CF;  /* interactief/hover, spaarzaam */
+  --vt-aqua:         #E8F6F5;  /* achtergrond van kaarten en panelen */
+  --vt-turquoise:    #8BD2CE;  /* koppen op donkerblauw vlak, zachte accenten */
+  --vt-druppel:      #ACDBEA;
+  --vt-grijs:        #707070;  /* secundaire tekst, metadata */
+  --vt-signaalrood:  #FF3A0D;  /* alleen knelpunten en fouten */
+  --vt-wit:          #FFFFFF;
+
+  /* afgeleid voor de tool (voorstel, niet van Vitens zelf) */
+  --tool-raster:     #D5DCEB;  /* rasterlijnen: vt-blauw op ~18% */
+  --tool-blauw-80:   #56639F;  /* secundaire lijnen */
+  --tool-blauw-30:   #C5CBE0;  /* uit-stand schakelaar/slider, randen van invoervelden */
+  --tool-plot:       #F4FAFA;  /* projectieveld in de grafiek, lichte vlakken */
+  --tool-op-blauw:   #C9D1EA;  /* gewone tekst op het donkerblauwe paneel */
+  --tool-status-knelpunt: #FF3A0D;
+  --tool-status-aandacht: #F2A71B;
+  --tool-status-kans:     #2E9E8F;
+  --tool-status-geen:     #AEB8DA;
+  --tool-fout-vlak:       #FFEBE6;  /* achtergrond van een cel of veld met een fout */
+  --tool-fout-tekst:      #C42A06;  /* signaalrood, donkerder voor kleine tekst op wit */
+  --tool-aandacht-vlak:   #FFF4D6;
+  --tool-aandacht-rand:   #F0C463;
+  --tool-aandacht-tekst:  #8A5A00;
+
+  /* typografie – valt terug op Arial zolang de lettertypen niet in /fonts staan */
+  --vt-font-kop:   "Baloo", "Baloo 2", Arial, sans-serif;
+  --vt-font-tekst: "Barlow", Arial, sans-serif;
+
+  /* vorm */
+  --vt-radius-kaart: 10px;
+  --vt-radius-knop:  5px;
+  --vt-schaduw-kaart: 0 3px 16px rgba(0,0,0,.10);
+
+  /* namen uit de mockup, gekoppeld aan de tokens (de componenten gebruiken deze) */
+  --navy:var(--vt-blauw); --ink:var(--vt-blauw); --ink-2:var(--vt-grijs); --muted:var(--vt-grijs);
+  --sky:var(--vt-lichtblauw); --vraag:var(--vt-lichtblauw); --light:var(--vt-aqua);
+  --track:var(--tool-blauw-30); --pill:var(--vt-wit); --lijn:var(--tool-blauw-30);
+  --plot:var(--tool-plot); --grid:var(--tool-raster); --slate:var(--tool-blauw-80);
+  --red:var(--tool-status-knelpunt); --amber:var(--tool-status-aandacht); --green:var(--tool-status-kans);
+  --red-bg:var(--tool-fout-vlak); --amber-bg:var(--tool-aandacht-vlak);
+  --map:var(--vt-lichtblauw); --eff-name:var(--vt-turquoise);
+}

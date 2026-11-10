@@ -83,15 +83,15 @@ function renderChart() {
   for (let v = dom.min + dom.stap; v <= dom.max + 1e-9; v += dom.stap) {
     s += `<line class="grid" x1="${CH.L}" x2="${CH.R}" y1="${Y(v)}" y2="${Y(v)}"/><text class="ytick" x="${CH.L - 12}" y="${Y(v) + 5}">${String(Math.round(v * 10) / 10).replace('.', ',')}</text>`;
   }
-  s += `<text x="${X(NU) + 10}" y="${CH.T + 16}" font-size="12" letter-spacing="3" fill="#5B6F82">PROJECTIE</text>`;
+  s += `<text x="${X(NU) + 10}" y="${CH.T + 16}" font-size="12.5" font-weight="500" fill="#707070">projectie</text>`;
   if (sh.reserve) {
     const r = S.map((c) => [c.jaar, c.vraag * RESERVE_FACTOR]), e = r[r.length - 1];
     s += `<path d="${pathOf(r)}" fill="none" stroke="var(--slate)" stroke-width="1.4" stroke-dasharray="12 5"/>`;
     s += `<text class="vlab" x="${X(JAAR_MAX) - 2}" y="${Y(e[1]) - 7}" text-anchor="end" style="font-weight:400;fill:var(--slate)">reserve +10%</text>`;
   }
   if (sh.zonder) {
-    s += `<path d="${pathOf(S.map((c) => [c.jaar, c.aanbod0]))}" fill="none" stroke="#7F93A6" stroke-width="1.7" stroke-dasharray="1.5 3.5" stroke-linecap="round"/>`;
-    s += AANBODJAREN.map((j) => `<circle class="punt" cx="${X(j)}" cy="${Y(app.zicht(j).aanbod0)}" r="2.6" fill="#fff" stroke="#7F93A6" stroke-width="1.4"/>`).join('');
+    s += `<path d="${pathOf(S.map((c) => [c.jaar, c.aanbod0]))}" fill="none" stroke="#707070" stroke-width="1.7" stroke-dasharray="1.5 3.5" stroke-linecap="round"/>`;
+    s += AANBODJAREN.map((j) => `<circle class="punt" cx="${X(j)}" cy="${Y(app.zicht(j).aanbod0)}" r="2.6" fill="#fff" stroke="#707070" stroke-width="1.4"/>`).join('');
   }
   if (sh.vraag) {
     s += `<path d="${pathOf(tot(vraag))}" fill="none" stroke="var(--vraag)" stroke-width="3" stroke-linecap="round"/>`;
@@ -139,10 +139,10 @@ function drawHover() {
   const g = $('#hoverG');
   if (hoverJaar == null) { g.innerHTML = ''; return; }
   const c = app.zicht(hoverJaar), x = X(hoverJaar), sh = app.state.show;
-  let s = `<line x1="${x}" x2="${x}" y1="${CH.T}" y2="${CH.B}" stroke="#8EA4B8" stroke-width="1"/>`;
+  let s = `<line x1="${x}" x2="${x}" y1="${CH.T}" y2="${CH.B}" stroke="#AEB8DA" stroke-width="1"/>`;
   if (sh.vraag) s += `<circle cx="${x}" cy="${Y(c.vraag)}" r="4" fill="#fff" stroke="var(--vraag)" stroke-width="2"/>`;
   if (sh.aanbod) s += `<circle cx="${x}" cy="${Y(c.aanbod)}" r="4" fill="#fff" stroke="var(--navy)" stroke-width="2"/>`;
-  if (sh.zonder) s += `<circle cx="${x}" cy="${Y(c.aanbod0)}" r="3.5" fill="#fff" stroke="#7F93A6" stroke-width="1.6"/>`;
+  if (sh.zonder) s += `<circle cx="${x}" cy="${Y(c.aanbod0)}" r="3.5" fill="#fff" stroke="#707070" stroke-width="1.6"/>`;
   g.innerHTML = s;
 }
 const lkey = (stroke, w, dash) => `<svg width="18" height="6"><line x1="1" y1="3" x2="17" y2="3" stroke="${stroke}" stroke-width="${w}" ${dash ? `stroke-dasharray="${dash}"` : ''} stroke-linecap="round"/></svg>`;
@@ -150,19 +150,19 @@ function chartTip(t) {
   const c = app.zicht(t), sh = app.state.show, dp = isDatapunt(t);
   const soort = (echt) => (echt ? '' : ' <i style="color:var(--muted);font-style:normal">(geïnterpoleerd)</i>');
   let h = `<div class="th">${t} · ${t <= NU ? 'huidig' : 'projectie'}${app.state.cluster ? ' · ' + esc(app.clusterNaam()) : ''}</div>`;
-  if (sh.vraag) h += `<div class="tr">${lkey('#4AA8E0', 3)}<b>${f1(c.vraag)}</b><span>Vraag${soort(dp.vraag)}</span></div>`;
-  if (sh.aanbod) h += `<div class="tr">${lkey('#0E3150', 3.5)}<b>${f1(c.aanbod)}</b><span>Aanbod${soort(dp.aanbod)}</span></div>`;
-  if (sh.zonder) h += `<div class="tr">${lkey('#7F93A6', 1.7, '1.5 3.5')}<b>${f1(c.aanbod0)}</b><span>Zonder maatregelen</span></div>`;
-  if (sh.reserve) h += `<div class="tr">${lkey('#5E7387', 1.4, '5 3')}<b>${f1(c.vraag * RESERVE_FACTOR)}</b><span>Reservenorm</span></div>`;
+  if (sh.vraag) h += `<div class="tr">${lkey('#4AAFE0', 3)}<b>${f1(c.vraag)}</b><span>Vraag${soort(dp.vraag)}</span></div>`;
+  if (sh.aanbod) h += `<div class="tr">${lkey('#2C3C8A', 3.5)}<b>${f1(c.aanbod)}</b><span>Aanbod${soort(dp.aanbod)}</span></div>`;
+  if (sh.zonder) h += `<div class="tr">${lkey('#707070', 1.7, '1.5 3.5')}<b>${f1(c.aanbod0)}</b><span>Zonder maatregelen</span></div>`;
+  if (sh.reserve) h += `<div class="tr">${lkey('#56639F', 1.4, '5 3')}<b>${f1(c.vraag * RESERVE_FACTOR)}</b><span>Reservenorm</span></div>`;
   return h + '<div class="sep"></div>' + kv('Vraag zonder besparing', f1(c.vraag0)) + kv('Tekort', `${f1(c.tekort)} Mm³/j`)
     + `<div class="tm" style="margin:4px 0 0">Klik om ${t} als zichtjaar te kiezen</div>`;
 }
 
 // legenda
 const LEG = [
-  { k: 'vraag', label: 'Vraag', key: '<svg width="34" height="8"><line x1="1" y1="4" x2="33" y2="4" stroke="#4AA8E0" stroke-width="3" stroke-linecap="round"/></svg>' },
-  { k: 'aanbod', label: 'Aanbod', key: '<svg width="34" height="8"><line x1="1" y1="4" x2="33" y2="4" stroke="#0E3150" stroke-width="3.5" stroke-linecap="round"/></svg>' },
-  { k: 'zonder', label: 'Zonder maatregelen', key: '<svg width="34" height="8"><line x1="1" y1="4" x2="33" y2="4" stroke="#7F93A6" stroke-width="1.7" stroke-dasharray="1.5 3.5" stroke-linecap="round"/></svg>' },
+  { k: 'vraag', label: 'Vraag', key: '<svg width="34" height="8"><line x1="1" y1="4" x2="33" y2="4" stroke="#4AAFE0" stroke-width="3" stroke-linecap="round"/></svg>' },
+  { k: 'aanbod', label: 'Aanbod', key: '<svg width="34" height="8"><line x1="1" y1="4" x2="33" y2="4" stroke="#2C3C8A" stroke-width="3.5" stroke-linecap="round"/></svg>' },
+  { k: 'zonder', label: 'Zonder maatregelen', key: '<svg width="34" height="8"><line x1="1" y1="4" x2="33" y2="4" stroke="#707070" stroke-width="1.7" stroke-dasharray="1.5 3.5" stroke-linecap="round"/></svg>' },
 ];
 function renderLegend() {
   $('#legend').replaceChildren(...LEG.map((l) => {
@@ -187,7 +187,7 @@ function renderTable() {
     const c = app.zicht(y);
     h += `<tr class="${y === app.state.jaar ? 'sel' : ''}"><td>${y}</td><td>${f1(c.vraag)}</td><td>${f1(c.aanbod)}</td><td>${f1(c.aanbod0)}</td><td>${c.opgave > 0 ? f1(c.opgave) : '–'}</td><td>${f1(c.bijdrage)}</td><td>${f1(c.tekort)}</td><td>${c.opgave > 0 ? Math.floor(c.gedekt * 100) + '%' : '–'}</td></tr>`;
   }
-  $('#tableView').innerHTML = h + '</tbody></table><div style="font-size:11.5px;color:#6B7F92;margin-top:8px">Alle waarden in Mm³/j · opgave = vraag zonder besparing − aanbod zonder maatregelen</div>';
+  $('#tableView').innerHTML = h + '</tbody></table><div style="font-size:11.5px;color:#707070;margin-top:8px">Alle waarden in Mm³/j · opgave = vraag zonder besparing − aanbod zonder maatregelen</div>';
 }
 
 // --------------------------------------------------------- dekkingsbalk

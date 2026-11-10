@@ -5,12 +5,12 @@ export const START_ZICHTJAAR = 2035;
 export const AFSPEEL_MS = 380;            // tempo van "afspelen" per jaar
 export const RESERVE_FACTOR = 1.1;        // chip "Reserve +10%": vraag × 1,1 (alleen een lijn)
 
-// Kleuren van pins en bolletjes (gelijk aan de mockup)
+// Kleuren van pins en bolletjes (css/tokens.css: --tool-status-*; hier herhaald omdat ze in SVG-attributen komen)
 export const NIVEAUS = {
-  knelpunt: { kleur: '#E5333A', volgorde: 0 },
+  knelpunt: { kleur: '#FF3A0D', volgorde: 0 },
   aandacht: { kleur: '#F2A71B', volgorde: 1 },
-  kans:     { kleur: '#2DB04B', volgorde: 2 },
-  geen:     { kleur: '#9DB6CC', volgorde: 3 },
+  kans:     { kleur: '#2E9E8F', volgorde: 2 },
+  geen:     { kleur: '#AEB8DA', volgorde: 3 },
 };
 
 // Fysieke voetafdruk -> niveau in het effectenpaneel. Niet genoemd = geen melding.
