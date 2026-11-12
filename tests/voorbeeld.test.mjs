@@ -46,9 +46,9 @@ function vergelijk(gevonden, verwacht, pad) {
   for (const k of Object.keys(verwacht)) vergelijk(gevonden[k], verwacht[k], `${pad} › ${k}`);
 }
 
-test('voorbeelddata: fictief gemarkeerd, alleen de bedoelde waarschuwing (Oasen)', () => {
+test('voorbeelddata: gemarkeerd, alleen de bedoelde waarschuwingen (Benschop, Oasen)', () => {
   assert.equal(data.meta.voorbeelddata, true);
-  assert.deepEqual(valideer(data).map((m) => `${m.niveau} ${m.rij} ${m.veld}`), ['waarschuwing oasen-levering-west leverancier']);
+  assert.deepEqual(valideer(data).map((m) => `${m.niveau} ${m.rij} ${m.veld}`), ['waarschuwing Benschop capaciteit', 'waarschuwing oasen-levering-west leverancier']);
   assert.ok(data.maatregelen.length >= 10);
   for (const soort of ['waterlevering', 'waterbesparing', 'afname']) assert.ok(data.maatregelen.some((m) => m.soort === soort), soort);
 });

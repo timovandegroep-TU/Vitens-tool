@@ -1,269 +1,401 @@
 {
  "meta": {
-  "naam": "Voorbeelddata (fictief)",
+  "naam": "Voorbeelddata",
   "schema_versie": 2,
   "datum_import": "2026-11-12",
-  "bron": "Verzonnen namen en waarden, alleen om de tool te tonen",
+  "bron": "Winningen: werkdocument V04_1. Vraagscenario's en maatregelen: fictief.",
   "voorbeelddata": true
  },
  "winningen": [
   {
-   "naam": "Lindewaard",
-   "cluster": "West",
-   "gemeente": "Lindewaard",
-   "capaciteit": 11.0,
-   "lat": 52.09,
-   "lon": 4.93,
-   "toelichting": ""
-  },
-  {
-   "naam": "Hoge Brug",
-   "cluster": "West",
-   "gemeente": "Hoge Brug",
-   "capaciteit": 9.0,
-   "lat": 52.12,
-   "lon": 4.99,
-   "toelichting": ""
-  },
-  {
-   "naam": "Kromme Akker",
-   "cluster": "West",
-   "gemeente": "Kromme Akker",
+   "naam": "Bremerberg",
+   "type": "Winning",
+   "cluster": "Flevoland",
+   "watersysteem": "Polder",
+   "huidig_aanbod": 8.0,
    "capaciteit": 7.0,
-   "lat": 52.05,
-   "lon": 4.88,
-   "toelichting": ""
+   "gemeente": "Dronten",
+   "lat": 52.42,
+   "lon": 5.65,
+   "toelichting": "Ligging benaderd op plaatsnaam."
   },
   {
-   "naam": "Wilgenoord",
-   "cluster": "West",
-   "gemeente": "Wilgenoord",
-   "capaciteit": 6.0,
-   "lat": 52.14,
-   "lon": 4.9,
-   "toelichting": ""
+   "naam": "Fledite",
+   "type": "Winning",
+   "cluster": "Flevoland",
+   "watersysteem": "Polder",
+   "huidig_aanbod": 11.0,
+   "capaciteit": 11.0,
+   "gemeente": "Zeewolde",
+   "lat": 52.3,
+   "lon": 5.42,
+   "toelichting": "Ligging benaderd op plaatsnaam."
   },
   {
-   "naam": "Rietveen",
-   "cluster": "West",
-   "gemeente": "Rietveen",
+   "naam": "Harderbroek",
+   "type": "Winning",
+   "cluster": "Flevoland",
+   "watersysteem": "Polder",
+   "huidig_aanbod": 10.0,
+   "capaciteit": 10.0,
+   "gemeente": "Zeewolde",
+   "lat": 52.37,
+   "lon": 5.57,
+   "toelichting": "Ligging benaderd op plaatsnaam."
+  },
+  {
+   "naam": "Harderwijk",
+   "type": "Winning",
+   "cluster": "Utrecht Randmeren Gelderland",
+   "watersysteem": "Flanken",
+   "huidig_aanbod": 5.0,
    "capaciteit": 5.0,
-   "lat": 52.03,
-   "lon": 4.96,
-   "toelichting": ""
+   "gemeente": "Harderwijk",
+   "lat": 52.34,
+   "lon": 5.62,
+   "toelichting": "Ligging benaderd op plaatsnaam."
   },
   {
-   "naam": "Molendijk",
-   "cluster": "West",
-   "gemeente": "Molendijk",
-   "capaciteit": 3.0,
-   "lat": 52.07,
-   "lon": 5.02,
-   "toelichting": ""
+   "naam": "Putten",
+   "type": "Winning",
+   "cluster": "Utrecht Randmeren Gelderland",
+   "watersysteem": "Flanken",
+   "huidig_aanbod": 3.5,
+   "capaciteit": 3.5,
+   "gemeente": "Putten",
+   "lat": 52.26,
+   "lon": 5.61,
+   "toelichting": "Ligging benaderd op plaatsnaam."
   },
   {
-   "naam": "Schaapsdrift",
-   "cluster": "West",
-   "gemeente": "Schaapsdrift",
+   "naam": "Fledite ROL",
+   "type": "Winning",
+   "cluster": "Utrecht Randmeren Gelderland",
+   "watersysteem": "Polder",
+   "huidig_aanbod": 2.2,
+   "capaciteit": 2.2,
+   "gemeente": "Zeewolde",
+   "lat": 52.3,
+   "lon": 5.42,
+   "toelichting": "Ligging benaderd op plaatsnaam."
+  },
+  {
+   "naam": "Holk",
+   "type": "Winning",
+   "cluster": "Utrecht Randmeren Gelderland",
+   "watersysteem": "Polder",
+   "huidig_aanbod": 5.0,
+   "capaciteit": 5.0,
+   "gemeente": "Nijkerk",
+   "lat": 52.23,
+   "lon": 5.45,
+   "toelichting": "Ligging benaderd op plaatsnaam."
+  },
+  {
+   "naam": "Amersfoort Koedijkerweg",
+   "type": "Winning",
+   "cluster": "Utrecht Randmeren Utrecht",
+   "watersysteem": "Flanken",
+   "huidig_aanbod": 1.5,
+   "capaciteit": 1.5,
+   "gemeente": "Amersfoort",
+   "lat": 52.18,
+   "lon": 5.4,
+   "toelichting": "Ligging benaderd op plaatsnaam."
+  },
+  {
+   "naam": "Laren",
+   "type": "Winning",
+   "cluster": "Utrecht Randmeren Utrecht",
+   "watersysteem": "Flanken",
+   "huidig_aanbod": 2.0,
    "capaciteit": 2.0,
-   "lat": 52.11,
-   "lon": 4.85,
-   "toelichting": ""
-  },
-  {
-   "naam": "Vossenhol",
-   "cluster": "West",
-   "gemeente": "Vossenhol",
-   "capaciteit": 1.0,
-   "lat": 52.16,
-   "lon": 4.96,
-   "toelichting": ""
-  },
-  {
-   "naam": "Beekzicht",
-   "cluster": "Zuid",
-   "gemeente": "Beekzicht",
-   "capaciteit": 5.0,
-   "lat": 51.98,
+   "gemeente": "Laren",
+   "lat": 52.26,
    "lon": 5.23,
-   "toelichting": ""
+   "toelichting": "Ligging benaderd op plaatsnaam."
   },
   {
-   "naam": "Dorrewaard",
-   "cluster": "Zuid",
-   "gemeente": "Dorrewaard",
-   "capaciteit": 3.5,
-   "lat": 51.96,
-   "lon": 5.33,
-   "toelichting": ""
+   "naam": "Loosdrecht",
+   "type": "Winning",
+   "cluster": "Utrecht Randmeren Utrecht",
+   "watersysteem": "Flanken",
+   "huidig_aanbod": 2.2,
+   "capaciteit": 2.2,
+   "gemeente": "Wijdemeren",
+   "lat": 52.2,
+   "lon": 5.12,
+   "toelichting": "Ligging benaderd op plaatsnaam."
   },
   {
-   "naam": "Heidepoort",
-   "cluster": "Zuid",
-   "gemeente": "Heidepoort",
-   "capaciteit": 3.5,
-   "lat": 52.0,
-   "lon": 5.39,
-   "toelichting": ""
+   "naam": "Amersfoort Berg",
+   "type": "Winning",
+   "cluster": "Utrecht Randmeren Utrecht",
+   "watersysteem": "Heuvelrug",
+   "huidig_aanbod": 1.5,
+   "capaciteit": 1.5,
+   "gemeente": "Amersfoort",
+   "lat": 52.14,
+   "lon": 5.37,
+   "toelichting": "Ligging benaderd op plaatsnaam."
   },
   {
-   "naam": "Klaverhoeve",
-   "cluster": "Zuid",
-   "gemeente": "Klaverhoeve",
-   "capaciteit": 3.0,
-   "lat": 51.99,
-   "lon": 5.17,
-   "toelichting": ""
-  },
-  {
-   "naam": "Zandstede",
-   "cluster": "Zuid",
-   "gemeente": "Zandstede",
-   "capaciteit": 2.0,
-   "lat": 51.95,
-   "lon": 5.26,
-   "toelichting": ""
-  },
-  {
-   "naam": "Eikenrode",
-   "cluster": "Midden",
-   "gemeente": "Eikenrode",
-   "capaciteit": 8.0,
+   "naam": "Soestduinen",
+   "type": "Winning",
+   "cluster": "Utrecht Randmeren Utrecht",
+   "watersysteem": "Heuvelrug",
+   "huidig_aanbod": 9.0,
+   "capaciteit": 9.0,
+   "gemeente": "Soest",
    "lat": 52.15,
    "lon": 5.3,
-   "toelichting": ""
+   "toelichting": "Ligging benaderd op plaatsnaam."
   },
   {
-   "naam": "Bosrand",
-   "cluster": "Midden",
-   "gemeente": "Bosrand",
-   "capaciteit": 6.0,
-   "lat": 52.12,
-   "lon": 5.36,
-   "toelichting": ""
-  },
-  {
-   "naam": "Leemberg",
-   "cluster": "Midden",
-   "gemeente": "Leemberg",
+   "naam": "Eemdijk",
+   "type": "Winning",
+   "cluster": "Utrecht Randmeren Utrecht",
+   "watersysteem": "Polder",
+   "huidig_aanbod": 5.0,
    "capaciteit": 5.0,
-   "lat": 52.18,
-   "lon": 5.24,
-   "toelichting": ""
-  },
-  {
-   "naam": "Dennenhof",
-   "cluster": "Midden",
-   "gemeente": "Dennenhof",
-   "capaciteit": 4.0,
-   "lat": 52.1,
-   "lon": 5.2,
-   "toelichting": ""
-  },
-  {
-   "naam": "Valkenheuvel",
-   "cluster": "Midden",
-   "gemeente": "Valkenheuvel",
-   "capaciteit": 3.0,
-   "lat": 52.2,
-   "lon": 5.33,
-   "toelichting": ""
-  },
-  {
-   "naam": "Mosveld",
-   "cluster": "Midden",
-   "gemeente": "Mosveld",
-   "capaciteit": 2.0,
-   "lat": 52.14,
-   "lon": 5.42,
-   "toelichting": ""
-  },
-  {
-   "naam": "Wolfsberg",
-   "cluster": "Oost",
-   "gemeente": "Wolfsberg",
-   "capaciteit": 5.0,
-   "lat": 52.32,
-   "lon": 5.64,
-   "toelichting": ""
-  },
-  {
-   "naam": "Hertenkamp",
-   "cluster": "Oost",
-   "gemeente": "Hertenkamp",
-   "capaciteit": 4.0,
-   "lat": 52.28,
-   "lon": 5.7,
-   "toelichting": ""
-  },
-  {
-   "naam": "Bremhorst",
-   "cluster": "Oost",
-   "gemeente": "Bremhorst",
-   "capaciteit": 3.5,
+   "gemeente": "Bunschoten",
    "lat": 52.25,
-   "lon": 5.6,
-   "toelichting": ""
+   "lon": 5.33,
+   "toelichting": "Ligging benaderd op plaatsnaam."
   },
   {
-   "naam": "Ruigeveld",
-   "cluster": "Oost",
-   "gemeente": "Ruigeveld",
-   "capaciteit": 3.0,
-   "lat": 52.35,
-   "lon": 5.58,
-   "toelichting": ""
+   "naam": "Fledite ROL",
+   "type": "Winning",
+   "cluster": "Utrecht Randmeren Utrecht",
+   "watersysteem": "Polder",
+   "huidig_aanbod": 1.8,
+   "capaciteit": 1.8,
+   "gemeente": "Zeewolde",
+   "lat": 52.3,
+   "lon": 5.42,
+   "toelichting": "Ligging benaderd op plaatsnaam."
   },
   {
-   "naam": "Polderkern",
-   "cluster": "Noord",
-   "gemeente": "Polderkern",
-   "capaciteit": 10.0,
-   "lat": 52.47,
-   "lon": 5.5,
-   "toelichting": ""
-  },
-  {
-   "naam": "Nieuwlandse Dijk",
-   "cluster": "Noord",
-   "gemeente": "Nieuwlandse Dijk",
-   "capaciteit": 7.0,
-   "lat": 52.43,
-   "lon": 5.6,
-   "toelichting": ""
-  },
-  {
-   "naam": "Kavel Zeven",
-   "cluster": "Noord",
-   "gemeente": "Kavel Zeven",
+   "naam": "Spiekzand ROL",
+   "type": "Winning",
+   "cluster": "Utrecht Randmeren Utrecht",
+   "watersysteem": "Polder",
+   "huidig_aanbod": 5.0,
    "capaciteit": 5.0,
-   "lat": 52.51,
-   "lon": 5.45,
-   "toelichting": ""
+   "gemeente": "Zeewolde",
+   "lat": 52.33,
+   "lon": 5.5,
+   "toelichting": "Ligging benaderd op plaatsnaam."
   },
   {
-   "naam": "Lage Vaart",
-   "cluster": "Noord",
-   "gemeente": "Lage Vaart",
-   "capaciteit": 4.0,
-   "lat": 52.4,
-   "lon": 5.52,
-   "toelichting": ""
+   "naam": "Beerschoten",
+   "type": "Winning",
+   "cluster": "Utrecht West",
+   "watersysteem": "Flanken",
+   "huidig_aanbod": 8.0,
+   "capaciteit": 8.0,
+   "gemeente": "De Bilt",
+   "lat": 52.09,
+   "lon": 5.2,
+   "toelichting": "Ligging benaderd op plaatsnaam."
   },
   {
-   "naam": "Meeuwenplaat",
-   "cluster": "Noord",
-   "gemeente": "Meeuwenplaat",
+   "naam": "Bilthoven",
+   "type": "Winning",
+   "cluster": "Utrecht West",
+   "watersysteem": "Flanken",
+   "huidig_aanbod": 2.0,
+   "capaciteit": 1.2,
+   "gemeente": "De Bilt",
+   "lat": 52.13,
+   "lon": 5.2,
+   "toelichting": "Ligging benaderd op plaatsnaam."
+  },
+  {
+   "naam": "Benschop",
+   "type": "Winning",
+   "cluster": "Utrecht West",
+   "watersysteem": "Polder",
+   "huidig_aanbod": 3.0,
+   "capaciteit": 0.0,
+   "gemeente": "Lopik",
+   "lat": 52.01,
+   "lon": 4.98,
+   "toelichting": "Ligging benaderd op plaatsnaam."
+  },
+  {
+   "naam": "Groenekan",
+   "type": "Winning",
+   "cluster": "Utrecht West",
+   "watersysteem": "Polder",
+   "huidig_aanbod": 7.5,
+   "capaciteit": 6.0,
+   "gemeente": "De Bilt",
+   "lat": 52.12,
+   "lon": 5.15,
+   "toelichting": "Ligging benaderd op plaatsnaam."
+  },
+  {
+   "naam": "Linschoten",
+   "type": "Winning",
+   "cluster": "Utrecht West",
+   "watersysteem": "Polder",
+   "huidig_aanbod": 10.0,
+   "capaciteit": 10.0,
+   "gemeente": "Montfoort",
+   "lat": 52.06,
+   "lon": 4.91,
+   "toelichting": "Ligging benaderd op plaatsnaam."
+  },
+  {
+   "naam": "Bunnik",
+   "type": "Winning",
+   "cluster": "Utrecht West",
+   "watersysteem": "Riviergebied",
+   "huidig_aanbod": 3.5,
+   "capaciteit": 3.5,
+   "gemeente": "Bunnik",
+   "lat": 52.07,
+   "lon": 5.2,
+   "toelichting": "Ligging benaderd op plaatsnaam."
+  },
+  {
+   "naam": "De Meern",
+   "type": "Winning",
+   "cluster": "Utrecht West",
+   "watersysteem": "Riviergebied",
+   "huidig_aanbod": 1.9,
+   "capaciteit": 1.9,
+   "gemeente": "Utrecht",
+   "lat": 52.08,
+   "lon": 5.03,
+   "toelichting": "Ligging benaderd op plaatsnaam."
+  },
+  {
+   "naam": "Leidsche Rijn",
+   "type": "Winning",
+   "cluster": "Utrecht West",
+   "watersysteem": "Riviergebied",
+   "huidig_aanbod": 5.3,
+   "capaciteit": 5.0,
+   "gemeente": "Utrecht",
+   "lat": 52.1,
+   "lon": 5.05,
+   "toelichting": "Ligging benaderd op plaatsnaam."
+  },
+  {
+   "naam": "Nieuwegein",
+   "type": "Winning",
+   "cluster": "Utrecht West",
+   "watersysteem": "Riviergebied",
+   "huidig_aanbod": 2.5,
+   "capaciteit": 2.5,
+   "gemeente": "Nieuwegein",
+   "lat": 52.03,
+   "lon": 5.09,
+   "toelichting": "Ligging benaderd op plaatsnaam."
+  },
+  {
+   "naam": "Tull en 't Waal",
+   "type": "Winning",
+   "cluster": "Utrecht West",
+   "watersysteem": "Riviergebied",
+   "huidig_aanbod": 6.0,
+   "capaciteit": 6.0,
+   "gemeente": "Houten",
+   "lat": 52.0,
+   "lon": 5.13,
+   "toelichting": "Ligging benaderd op plaatsnaam."
+  },
+  {
+   "naam": "Driebergen",
+   "type": "Winning",
+   "cluster": "Utrecht Zuid",
+   "watersysteem": "Flanken",
+   "huidig_aanbod": 0.9,
+   "capaciteit": 0.9,
+   "gemeente": "Utrechtse Heuvelrug",
+   "lat": 52.05,
+   "lon": 5.28,
+   "toelichting": "Ligging benaderd op plaatsnaam."
+  },
+  {
+   "naam": "Leersum",
+   "type": "Winning",
+   "cluster": "Utrecht Zuid",
+   "watersysteem": "Flanken",
+   "huidig_aanbod": 0.8,
+   "capaciteit": 0.8,
+   "gemeente": "Utrechtse Heuvelrug",
+   "lat": 52.01,
+   "lon": 5.43,
+   "toelichting": "Ligging benaderd op plaatsnaam."
+  },
+  {
+   "naam": "Veenendaal",
+   "type": "Winning",
+   "cluster": "Utrecht Zuid",
+   "watersysteem": "Flanken",
+   "huidig_aanbod": 3.0,
+   "capaciteit": 3.0,
+   "gemeente": "Veenendaal",
+   "lat": 52.03,
+   "lon": 5.55,
+   "toelichting": "Ligging benaderd op plaatsnaam."
+  },
+  {
+   "naam": "Woudenberg",
+   "type": "Winning",
+   "cluster": "Utrecht Zuid",
+   "watersysteem": "Flanken",
+   "huidig_aanbod": 3.4,
+   "capaciteit": 2.2,
+   "gemeente": "Woudenberg",
+   "lat": 52.08,
+   "lon": 5.42,
+   "toelichting": "Ligging benaderd op plaatsnaam."
+  },
+  {
+   "naam": "Zeist",
+   "type": "Winning",
+   "cluster": "Utrecht Zuid",
+   "watersysteem": "Flanken",
+   "huidig_aanbod": 5.0,
+   "capaciteit": 5.0,
+   "gemeente": "Zeist",
+   "lat": 52.09,
+   "lon": 5.24,
+   "toelichting": "Ligging benaderd op plaatsnaam."
+  },
+  {
+   "naam": "Rhenen",
+   "type": "Winning",
+   "cluster": "Utrecht Zuid",
+   "watersysteem": "Heuvelrug",
+   "huidig_aanbod": 2.0,
    "capaciteit": 2.0,
-   "lat": 52.54,
-   "lon": 5.58,
-   "toelichting": ""
+   "gemeente": "Rhenen",
+   "lat": 51.96,
+   "lon": 5.57,
+   "toelichting": "Ligging benaderd op plaatsnaam."
+  },
+  {
+   "naam": "Cothen",
+   "type": "Winning",
+   "cluster": "Utrecht Zuid",
+   "watersysteem": "Riviergebied",
+   "huidig_aanbod": 3.0,
+   "capaciteit": 3.0,
+   "gemeente": "Wijk bij Duurstede",
+   "lat": 52.0,
+   "lon": 5.31,
+   "toelichting": "Ligging benaderd op plaatsnaam."
   }
  ],
  "vraag": [
   {
    "scenario": "Laag",
-   "cluster": "West",
+   "cluster": "Utrecht West",
    "2025": 46.5,
    "2030": 46.26,
    "2035": 46.05,
@@ -274,7 +406,7 @@
   },
   {
    "scenario": "Laag",
-   "cluster": "Zuid",
+   "cluster": "Utrecht Zuid",
    "2025": 16.6,
    "2030": 16.54,
    "2035": 16.48,
@@ -285,7 +417,7 @@
   },
   {
    "scenario": "Laag",
-   "cluster": "Midden",
+   "cluster": "Utrecht Randmeren Utrecht",
    "2025": 32.5,
    "2030": 32.35,
    "2035": 32.22,
@@ -296,7 +428,7 @@
   },
   {
    "scenario": "Laag",
-   "cluster": "Oost",
+   "cluster": "Utrecht Randmeren Gelderland",
    "2025": 14.6,
    "2030": 14.54,
    "2035": 14.48,
@@ -307,7 +439,7 @@
   },
   {
    "scenario": "Laag",
-   "cluster": "Noord",
+   "cluster": "Flevoland",
    "2025": 28.0,
    "2030": 27.84,
    "2035": 27.71,
@@ -318,7 +450,7 @@
   },
   {
    "scenario": "Midden (CBS)",
-   "cluster": "West",
+   "cluster": "Utrecht West",
    "2025": 46.5,
    "2030": 47.58,
    "2035": 48.52,
@@ -329,7 +461,7 @@
   },
   {
    "scenario": "Midden (CBS)",
-   "cluster": "Zuid",
+   "cluster": "Utrecht Zuid",
    "2025": 16.6,
    "2030": 16.88,
    "2035": 17.12,
@@ -340,7 +472,7 @@
   },
   {
    "scenario": "Midden (CBS)",
-   "cluster": "Midden",
+   "cluster": "Utrecht Randmeren Utrecht",
    "2025": 32.5,
    "2030": 33.19,
    "2035": 33.78,
@@ -351,7 +483,7 @@
   },
   {
    "scenario": "Midden (CBS)",
-   "cluster": "Oost",
+   "cluster": "Utrecht Randmeren Gelderland",
    "2025": 14.6,
    "2030": 14.88,
    "2035": 15.12,
@@ -362,7 +494,7 @@
   },
   {
    "scenario": "Midden (CBS)",
-   "cluster": "Noord",
+   "cluster": "Flevoland",
    "2025": 28.0,
    "2030": 28.71,
    "2035": 29.33,
@@ -373,7 +505,7 @@
   },
   {
    "scenario": "Hoog",
-   "cluster": "West",
+   "cluster": "Utrecht West",
    "2025": 46.5,
    "2030": 48.9,
    "2035": 50.98,
@@ -384,7 +516,7 @@
   },
   {
    "scenario": "Hoog",
-   "cluster": "Zuid",
+   "cluster": "Utrecht Zuid",
    "2025": 16.6,
    "2030": 17.22,
    "2035": 17.76,
@@ -395,7 +527,7 @@
   },
   {
    "scenario": "Hoog",
-   "cluster": "Midden",
+   "cluster": "Utrecht Randmeren Utrecht",
    "2025": 32.5,
    "2030": 34.03,
    "2035": 35.35,
@@ -406,7 +538,7 @@
   },
   {
    "scenario": "Hoog",
-   "cluster": "Oost",
+   "cluster": "Utrecht Randmeren Gelderland",
    "2025": 14.6,
    "2030": 15.22,
    "2035": 15.75,
@@ -417,7 +549,7 @@
   },
   {
    "scenario": "Hoog",
-   "cluster": "Noord",
+   "cluster": "Flevoland",
    "2025": 28.0,
    "2030": 29.58,
    "2035": 30.95,
@@ -428,7 +560,7 @@
   },
   {
    "scenario": "Hoog + warm",
-   "cluster": "West",
+   "cluster": "Utrecht West",
    "2025": 46.5,
    "2030": 49.86,
    "2035": 52.78,
@@ -439,7 +571,7 @@
   },
   {
    "scenario": "Hoog + warm",
-   "cluster": "Zuid",
+   "cluster": "Utrecht Zuid",
    "2025": 16.6,
    "2030": 17.47,
    "2035": 18.23,
@@ -450,7 +582,7 @@
   },
   {
    "scenario": "Hoog + warm",
-   "cluster": "Midden",
+   "cluster": "Utrecht Randmeren Utrecht",
    "2025": 32.5,
    "2030": 34.64,
    "2035": 36.49,
@@ -461,7 +593,7 @@
   },
   {
    "scenario": "Hoog + warm",
-   "cluster": "Oost",
+   "cluster": "Utrecht Randmeren Gelderland",
    "2025": 14.6,
    "2030": 15.46,
    "2035": 16.21,
@@ -472,7 +604,7 @@
   },
   {
    "scenario": "Hoog + warm",
-   "cluster": "Noord",
+   "cluster": "Flevoland",
    "2025": 28.0,
    "2030": 30.21,
    "2035": 32.12,
@@ -486,7 +618,7 @@
   {
    "id": "besparing-huishoudens",
    "naam": "Waterbesparing huishoudens",
-   "omschrijving": "Campagnes en waterbesparende toestellen bij huishoudens.",
+   "omschrijving": "Fictief voorbeeld: campagnes en waterbesparende toestellen bij huishoudens.",
    "leverancier": "Vitens",
    "soort": "waterbesparing",
    "spoor": "S0",
@@ -515,13 +647,13 @@
    "meta": {
     "aangeleverd_door": "J. Voorbeeld (fictief)",
     "datum": "2026-11-12",
-    "bron": "Fictief overzicht maatregelen"
+    "bron": "Fictief voorbeeld, geen echte plannen"
    }
   },
   {
    "id": "besparing-bedrijven",
    "naam": "Waterbesparing bedrijven",
-   "omschrijving": "Afspraken met grootverbruikers over hergebruik van proceswater.",
+   "omschrijving": "Fictief voorbeeld: afspraken met grootverbruikers over hergebruik van proceswater.",
    "leverancier": "Vitens",
    "soort": "waterbesparing",
    "spoor": "S0",
@@ -550,13 +682,13 @@
    "meta": {
     "aangeleverd_door": "J. Voorbeeld (fictief)",
     "datum": "2026-11-12",
-    "bron": "Fictief overzicht maatregelen"
+    "bron": "Fictief voorbeeld, geen echte plannen"
    }
   },
   {
    "id": "slimme-meters",
    "naam": "Slimme watermeters",
-   "omschrijving": "Inzicht in verbruik en lekverlies met slimme meters.",
+   "omschrijving": "Fictief voorbeeld: inzicht in verbruik en lekverlies met slimme meters.",
    "leverancier": "Vitens",
    "soort": "waterbesparing",
    "spoor": "S0",
@@ -585,24 +717,24 @@
    "meta": {
     "aangeleverd_door": "J. Voorbeeld (fictief)",
     "datum": "2026-11-12",
-    "bron": "Fictief overzicht maatregelen"
+    "bron": "Fictief voorbeeld, geen echte plannen"
    }
   },
   {
-   "id": "afname-schaapsdrift",
-   "naam": "Sluiting Schaapsdrift (natuur)",
-   "omschrijving": "Winning sluit om verdroging van het nabije natuurgebied te stoppen.",
+   "id": "afname-de-meern",
+   "naam": "Sluiting De Meern",
+   "omschrijving": "Fictief voorbeeld: de winning sluit om verdroging van een natuurgebied te stoppen.",
    "leverancier": "Vitens",
    "soort": "afname",
    "spoor": "S1",
    "standaard_aan": true,
    "status": "besloten",
-   "winning": "Schaapsdrift",
-   "cluster": "West",
+   "winning": "De Meern",
+   "cluster": "Utrecht West",
    "gemeente": null,
    "locatie": null,
    "bron": null,
-   "volume": 2.0,
+   "volume": 1.9,
    "ruimtebeslag": null,
    "stroomvraag": null,
    "ingangsjaar": 2030,
@@ -614,20 +746,20 @@
    "meta": {
     "aangeleverd_door": "J. Voorbeeld (fictief)",
     "datum": "2026-11-12",
-    "bron": "Fictief overzicht maatregelen"
+    "bron": "Fictief voorbeeld, geen echte plannen"
    }
   },
   {
-   "id": "afname-eikenrode",
-   "naam": "Lagere vergunning Eikenrode",
-   "omschrijving": "Vergunning wordt verlaagd vanwege landbouwschade.",
+   "id": "afname-soestduinen",
+   "naam": "Lagere vergunning Soestduinen",
+   "omschrijving": "Fictief voorbeeld: de vergunning wordt verlaagd vanwege landbouwschade.",
    "leverancier": "Vitens",
    "soort": "afname",
    "spoor": "S1",
    "standaard_aan": true,
    "status": "verkenning",
-   "winning": "Eikenrode",
-   "cluster": "Midden",
+   "winning": "Soestduinen",
+   "cluster": "Utrecht Randmeren Utrecht",
    "gemeente": null,
    "locatie": null,
    "bron": null,
@@ -643,20 +775,20 @@
    "meta": {
     "aangeleverd_door": "J. Voorbeeld (fictief)",
     "datum": "2026-11-12",
-    "bron": "Fictief overzicht maatregelen"
+    "bron": "Fictief voorbeeld, geen echte plannen"
    }
   },
   {
-   "id": "afname-kavel-zeven",
-   "naam": "Einde levensduur Kavel Zeven",
-   "omschrijving": "Zuivering is aan het einde van de levensduur en sluit.",
+   "id": "afname-harderbroek",
+   "naam": "Einde levensduur Harderbroek",
+   "omschrijving": "Fictief voorbeeld: de zuivering is aan het einde van de levensduur en sluit.",
    "leverancier": "Vitens",
    "soort": "afname",
    "spoor": "S1",
    "standaard_aan": true,
    "status": "verkenning",
-   "winning": "Kavel Zeven",
-   "cluster": "Noord",
+   "winning": "Harderbroek",
+   "cluster": "Flevoland",
    "gemeente": null,
    "locatie": null,
    "bron": null,
@@ -672,20 +804,20 @@
    "meta": {
     "aangeleverd_door": "J. Voorbeeld (fictief)",
     "datum": "2026-11-12",
-    "bron": "Fictief overzicht maatregelen"
+    "bron": "Fictief voorbeeld, geen echte plannen"
    }
   },
   {
-   "id": "afname-heidepoort",
-   "naam": "Verontreiniging Heidepoort",
-   "omschrijving": "Toenemende verontreiniging; een deel van de putten valt weg.",
+   "id": "afname-zeist",
+   "naam": "Verontreiniging Zeist",
+   "omschrijving": "Fictief voorbeeld: door verontreiniging valt een deel van de putten weg.",
    "leverancier": "Vitens",
    "soort": "afname",
    "spoor": "S1",
    "standaard_aan": true,
    "status": "idee",
-   "winning": "Heidepoort",
-   "cluster": "Zuid",
+   "winning": "Zeist",
+   "cluster": "Utrecht Zuid",
    "gemeente": null,
    "locatie": null,
    "bron": null,
@@ -701,20 +833,20 @@
    "meta": {
     "aangeleverd_door": "J. Voorbeeld (fictief)",
     "datum": "2026-11-12",
-    "bron": "Fictief overzicht maatregelen"
+    "bron": "Fictief voorbeeld, geen echte plannen"
    }
   },
   {
-   "id": "herbouw-kavel-zeven",
-   "naam": "Herbouw zuivering Kavel Zeven",
-   "omschrijving": "Nieuwe zuivering op hetzelfde terrein, zodat de winning in bedrijf blijft.",
+   "id": "herbouw-harderbroek",
+   "naam": "Herbouw zuivering Harderbroek",
+   "omschrijving": "Fictief voorbeeld: nieuwe zuivering op hetzelfde terrein, zodat de winning in bedrijf blijft.",
    "leverancier": "Vitens",
    "soort": "waterlevering",
    "spoor": "S1",
    "standaard_aan": true,
    "status": "verkenning",
-   "winning": "Kavel Zeven",
-   "cluster": "Noord",
+   "winning": "Harderbroek",
+   "cluster": "Flevoland",
    "gemeente": null,
    "locatie": null,
    "bron": "grondwater",
@@ -757,20 +889,20 @@
    "meta": {
     "aangeleverd_door": "J. Voorbeeld (fictief)",
     "datum": "2026-11-12",
-    "bron": "Fictief overzicht maatregelen"
+    "bron": "Fictief voorbeeld, geen echte plannen"
    }
   },
   {
-   "id": "uitbreiding-wolfsberg",
-   "naam": "Uitbreiding Wolfsberg",
-   "omschrijving": "Extra putten en een zuiveringsstraat op het bestaande terrein.",
+   "id": "uitbreiding-harderwijk",
+   "naam": "Uitbreiding Harderwijk",
+   "omschrijving": "Fictief voorbeeld: extra putten en een zuiveringsstraat op het bestaande terrein.",
    "leverancier": "Vitens",
    "soort": "waterlevering",
    "spoor": "S2",
    "standaard_aan": true,
    "status": "verkenning",
-   "winning": "Wolfsberg",
-   "cluster": "Oost",
+   "winning": "Harderwijk",
+   "cluster": "Utrecht Randmeren Gelderland",
    "gemeente": null,
    "locatie": null,
    "bron": "grondwater",
@@ -813,20 +945,20 @@
    "meta": {
     "aangeleverd_door": "J. Voorbeeld (fictief)",
     "datum": "2026-11-12",
-    "bron": "Fictief overzicht maatregelen"
+    "bron": "Fictief voorbeeld, geen echte plannen"
    }
   },
   {
-   "id": "uitbreiding-lindewaard",
-   "naam": "Uitbreiding Lindewaard",
-   "omschrijving": "Vergroten van de vergunning op de bestaande locatie.",
+   "id": "uitbreiding-linschoten",
+   "naam": "Uitbreiding Linschoten",
+   "omschrijving": "Fictief voorbeeld: vergroten van de vergunning op de bestaande locatie.",
    "leverancier": "Vitens",
    "soort": "waterlevering",
    "spoor": "S2",
    "standaard_aan": false,
    "status": "idee",
-   "winning": "Lindewaard",
-   "cluster": "West",
+   "winning": "Linschoten",
+   "cluster": "Utrecht West",
    "gemeente": null,
    "locatie": null,
    "bron": "grondwater",
@@ -874,24 +1006,24 @@
    "meta": {
     "aangeleverd_door": "J. Voorbeeld (fictief)",
     "datum": "2026-11-12",
-    "bron": "Fictief overzicht maatregelen"
+    "bron": "Fictief voorbeeld, geen echte plannen"
    }
   },
   {
-   "id": "winning-veldhoven-oost",
-   "naam": "Nieuwe winning Veldhoven-Oost",
-   "omschrijving": "Nieuwe grondwaterwinning met zuivering in het oosten van cluster Midden.",
+   "id": "winning-heideveld",
+   "naam": "Nieuwe winning Heideveld",
+   "omschrijving": "Fictief voorbeeld: nieuwe grondwaterwinning met zuivering op een verzonnen locatie.",
    "leverancier": "Vitens",
    "soort": "waterlevering",
    "spoor": "S3",
    "standaard_aan": true,
    "status": "verkenning",
    "winning": null,
-   "cluster": "Midden",
-   "gemeente": "Veldhoven-Oost",
+   "cluster": "Utrecht Randmeren Utrecht",
+   "gemeente": "Heideveld (fictief)",
    "locatie": {
-    "lat": 52.17,
-    "lon": 5.47
+    "lat": 52.2,
+    "lon": 5.35
    },
    "bron": "grondwater",
    "volume": 6.0,
@@ -943,24 +1075,24 @@
    "meta": {
     "aangeleverd_door": "J. Voorbeeld (fictief)",
     "datum": "2026-11-12",
-    "bron": "Fictief overzicht maatregelen"
+    "bron": "Fictief voorbeeld, geen echte plannen"
    }
   },
   {
    "id": "oeverwinning-westmeer",
    "naam": "Oeverwinning Westmeer",
-   "omschrijving": "Nieuwe oevergrondwaterwinning langs het meer.",
+   "omschrijving": "Fictief voorbeeld: nieuwe oevergrondwaterwinning langs een verzonnen meer.",
    "leverancier": "Vitens",
    "soort": "waterlevering",
    "spoor": "S3",
    "standaard_aan": false,
    "status": "idee",
    "winning": null,
-   "cluster": "West",
-   "gemeente": "Westmeer",
+   "cluster": "Utrecht West",
+   "gemeente": "Westmeer (fictief)",
    "locatie": {
-    "lat": 52.1,
-    "lon": 4.82
+    "lat": 52.12,
+    "lon": 4.92
    },
    "bron": "oevergrondwater",
    "volume": 5.0,
@@ -1002,24 +1134,24 @@
    "meta": {
     "aangeleverd_door": "J. Voorbeeld (fictief)",
     "datum": "2026-11-12",
-    "bron": "Fictief overzicht maatregelen"
+    "bron": "Fictief voorbeeld, geen echte plannen"
    }
   },
   {
-   "id": "oppervlaktewater-noord",
+   "id": "oppervlaktewater-noordvaart",
    "naam": "Oppervlaktewater Noordvaart",
-   "omschrijving": "Inname en zuivering van water uit de Noordvaart.",
+   "omschrijving": "Fictief voorbeeld: inname en zuivering van water uit een verzonnen vaart.",
    "leverancier": "Vitens",
    "soort": "waterlevering",
    "spoor": "S3",
    "standaard_aan": false,
    "status": "idee",
    "winning": null,
-   "cluster": "Noord",
-   "gemeente": "Noordvaart",
+   "cluster": "Flevoland",
+   "gemeente": "Noordvaart (fictief)",
    "locatie": {
-    "lat": 52.5,
-    "lon": 5.66
+    "lat": 52.45,
+    "lon": 5.55
    },
    "bron": "oppervlaktewater",
    "volume": 10.0,
@@ -1066,24 +1198,24 @@
    "meta": {
     "aangeleverd_door": "J. Voorbeeld (fictief)",
     "datum": "2026-11-12",
-    "bron": "Fictief overzicht maatregelen"
+    "bron": "Fictief voorbeeld, geen echte plannen"
    }
   },
   {
    "id": "oasen-levering-west",
-   "naam": "Levering Oasen naar West",
-   "omschrijving": "Water van een buurbedrijf via een nieuwe verbinding.",
+   "naam": "Levering Oasen naar Utrecht West",
+   "omschrijving": "Fictief voorbeeld: water van een buurbedrijf via een nieuwe verbinding.",
    "leverancier": "Oasen",
    "soort": "waterlevering",
    "spoor": "S3",
    "standaard_aan": true,
    "status": "idee",
    "winning": null,
-   "cluster": "West",
-   "gemeente": "Grensdorp",
+   "cluster": "Utrecht West",
+   "gemeente": "Grensdorp (fictief)",
    "locatie": {
     "lat": 51.99,
-    "lon": 4.86
+    "lon": 4.9
    },
    "bron": "overig",
    "volume": 2.0,
@@ -1119,7 +1251,7 @@
    "meta": {
     "aangeleverd_door": "J. Voorbeeld (fictief)",
     "datum": "2026-11-12",
-    "bron": "Fictief overzicht maatregelen"
+    "bron": "Fictief voorbeeld, geen echte plannen"
    }
   }
  ]

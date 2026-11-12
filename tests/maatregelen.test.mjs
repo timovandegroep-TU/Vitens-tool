@@ -156,7 +156,7 @@ test('maatregelen-template: leeg, met gegevensvalidatie, uitleg per kolom en lij
   for (const k of MAATREGEL_KOLOMMEN) assert.ok(uitgelegd.has(k.veld), `uitleg voor ${k.veld}`);
   const lijsten = templateLijsten(basis);
   assert.deepEqual(lijsten.cluster, ['alle', ...clusters(basis)]);
-  assert.deepEqual(lijsten.winning, basis.winningen.map((w) => w.naam));
+  assert.deepEqual(lijsten.winning, [...new Set(basis.winningen.map((w) => w.naam))]);   // Fledite ROL één keer
   const kop = bladen.Lijsten[0];
   assert.deepEqual(bladen.Lijsten.slice(1).map((r) => r[kop.indexOf('soort')]).filter(Boolean), ['waterlevering', 'waterbesparing', 'afname']);
   const zip = XLSX.CFB.read(bytes, { type: 'array' });

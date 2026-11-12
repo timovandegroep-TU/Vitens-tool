@@ -3,7 +3,7 @@
 import { el, toon } from './dom.js';
 import {
   MAATREGEL_BLOKKEN, MAATREGEL_VELDEN, VOETAFDRUK, KEUZES, valideerMaatregel, contextVoorMaatregel,
-  veldVanMelding, maatregelWeergave, normaliseerMaatregel, maakId, telling,
+  veldVanMelding, maatregelWeergave, normaliseerMaatregel, maakId, telling, winningVan,
 } from './schema.js';
 import { ALLE_CLUSTERS, clusters } from './model.js';
 import { leesGetal, maatregelNaarRij, rijNaarMaatregel } from './store.js';
@@ -44,7 +44,7 @@ export function bouwFormulier({ data, maatregel, nieuw, opslaan, annuleer }) {
   const voet = el('div', { class: 'mvoet' });
 
   // ------------------------------------------------------------ velden
-  const opties = (v) => (v.veld === 'winning' ? data.winningen.map((w) => w.naam).filter(Boolean)
+  const opties = (v) => (v.veld === 'winning' ? [...new Set(data.winningen.map((w) => w.naam).filter(Boolean))]
     : v.veld === 'cluster' ? [ALLE_CLUSTERS, ...clusters(data)] : v.keuzes);
   const optieLabel = (v, o) => (v.veld === 'cluster' && o === ALLE_CLUSTERS ? 'alle clusters' : o);
 
@@ -129,8 +129,8 @@ export function bouwFormulier({ data, maatregel, nieuw, opslaan, annuleer }) {
   function gewijzigd(v) {
     if (v?.veld === 'naam' && !idAangeraakt) { rij.id = maakId(rij.naam); form.querySelector('#mf-id').value = rij.id; }
     if (v?.veld === 'id') idAangeraakt = true;
-    if (v?.veld === 'winning' && rij.winning && ctx.winningen.get(rij.winning)) {
-      const w = ctx.winningen.get(rij.winning);                       // de winning bepaalt cluster en gemeente
+    const w = v?.veld === 'winning' ? winningVan(ctx, rij) : null;
+    if (w) {                                                          // de winning bepaalt cluster en gemeente
       if (w.cluster) { rij.cluster = w.cluster; form.querySelector('#mf-cluster').value = rij.cluster; }
       if (w.gemeente && !rij.gemeente) { rij.gemeente = w.gemeente; form.querySelector('#mf-gemeente').value = rij.gemeente; }
       tekenBlokken();

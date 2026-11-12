@@ -230,7 +230,7 @@ export function templateLijsten(data) {
     if (k.type === 'janee') uit[k.veld] = ['ja', 'nee'];
     else if (k.keuzes) uit[k.veld] = [...k.keuzes];
   }
-  uit.winning = (data.winningen ?? []).map((w) => w.naam).filter(Boolean);
+  uit.winning = [...new Set((data.winningen ?? []).map((w) => w.naam).filter(Boolean))];
   uit.cluster = [ALLE_CLUSTERS, ...clusters(data)];
   return uit;
 }

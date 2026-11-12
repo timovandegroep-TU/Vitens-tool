@@ -13,12 +13,12 @@ const LEGENDA = {
 
 /** Effecten van de maatregelen die in het zichtjaar meetellen. Puur. */
 export function effectenMaatregelen(data, resultaat, cluster) {
-  const coord = new Map(data.winningen.map((w) => [w.naam, [w.lon, w.lat]]));
+  const coord = (m) => { const w = data.winningen.find((x) => x.naam === m.winning && x.cluster === m.cluster) ?? data.winningen.find((x) => x.naam === m.winning); return w ? [w.lon, w.lat] : null; };
   const uit = [];
   for (const m of data.maatregelen) {
     if (!resultaat.maatregelen[m.id]?.actief) continue;
     if (cluster && m.cluster !== cluster && m.cluster !== ALLE_CLUSTERS) continue;
-    const punt = m.locatie ? [m.locatie.lon, m.locatie.lat] : coord.get(m.winning) ?? null;
+    const punt = m.locatie ? [m.locatie.lon, m.locatie.lat] : coord(m);
     const plek = m.gemeente || m.winning || m.naam;
     const voeg = (niveau, tekst, i) => uit.push({ k: `${m.id}|${i}`, groep: m.id, naam: plek, niveau, label: niveau === 'geen' ? '' : niveau, tekst, punt, vorm: 'pin' });
     let n = 0;
@@ -45,18 +45,19 @@ export function effectenWinningen(data, resultaat, cluster) {
   for (const w of data.winningen) {
     if (cluster && w.cluster !== cluster) continue;
     const cap = typeof w.capaciteit === 'number' ? w.capaciteit : 0;
-    const oorzaken = data.maatregelen.filter((m) => m.soort === 'afname' && m.winning === w.naam && resultaat.maatregelen[m.id]?.actief);
+    const oorzaken = data.maatregelen.filter((m) => m.soort === 'afname' && m.winning === w.naam && m.cluster === w.cluster && resultaat.maatregelen[m.id]?.actief);
     const afname = Math.min(cap, oorzaken.reduce((s, m) => s + resultaat.maatregelen[m.id].volume, 0));
     const pct = cap > 0 ? afname / cap * 100 : 0;
     const niveau = pct >= AFNAME_DREMPELS.knelpunt ? 'knelpunt' : pct >= AFNAME_DREMPELS.aandacht ? 'aandacht' : 'geen';
     const reden = oorzaken.map((m) => m.naam).join(', ');
     uit.push({
-      k: `w|${w.naam}`, groep: w.naam, naam: w.naam, niveau, afname, inLijst: niveau !== 'geen',
+      k: `w|${w.naam}|${w.cluster}`, groep: w.naam, naam: w.naam, niveau, afname, inLijst: niveau !== 'geen',
       label: `−${Math.round(pct)}%`,
       tekst: `−${f1(afname)} Mm³/j: ${f1(cap - afname)} van ${f1(cap)}` + (reden ? ` · ${reden}` : ''),
       punt: [w.lon, w.lat], vorm: 'stip',
-      tip: () => `<div class="th">${esc(w.naam)}</div><div class="tm">${esc([w.gemeente, w.cluster].filter(Boolean).join(' · '))}</div>`
-        + kv('Capaciteit nu', `${f1(cap)} Mm³/j`) + kv(`Aanbod in ${jaar}`, `${f1(cap - afname)} Mm³/j`)
+      tip: () => `<div class="th">${esc(w.naam)}</div><div class="tm">${esc([w.gemeente, w.cluster, w.watersysteem].filter(Boolean).join(' · '))}</div>`
+        + (typeof w.huidig_aanbod === 'number' ? kv('Huidig aanbod (vergund)', `${f1(w.huidig_aanbod)} Mm³/j`) : '')
+        + kv('Inzetbare capaciteit nu', `${f1(cap)} Mm³/j`) + kv(`Aanbod in ${jaar}`, `${f1(cap - afname)} Mm³/j`)
         + (afname > 0 ? kv('Afname', `${f1(afname)} Mm³/j (${Math.round(pct)}%)`) + kv('Door', reden) : '<div class="tm">Geen actieve afname in dit jaar.</div>'),
     });
   }

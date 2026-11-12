@@ -1,7 +1,7 @@
 // Validatieregels (js/schema.js) op de fictieve voorbeelddata.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { valideer, valideerMaatregel, normaliseer } from '../js/schema.js';
+import { valideer, valideerMaatregel, normaliseer, contextVoorMaatregel, winningVan, TABELLEN } from '../js/schema.js';
 import { voorbeeld, kopie, maakMaatregel, zonderLevering } from './hulp.mjs';
 
 const ctx = { clusters: new Set(['West', 'Oost']), winningen: new Map() };
@@ -20,7 +20,7 @@ test('basisdata, blokkerend', () => {
   d.vraag[2]['2040'] = 'veel';                                       // geen getal
   d.vraag.push({ scenario: 'Nieuw', cluster: d.vraag[0].cluster, 2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1 }); // mist de andere clusters
   d.winningen[0].cluster = 'Nergens';                                // cluster zonder vraag
-  d.winningen[1].naam = d.winningen[2].naam;                          // dubbele naam
+  d.winningen[1] = { ...d.winningen[2] };                            // dubbele naam binnen hetzelfde cluster
   d.winningen[3].capaciteit = -1;
   const m = valideer(d);
   const zoek = (tabel, re) => assert.ok(m.some((x) => x.niveau === 'fout' && x.tabel === tabel && re.test(x.melding)), `${tabel}: ${re}`);
@@ -29,7 +29,7 @@ test('basisdata, blokkerend', () => {
   zoek('Vraag', /geen getal/);
   zoek('Vraag', /Scenario "Nieuw" heeft geen rij/);
   zoek('Winningen', /Geen vraag voor cluster "Nergens"/);
-  zoek('Winningen', /Dubbele naam/);
+  zoek('Winningen', /staat twee keer bij cluster/);
   zoek('Winningen', /negatief/);
   assert.ok(s0);
 });
@@ -71,4 +71,15 @@ test('maatregel, waarschuwing', () => {
   assert.ok(heeft(oasen, 'waarschuwing', 'leverancier') && fouten(oasen).length === 0);
   const onbekend = v({ voetafdruk: { ...maakMaatregel().voetafdruk, natura2000: { beoordeling: 'onbekend' } } });
   assert.ok(heeft(onbekend, 'waarschuwing', 'voetafdruk Natura 2000') && fouten(onbekend).length === 0);
+});
+
+test('winningen: kolomvolgorde als het werkdocument; zelfde naam in twee clusters mag (Fledite ROL)', () => {
+  assert.deepEqual(TABELLEN[0].kolommen.slice(0, 6).map((k) => k.label),
+    ['Locatie', 'Type', 'Vitens cluster (gebruik)', 'Watersysteem', 'Huidig aanbod', 'Inzetbare productiecapaciteit']);
+  const d = normaliseer(kopie(voorbeeld));
+  const fledite = d.winningen.filter((w) => w.naam === 'Fledite ROL');
+  assert.equal(fledite.length, 2);
+  assert.deepEqual(valideer(d).filter((m) => m.tabel === 'Winningen' && m.niveau === 'fout'), []);
+  const ctx = contextVoorMaatregel(d);
+  for (const w of fledite) assert.equal(winningVan(ctx, { winning: 'Fledite ROL', cluster: w.cluster }), w);
 });

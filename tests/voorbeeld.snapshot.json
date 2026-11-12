@@ -2,36 +2,36 @@
  "Laag 2026": {
   "zonder": {
    "vraag": 138.066,
-   "aanbod": 132.5
+   "aanbod": 132.7
   },
   "standaard": {
    "vraag0": 138.066,
-   "aanbod0": 132.5,
+   "aanbod0": 132.7,
    "vraag": 138.066,
-   "aanbod": 132.5,
+   "aanbod": 132.7,
    "afname": 0,
-   "opgave": 5.566,
+   "opgave": 5.366,
    "bijdrage": 0,
-   "tekort": 5.566
+   "tekort": 5.366
   },
   "clusters": {
-   "West": {
+   "Utrecht West": {
     "vraag": 46.452,
-    "aanbod": 44
+    "aanbod": 44.1
    },
-   "Zuid": {
+   "Utrecht Zuid": {
     "vraag": 16.588,
-    "aanbod": 17
+    "aanbod": 16.9
    },
-   "Midden": {
+   "Utrecht Randmeren Utrecht": {
     "vraag": 32.47,
     "aanbod": 28
    },
-   "Oost": {
+   "Utrecht Randmeren Gelderland": {
     "vraag": 14.588,
-    "aanbod": 15.5
+    "aanbod": 15.7
    },
-   "Noord": {
+   "Flevoland": {
     "vraag": 27.968,
     "aanbod": 28
    }
@@ -40,36 +40,36 @@
  "Laag 2030": {
   "zonder": {
    "vraag": 137.53,
-   "aanbod": 132.5
+   "aanbod": 132.7
   },
   "standaard": {
    "vraag0": 137.53,
-   "aanbod0": 130.5,
+   "aanbod0": 130.8,
    "vraag": 131.53,
-   "aanbod": 130.5,
-   "afname": 2,
-   "opgave": 7.03,
+   "aanbod": 130.8,
+   "afname": 1.9,
+   "opgave": 6.73,
    "bijdrage": 6,
-   "tekort": 1.03
+   "tekort": 0.73
   },
   "clusters": {
-   "West": {
+   "Utrecht West": {
     "vraag": 44.242,
-    "aanbod": 42
+    "aanbod": 42.2
    },
-   "Zuid": {
+   "Utrecht Zuid": {
     "vraag": 15.818,
-    "aanbod": 17
+    "aanbod": 16.9
    },
-   "Midden": {
+   "Utrecht Randmeren Utrecht": {
     "vraag": 30.939,
     "aanbod": 28
    },
-   "Oost": {
+   "Utrecht Randmeren Gelderland": {
     "vraag": 13.906,
-    "aanbod": 15.5
+    "aanbod": 15.7
    },
-   "Noord": {
+   "Flevoland": {
     "vraag": 26.625,
     "aanbod": 28
    }
@@ -78,36 +78,36 @@
  "Laag 2035": {
   "zonder": {
    "vraag": 136.94,
-   "aanbod": 132.5
+   "aanbod": 132.7
   },
   "standaard": {
    "vraag0": 136.94,
-   "aanbod0": 128,
+   "aanbod0": 128.3,
    "vraag": 128.94,
-   "aanbod": 131,
-   "afname": 4.5,
-   "opgave": 8.94,
+   "aanbod": 131.3,
+   "afname": 4.4,
+   "opgave": 8.64,
    "bijdrage": 11,
    "tekort": 0
   },
   "clusters": {
-   "West": {
+   "Utrecht West": {
     "vraag": 43.36,
-    "aanbod": 42
+    "aanbod": 42.2
    },
-   "Zuid": {
+   "Utrecht Zuid": {
     "vraag": 15.517,
-    "aanbod": 17
+    "aanbod": 16.9
    },
-   "Midden": {
+   "Utrecht Randmeren Utrecht": {
     "vraag": 30.338,
     "aanbod": 25.5
    },
-   "Oost": {
+   "Utrecht Randmeren Gelderland": {
     "vraag": 13.634,
-    "aanbod": 18.5
+    "aanbod": 18.7
    },
-   "Noord": {
+   "Flevoland": {
     "vraag": 26.091,
     "aanbod": 28
    }
@@ -116,36 +116,36 @@
  "Laag 2040": {
   "zonder": {
    "vraag": 136.38,
-   "aanbod": 132.5
+   "aanbod": 132.7
   },
   "standaard": {
    "vraag0": 136.38,
-   "aanbod0": 123,
+   "aanbod0": 123.3,
    "vraag": 128.38,
-   "aanbod": 132,
-   "afname": 9.5,
-   "opgave": 13.38,
+   "aanbod": 132.3,
+   "afname": 9.4,
+   "opgave": 13.08,
    "bijdrage": 17,
    "tekort": 0
   },
   "clusters": {
-   "West": {
+   "Utrecht West": {
     "vraag": 43.16,
-    "aanbod": 42
+    "aanbod": 42.2
    },
-   "Zuid": {
+   "Utrecht Zuid": {
     "vraag": 15.466,
-    "aanbod": 17
+    "aanbod": 16.9
    },
-   "Midden": {
+   "Utrecht Randmeren Utrecht": {
     "vraag": 30.208,
     "aanbod": 31.5
    },
-   "Oost": {
+   "Utrecht Randmeren Gelderland": {
     "vraag": 13.584,
-    "aanbod": 18.5
+    "aanbod": 18.7
    },
-   "Noord": {
+   "Flevoland": {
     "vraag": 25.962,
     "aanbod": 23
    }
@@ -154,36 +154,36 @@
  "Laag 2050": {
   "zonder": {
    "vraag": 135.33,
-   "aanbod": 132.5
+   "aanbod": 132.7
   },
   "standaard": {
    "vraag0": 135.33,
-   "aanbod0": 121.5,
+   "aanbod0": 121.8,
    "vraag": 127.33,
-   "aanbod": 135.5,
-   "afname": 11,
-   "opgave": 13.83,
+   "aanbod": 135.8,
+   "afname": 10.9,
+   "opgave": 13.53,
    "bijdrage": 22,
    "tekort": 0
   },
   "clusters": {
-   "West": {
+   "Utrecht West": {
     "vraag": 42.791,
-    "aanbod": 42
+    "aanbod": 42.2
    },
-   "Zuid": {
+   "Utrecht Zuid": {
     "vraag": 15.365,
-    "aanbod": 15.5
+    "aanbod": 15.4
    },
-   "Midden": {
+   "Utrecht Randmeren Utrecht": {
     "vraag": 29.967,
     "aanbod": 31.5
    },
-   "Oost": {
+   "Utrecht Randmeren Gelderland": {
     "vraag": 13.492,
-    "aanbod": 18.5
+    "aanbod": 18.7
    },
-   "Noord": {
+   "Flevoland": {
     "vraag": 25.714,
     "aanbod": 28
    }
@@ -192,36 +192,36 @@
  "Midden (CBS) 2026": {
   "zonder": {
    "vraag": 138.808,
-   "aanbod": 132.5
+   "aanbod": 132.7
   },
   "standaard": {
    "vraag0": 138.808,
-   "aanbod0": 132.5,
+   "aanbod0": 132.7,
    "vraag": 138.808,
-   "aanbod": 132.5,
+   "aanbod": 132.7,
    "afname": 0,
-   "opgave": 6.308,
+   "opgave": 6.108,
    "bijdrage": 0,
-   "tekort": 6.308
+   "tekort": 6.108
   },
   "clusters": {
-   "West": {
+   "Utrecht West": {
     "vraag": 46.716,
-    "aanbod": 44
+    "aanbod": 44.1
    },
-   "Zuid": {
+   "Utrecht Zuid": {
     "vraag": 16.656,
-    "aanbod": 17
+    "aanbod": 16.9
    },
-   "Midden": {
+   "Utrecht Randmeren Utrecht": {
     "vraag": 32.638,
     "aanbod": 28
    },
-   "Oost": {
+   "Utrecht Randmeren Gelderland": {
     "vraag": 14.656,
-    "aanbod": 15.5
+    "aanbod": 15.7
    },
-   "Noord": {
+   "Flevoland": {
     "vraag": 28.142,
     "aanbod": 28
    }
@@ -230,36 +230,36 @@
  "Midden (CBS) 2030": {
   "zonder": {
    "vraag": 141.24,
-   "aanbod": 132.5
+   "aanbod": 132.7
   },
   "standaard": {
    "vraag0": 141.24,
-   "aanbod0": 130.5,
+   "aanbod0": 130.8,
    "vraag": 135.24,
-   "aanbod": 130.5,
-   "afname": 2,
-   "opgave": 10.74,
+   "aanbod": 130.8,
+   "afname": 1.9,
+   "opgave": 10.44,
    "bijdrage": 6,
-   "tekort": 4.74
+   "tekort": 4.44
   },
   "clusters": {
-   "West": {
+   "Utrecht West": {
     "vraag": 45.559,
-    "aanbod": 42
+    "aanbod": 42.2
    },
-   "Zuid": {
+   "Utrecht Zuid": {
     "vraag": 16.163,
-    "aanbod": 17
+    "aanbod": 16.9
    },
-   "Midden": {
+   "Utrecht Randmeren Utrecht": {
     "vraag": 31.78,
     "aanbod": 28
    },
-   "Oost": {
+   "Utrecht Randmeren Gelderland": {
     "vraag": 14.248,
-    "aanbod": 15.5
+    "aanbod": 15.7
    },
-   "Noord": {
+   "Flevoland": {
     "vraag": 27.49,
     "aanbod": 28
    }
@@ -268,36 +268,36 @@
  "Midden (CBS) 2035": {
   "zonder": {
    "vraag": 143.87,
-   "aanbod": 132.5
+   "aanbod": 132.7
   },
   "standaard": {
    "vraag0": 143.87,
-   "aanbod0": 128,
+   "aanbod0": 128.3,
    "vraag": 135.87,
-   "aanbod": 131,
-   "afname": 4.5,
-   "opgave": 15.87,
+   "aanbod": 131.3,
+   "afname": 4.4,
+   "opgave": 15.57,
    "bijdrage": 11,
-   "tekort": 4.87
+   "tekort": 4.57
   },
   "clusters": {
-   "West": {
+   "Utrecht West": {
     "vraag": 45.822,
-    "aanbod": 42
+    "aanbod": 42.2
    },
-   "Zuid": {
+   "Utrecht Zuid": {
     "vraag": 16.168,
-    "aanbod": 17
+    "aanbod": 16.9
    },
-   "Midden": {
+   "Utrecht Randmeren Utrecht": {
     "vraag": 31.902,
     "aanbod": 25.5
    },
-   "Oost": {
+   "Utrecht Randmeren Gelderland": {
     "vraag": 14.279,
-    "aanbod": 18.5
+    "aanbod": 18.7
    },
-   "Noord": {
+   "Flevoland": {
     "vraag": 27.699,
     "aanbod": 28
    }
@@ -306,36 +306,36 @@
  "Midden (CBS) 2040": {
   "zonder": {
    "vraag": 146.37,
-   "aanbod": 132.5
+   "aanbod": 132.7
   },
   "standaard": {
    "vraag0": 146.37,
-   "aanbod0": 123,
+   "aanbod0": 123.3,
    "vraag": 138.37,
-   "aanbod": 132,
-   "afname": 9.5,
-   "opgave": 23.37,
+   "aanbod": 132.3,
+   "afname": 9.4,
+   "opgave": 23.07,
    "bijdrage": 17,
-   "tekort": 6.37
+   "tekort": 6.07
   },
   "clusters": {
-   "West": {
+   "Utrecht West": {
     "vraag": 46.709,
-    "aanbod": 42
+    "aanbod": 42.2
    },
-   "Zuid": {
+   "Utrecht Zuid": {
     "vraag": 16.402,
-    "aanbod": 17
+    "aanbod": 16.9
    },
-   "Midden": {
+   "Utrecht Randmeren Utrecht": {
     "vraag": 32.473,
     "aanbod": 31.5
    },
-   "Oost": {
+   "Utrecht Randmeren Gelderland": {
     "vraag": 14.511,
-    "aanbod": 18.5
+    "aanbod": 18.7
    },
-   "Noord": {
+   "Flevoland": {
     "vraag": 28.275,
     "aanbod": 23
    }
@@ -344,36 +344,36 @@
  "Midden (CBS) 2050": {
   "zonder": {
    "vraag": 151.13,
-   "aanbod": 132.5
+   "aanbod": 132.7
   },
   "standaard": {
    "vraag0": 151.13,
-   "aanbod0": 121.5,
+   "aanbod0": 121.8,
    "vraag": 143.13,
-   "aanbod": 135.5,
-   "afname": 11,
-   "opgave": 29.63,
+   "aanbod": 135.8,
+   "afname": 10.9,
+   "opgave": 29.33,
    "bijdrage": 22,
-   "tekort": 7.63
+   "tekort": 7.33
   },
   "clusters": {
-   "West": {
+   "Utrecht West": {
     "vraag": 48.395,
-    "aanbod": 42
+    "aanbod": 42.2
    },
-   "Zuid": {
+   "Utrecht Zuid": {
     "vraag": 16.858,
-    "aanbod": 15.5
+    "aanbod": 15.4
    },
-   "Midden": {
+   "Utrecht Randmeren Utrecht": {
     "vraag": 33.555,
     "aanbod": 31.5
    },
-   "Oost": {
+   "Utrecht Randmeren Gelderland": {
     "vraag": 14.945,
-    "aanbod": 18.5
+    "aanbod": 18.7
    },
-   "Noord": {
+   "Flevoland": {
     "vraag": 29.378,
     "aanbod": 28
    }
@@ -382,36 +382,36 @@
  "Hoog 2026": {
   "zonder": {
    "vraag": 139.55,
-   "aanbod": 132.5
+   "aanbod": 132.7
   },
   "standaard": {
    "vraag0": 139.55,
-   "aanbod0": 132.5,
+   "aanbod0": 132.7,
    "vraag": 139.55,
-   "aanbod": 132.5,
+   "aanbod": 132.7,
    "afname": 0,
-   "opgave": 7.05,
+   "opgave": 6.85,
    "bijdrage": 0,
-   "tekort": 7.05
+   "tekort": 6.85
   },
   "clusters": {
-   "West": {
+   "Utrecht West": {
     "vraag": 46.98,
-    "aanbod": 44
+    "aanbod": 44.1
    },
-   "Zuid": {
+   "Utrecht Zuid": {
     "vraag": 16.724,
-    "aanbod": 17
+    "aanbod": 16.9
    },
-   "Midden": {
+   "Utrecht Randmeren Utrecht": {
     "vraag": 32.806,
     "aanbod": 28
    },
-   "Oost": {
+   "Utrecht Randmeren Gelderland": {
     "vraag": 14.724,
-    "aanbod": 15.5
+    "aanbod": 15.7
    },
-   "Noord": {
+   "Flevoland": {
     "vraag": 28.316,
     "aanbod": 28
    }
@@ -420,36 +420,36 @@
  "Hoog 2030": {
   "zonder": {
    "vraag": 144.95,
-   "aanbod": 132.5
+   "aanbod": 132.7
   },
   "standaard": {
    "vraag0": 144.95,
-   "aanbod0": 130.5,
+   "aanbod0": 130.8,
    "vraag": 138.95,
-   "aanbod": 130.5,
-   "afname": 2,
-   "opgave": 14.45,
+   "aanbod": 130.8,
+   "afname": 1.9,
+   "opgave": 14.15,
    "bijdrage": 6,
-   "tekort": 8.45
+   "tekort": 8.15
   },
   "clusters": {
-   "West": {
+   "Utrecht West": {
     "vraag": 46.876,
-    "aanbod": 42
+    "aanbod": 42.2
    },
-   "Zuid": {
+   "Utrecht Zuid": {
     "vraag": 16.507,
-    "aanbod": 17
+    "aanbod": 16.9
    },
-   "Midden": {
+   "Utrecht Randmeren Utrecht": {
     "vraag": 32.621,
     "aanbod": 28
    },
-   "Oost": {
+   "Utrecht Randmeren Gelderland": {
     "vraag": 14.59,
-    "aanbod": 15.5
+    "aanbod": 15.7
    },
-   "Noord": {
+   "Flevoland": {
     "vraag": 28.356,
     "aanbod": 28
    }
@@ -458,36 +458,36 @@
  "Hoog 2035": {
   "zonder": {
    "vraag": 150.79,
-   "aanbod": 132.5
+   "aanbod": 132.7
   },
   "standaard": {
    "vraag0": 150.79,
-   "aanbod0": 128,
+   "aanbod0": 128.3,
    "vraag": 142.79,
-   "aanbod": 131,
-   "afname": 4.5,
-   "opgave": 22.79,
+   "aanbod": 131.3,
+   "afname": 4.4,
+   "opgave": 22.49,
    "bijdrage": 11,
-   "tekort": 11.79
+   "tekort": 11.49
   },
   "clusters": {
-   "West": {
+   "Utrecht West": {
     "vraag": 48.275,
-    "aanbod": 42
+    "aanbod": 42.2
    },
-   "Zuid": {
+   "Utrecht Zuid": {
     "vraag": 16.818,
-    "aanbod": 17
+    "aanbod": 16.9
    },
-   "Midden": {
+   "Utrecht Randmeren Utrecht": {
     "vraag": 33.475,
     "aanbod": 25.5
    },
-   "Oost": {
+   "Utrecht Randmeren Gelderland": {
     "vraag": 14.914,
-    "aanbod": 18.5
+    "aanbod": 18.7
    },
-   "Noord": {
+   "Flevoland": {
     "vraag": 29.308,
     "aanbod": 28
    }
@@ -496,36 +496,36 @@
  "Hoog 2040": {
   "zonder": {
    "vraag": 156.34,
-   "aanbod": 132.5
+   "aanbod": 132.7
   },
   "standaard": {
    "vraag0": 156.34,
-   "aanbod0": 123,
+   "aanbod0": 123.3,
    "vraag": 148.34,
-   "aanbod": 132,
-   "afname": 9.5,
-   "opgave": 33.34,
+   "aanbod": 132.3,
+   "afname": 9.4,
+   "opgave": 33.04,
    "bijdrage": 17,
-   "tekort": 16.34
+   "tekort": 16.04
   },
   "clusters": {
-   "West": {
+   "Utrecht West": {
     "vraag": 50.25,
-    "aanbod": 42
+    "aanbod": 42.2
    },
-   "Zuid": {
+   "Utrecht Zuid": {
     "vraag": 17.345,
-    "aanbod": 17
+    "aanbod": 16.9
    },
-   "Midden": {
+   "Utrecht Randmeren Utrecht": {
     "vraag": 34.727,
     "aanbod": 31.5
    },
-   "Oost": {
+   "Utrecht Randmeren Gelderland": {
     "vraag": 15.428,
-    "aanbod": 18.5
+    "aanbod": 18.7
    },
-   "Noord": {
+   "Flevoland": {
     "vraag": 30.59,
     "aanbod": 23
    }
@@ -534,36 +534,36 @@
  "Hoog 2050": {
   "zonder": {
    "vraag": 166.94,
-   "aanbod": 132.5
+   "aanbod": 132.7
   },
   "standaard": {
    "vraag0": 166.94,
-   "aanbod0": 121.5,
+   "aanbod0": 121.8,
    "vraag": 158.94,
-   "aanbod": 135.5,
-   "afname": 11,
-   "opgave": 45.44,
+   "aanbod": 135.8,
+   "afname": 10.9,
+   "opgave": 45.14,
    "bijdrage": 22,
-   "tekort": 23.44
+   "tekort": 23.14
   },
   "clusters": {
-   "West": {
+   "Utrecht West": {
     "vraag": 54.011,
-    "aanbod": 42
+    "aanbod": 42.2
    },
-   "Zuid": {
+   "Utrecht Zuid": {
     "vraag": 18.337,
-    "aanbod": 15.5
+    "aanbod": 15.4
    },
-   "Midden": {
+   "Utrecht Randmeren Utrecht": {
     "vraag": 37.131,
     "aanbod": 31.5
    },
-   "Oost": {
+   "Utrecht Randmeren Gelderland": {
     "vraag": 16.404,
-    "aanbod": 18.5
+    "aanbod": 18.7
    },
-   "Noord": {
+   "Flevoland": {
     "vraag": 33.056,
     "aanbod": 28
    }
@@ -572,36 +572,36 @@
  "Hoog + warm 2026": {
   "zonder": {
    "vraag": 140.088,
-   "aanbod": 132.5
+   "aanbod": 132.7
   },
   "standaard": {
    "vraag0": 140.088,
-   "aanbod0": 132.5,
+   "aanbod0": 132.7,
    "vraag": 140.088,
-   "aanbod": 132.5,
+   "aanbod": 132.7,
    "afname": 0,
-   "opgave": 7.588,
+   "opgave": 7.388,
    "bijdrage": 0,
-   "tekort": 7.588
+   "tekort": 7.388
   },
   "clusters": {
-   "West": {
+   "Utrecht West": {
     "vraag": 47.172,
-    "aanbod": 44
+    "aanbod": 44.1
    },
-   "Zuid": {
+   "Utrecht Zuid": {
     "vraag": 16.774,
-    "aanbod": 17
+    "aanbod": 16.9
    },
-   "Midden": {
+   "Utrecht Randmeren Utrecht": {
     "vraag": 32.928,
     "aanbod": 28
    },
-   "Oost": {
+   "Utrecht Randmeren Gelderland": {
     "vraag": 14.772,
-    "aanbod": 15.5
+    "aanbod": 15.7
    },
-   "Noord": {
+   "Flevoland": {
     "vraag": 28.442,
     "aanbod": 28
    }
@@ -610,36 +610,36 @@
  "Hoog + warm 2030": {
   "zonder": {
    "vraag": 147.64,
-   "aanbod": 132.5
+   "aanbod": 132.7
   },
   "standaard": {
    "vraag0": 147.64,
-   "aanbod0": 130.5,
+   "aanbod0": 130.8,
    "vraag": 141.64,
-   "aanbod": 130.5,
-   "afname": 2,
-   "opgave": 17.14,
+   "aanbod": 130.8,
+   "afname": 1.9,
+   "opgave": 16.84,
    "bijdrage": 6,
-   "tekort": 11.14
+   "tekort": 10.84
   },
   "clusters": {
-   "West": {
+   "Utrecht West": {
     "vraag": 47.834,
-    "aanbod": 42
+    "aanbod": 42.2
    },
-   "Zuid": {
+   "Utrecht Zuid": {
     "vraag": 16.76,
-    "aanbod": 17
+    "aanbod": 16.9
    },
-   "Midden": {
+   "Utrecht Randmeren Utrecht": {
     "vraag": 33.232,
     "aanbod": 28
    },
-   "Oost": {
+   "Utrecht Randmeren Gelderland": {
     "vraag": 14.832,
-    "aanbod": 15.5
+    "aanbod": 15.7
    },
-   "Noord": {
+   "Flevoland": {
     "vraag": 28.982,
     "aanbod": 28
    }
@@ -648,36 +648,36 @@
  "Hoog + warm 2035": {
   "zonder": {
    "vraag": 155.83,
-   "aanbod": 132.5
+   "aanbod": 132.7
   },
   "standaard": {
    "vraag0": 155.83,
-   "aanbod0": 128,
+   "aanbod0": 128.3,
    "vraag": 147.83,
-   "aanbod": 131,
-   "afname": 4.5,
-   "opgave": 27.83,
+   "aanbod": 131.3,
+   "afname": 4.4,
+   "opgave": 27.53,
    "bijdrage": 11,
-   "tekort": 16.83
+   "tekort": 16.53
   },
   "clusters": {
-   "West": {
+   "Utrecht West": {
     "vraag": 50.07,
-    "aanbod": 42
+    "aanbod": 42.2
    },
-   "Zuid": {
+   "Utrecht Zuid": {
     "vraag": 17.294,
-    "aanbod": 17
+    "aanbod": 16.9
    },
-   "Midden": {
+   "Utrecht Randmeren Utrecht": {
     "vraag": 34.617,
     "aanbod": 25.5
    },
-   "Oost": {
+   "Utrecht Randmeren Gelderland": {
     "vraag": 15.378,
-    "aanbod": 18.5
+    "aanbod": 18.7
    },
-   "Noord": {
+   "Flevoland": {
     "vraag": 30.471,
     "aanbod": 28
    }
@@ -686,36 +686,36 @@
  "Hoog + warm 2040": {
   "zonder": {
    "vraag": 163.6,
-   "aanbod": 132.5
+   "aanbod": 132.7
   },
   "standaard": {
    "vraag0": 163.6,
-   "aanbod0": 123,
+   "aanbod0": 123.3,
    "vraag": 155.6,
-   "aanbod": 132,
-   "afname": 9.5,
-   "opgave": 40.6,
+   "aanbod": 132.3,
+   "afname": 9.4,
+   "opgave": 40.3,
    "bijdrage": 17,
-   "tekort": 23.6
+   "tekort": 23.3
   },
   "clusters": {
-   "West": {
+   "Utrecht West": {
     "vraag": 52.824,
-    "aanbod": 42
+    "aanbod": 42.2
    },
-   "Zuid": {
+   "Utrecht Zuid": {
     "vraag": 18.023,
-    "aanbod": 17
+    "aanbod": 16.9
    },
-   "Midden": {
+   "Utrecht Randmeren Utrecht": {
     "vraag": 36.38,
     "aanbod": 31.5
    },
-   "Oost": {
+   "Utrecht Randmeren Gelderland": {
     "vraag": 16.093,
-    "aanbod": 18.5
+    "aanbod": 18.7
    },
-   "Noord": {
+   "Flevoland": {
     "vraag": 32.28,
     "aanbod": 23
    }
@@ -724,36 +724,36 @@
  "Hoog + warm 2050": {
   "zonder": {
    "vraag": 178.43,
-   "aanbod": 132.5
+   "aanbod": 132.7
   },
   "standaard": {
    "vraag0": 178.43,
-   "aanbod0": 121.5,
+   "aanbod0": 121.8,
    "vraag": 170.43,
-   "aanbod": 135.5,
-   "afname": 11,
-   "opgave": 56.93,
+   "aanbod": 135.8,
+   "afname": 10.9,
+   "opgave": 56.63,
    "bijdrage": 22,
-   "tekort": 34.93
+   "tekort": 34.63
   },
   "clusters": {
-   "West": {
+   "Utrecht West": {
     "vraag": 58.093,
-    "aanbod": 42
+    "aanbod": 42.2
    },
-   "Zuid": {
+   "Utrecht Zuid": {
     "vraag": 19.409,
-    "aanbod": 15.5
+    "aanbod": 15.4
    },
-   "Midden": {
+   "Utrecht Randmeren Utrecht": {
     "vraag": 39.735,
     "aanbod": 31.5
    },
-   "Oost": {
+   "Utrecht Randmeren Gelderland": {
     "vraag": 17.46,
-    "aanbod": 18.5
+    "aanbod": 18.7
    },
-   "Noord": {
+   "Flevoland": {
     "vraag": 35.733,
     "aanbod": 28
    }

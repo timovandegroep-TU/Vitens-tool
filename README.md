@@ -23,7 +23,7 @@ Alle data past in één Excel-bestand met drie tabbladen. Op `invoer.html` staat
 
 | Tabblad | Eén rij per | Wat de tool ermee doet |
 |---|---|---|
-| **Winningen** | bestaande winning: naam, cluster, capaciteit (Mm³/j), lat/lon | Het huidige aanbod is de som van de capaciteit. |
+| **Winningen** | bestaande winning: locatie, type, cluster, watersysteem, huidig aanbod, inzetbare productiecapaciteit (Mm³/j), gemeente, lat/lon | Het huidige aanbod is de som van de inzetbare productiecapaciteit. De eerste zes kolommen staan in de volgorde van het werkdocument: dat blok kunt u in één keer plakken. |
 | **Vraag** | scenario × cluster: vraag in 2025, 2030, … 2050 | Linksboven kies je een scenario; het scenario verandert alleen de vraag. |
 | **Maatregelen** | maatregel | Elke maatregel wordt een schakelaar in de visualisatie. |
 
@@ -32,7 +32,7 @@ Alle data past in één Excel-bestand met drie tabbladen. Op `invoer.html` staat
 3. U kunt ook direct in de tabellen typen of een blok cellen uit Excel plakken (Ctrl+V).
 4. Bewaar het resultaat met **Download huidige data** (.xlsx of .json).
 
-Wilt u eerst zien hoe het werkt, klik dan **Voorbeelddata laden**: dat laadt de fictieve dataset `data/voorbeeld.json`.
+Wilt u eerst zien hoe het werkt, klik dan **Voorbeelddata laden**: dat laadt `data/voorbeeld.json`. Daarin staan de winningen uit het werkdocument; de vraagscenario's en maatregelen zijn fictief.
 
 ### Hoe de tool rekent
 
@@ -114,7 +114,7 @@ Na een bewuste wijziging van het model of van de voorbeelddata werkt u de snapsh
 node tests/voorbeeld.test.mjs --bijwerken
 ```
 
-**Interne data.** De map `private/` staat in `.gitignore` en mag nooit gecommit worden. Daar staan het werkdocument van Vitens en de daaruit omgezette dataset. Alles wat wel in de repo staat (`data/`, `docs/`, tests) is fictief.
+**Interne data.** De map `private/` staat in `.gitignore` en mag nooit gecommit worden. Daar staan het werkdocument van Vitens en de daaruit omgezette dataset. Wat wel in de repo staat is fictief, met één uitzondering: de winningen in `data/voorbeeld.json` komen uit het werkdocument (OPEN-VRAGEN J10).
 
 ```bash
 python tools/convert_werkdocument.py

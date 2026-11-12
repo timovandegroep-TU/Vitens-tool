@@ -59,12 +59,15 @@ const isGetal = (v) => typeof v === 'number' && Number.isFinite(v);
 export const TABELLEN = [
   {
     id: 'winningen', blad: 'Winningen', rij: (w) => String(w.naam ?? ''),
-    uitleg: 'Bestaande winningen. Het huidige aanbod is de som van hun capaciteit; die blijft gelijk tot een maatregel het aanbod verandert (een levering of een afname).',
+    uitleg: 'Bestaande winningen. Het huidige aanbod is de som van de inzetbare productiecapaciteit; die blijft gelijk tot een maatregel het aanbod verandert (een levering of een afname). De eerste zes kolommen staan in dezelfde volgorde als in het werkdocument (Locatie t/m Inzetbare productiecapaciteit), zodat u dat blok in één keer kunt plakken.',
     kolommen: [
-      { veld: 'naam', label: 'Naam', type: 'tekst', uitleg: 'Naam van de winning; uniek. Een maatregel kan hiernaar verwijzen (kolom "winning").' },
-      { veld: 'cluster', label: 'Cluster', type: 'tekst', uitleg: 'Cluster dat het water gebruikt. Moet ook in de tabel Vraag voorkomen.' },
+      { veld: 'naam', label: 'Locatie', type: 'tekst', uitleg: 'Naam van de winning. Mag vaker voorkomen bij verschillende clusters (bv. Fledite ROL); de combinatie naam + cluster is uniek. Een maatregel kan hiernaar verwijzen (kolom "winning").' },
+      { veld: 'type', label: 'Type', type: 'tekst', uitleg: 'Bv. Winning. Alleen ter informatie.' },
+      { veld: 'cluster', label: 'Vitens cluster (gebruik)', type: 'tekst', uitleg: 'Cluster dat het water gebruikt. Moet ook in de tabel Vraag voorkomen.' },
+      { veld: 'watersysteem', label: 'Watersysteem', type: 'tekst', uitleg: 'Flanken / Heuvelrug / Polder / Riviergebied. Alleen ter informatie.' },
+      { veld: 'huidig_aanbod', label: 'Huidig aanbod', type: 'getal', eenheid: 'Mm³/j', uitleg: 'Vergunde capaciteit na bestuurlijke beperkingen. Alleen ter informatie; de tool rekent met de inzetbare productiecapaciteit.' },
+      { veld: 'capaciteit', label: 'Inzetbare productiecapaciteit', type: 'getal', eenheid: 'Mm³/j', uitleg: 'Hiermee rekent de tool: dit is het huidige aanbod van de winning.' },
       { veld: 'gemeente', label: 'Gemeente', type: 'tekst', uitleg: 'Gemeente waarin de winning ligt. Alleen ter informatie.' },
-      { veld: 'capaciteit', label: 'Capaciteit', type: 'getal', eenheid: 'Mm³/j', uitleg: 'Inzetbare productiecapaciteit nu. Hiermee rekent de tool.' },
       { veld: 'lat', label: 'Lat', type: 'getal', uitleg: 'Breedtegraad (WGS84), bv. 52,09. Voor de kaart.' },
       { veld: 'lon', label: 'Lon', type: 'getal', uitleg: 'Lengtegraad (WGS84), bv. 5,12. Voor de kaart.' },
       { veld: 'toelichting', label: 'Toelichting', type: 'tekst', uitleg: 'Vrije toelichting.' },
@@ -159,11 +162,15 @@ export function valideer(data) {
   for (const w of lijst('winningen')) {
     const rij = w.naam ?? '';
     if (leeg(w.naam)) fout(W, rij, 'naam', 'Naam ontbreekt.');
-    else if (namen.has(w.naam)) fout(W, rij, 'naam', `Dubbele naam "${w.naam}".`);
-    namen.add(w.naam);
+    else if (namen.has(`${w.naam}|${w.cluster}`)) fout(W, rij, 'naam', `"${w.naam}" staat twee keer bij cluster "${w.cluster}".`);
+    namen.add(`${w.naam}|${w.cluster}`);
     if (leeg(w.cluster)) fout(W, rij, 'cluster', 'Cluster ontbreekt.');
     else if (!vraagClusters.has(String(w.cluster).trim())) fout(W, rij, 'cluster', `Geen vraag voor cluster "${w.cluster}": voeg het toe in de tabel Vraag of kies een bestaand cluster.`);
-    if (getal(W, rij, 'capaciteit', w.capaciteit) && w.capaciteit < 0) fout(W, rij, 'capaciteit', 'Capaciteit is negatief.');
+    const capOk = getal(W, rij, 'capaciteit', w.capaciteit);
+    if (capOk && w.capaciteit < 0) fout(W, rij, 'capaciteit', 'Capaciteit is negatief.');
+    if (getal(W, rij, 'huidig_aanbod', w.huidig_aanbod, true) && capOk && w.capaciteit === 0 && w.huidig_aanbod > 0) {
+      waarschuw(W, rij, 'capaciteit', `Inzetbare capaciteit is 0 terwijl het huidig aanbod ${w.huidig_aanbod} Mm³/j is.`);
+    }
     const latOk = getal(W, rij, 'lat', w.lat, true), lonOk = getal(W, rij, 'lon', w.lon, true);
     if ((!latOk || !lonOk) && (leeg(w.lat) || leeg(w.lon))) waarschuw(W, rij, 'lat', 'Geen coördinaten: de winning staat niet op de kaart.');
   }
@@ -179,12 +186,20 @@ export function valideer(data) {
   return uit;
 }
 
-/** Naslag voor `valideerMaatregel`: bekende clusters en winningen van de dataset. */
+/** Naslag voor `valideerMaatregel`: bekende clusters en de winningen per naam. */
 export function contextVoorMaatregel(data) {
-  return {
-    clusters: new Set(clusters(data)),
-    winningen: new Map((data?.winningen ?? []).filter((w) => !leeg(w.naam)).map((w) => [w.naam, w])),
-  };
+  const winningen = new Map();
+  for (const w of data?.winningen ?? []) if (!leeg(w.naam)) winningen.set(w.naam, [...(winningen.get(w.naam) ?? []), w]);
+  return { clusters: new Set(clusters(data)), winningen };
+}
+
+/**
+ * De winning waar een maatregel naar verwijst. Een naam kan bij meer clusters horen
+ * (Fledite ROL): dan die van het cluster van de maatregel, anders de eerste.
+ */
+export function winningVan(ctx, m) {
+  const kandidaten = leeg(m?.winning) ? [] : ctx.winningen.get(m.winning) ?? [];
+  return kandidaten.find((w) => w.cluster === m.cluster) ?? kandidaten[0] ?? null;
 }
 
 /**
@@ -201,7 +216,7 @@ export function valideerMaatregel(m, ctx) {
     if (!opties.includes(v)) fout(veld, `"${v}" is geen geldige keuze (${opties.join(' / ')}).`);
   };
   const levering = m.soort === 'waterlevering';
-  const winning = leeg(m.winning) ? null : ctx.winningen.get(m.winning);
+  const winning = winningVan(ctx, m);
 
   // identiteit en levering
   if (leeg(m.id)) fout('id', 'Verplicht veld is leeg.');

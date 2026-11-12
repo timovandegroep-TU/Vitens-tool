@@ -1,6 +1,8 @@
-# Schrijft data/voorbeeld.json: volledig fictieve data in het formaat van de tool (schema 2).
-# Namen en waarden zijn verzonnen; de orde van grootte lijkt op het werkdocument
-# (5 clusters, ca. 30 winningen, ca. 132 Mm³/j aanbod, vraag ca. 138 Mm³/j in 2025).
+# Schrijft data/voorbeeld.json in het formaat van de tool (schema 2).
+#   Winningen:   de winningen uit het werkdocument V04_1 (aangeleverd door de opdrachtgever,
+#                12-11-2026). Gemeente en coördinaten zijn benaderd op plaatsnaam.
+#   Vraag:       FICTIEF: vier vraagscenario's, orde van grootte als het werkdocument.
+#   Maatregelen: FICTIEF: verzonnen voorbeelden op echte winningen en verzonnen nieuwe locaties.
 #
 # Gebruik:  python tools/maak_voorbeeld.py data/voorbeeld.json
 # daarna:   node tests/voorbeeld.test.mjs --bijwerken   (snapshot bijwerken)
@@ -11,11 +13,11 @@ JAREN = [2025, 2030, 2035, 2040, 2045, 2050]
 # ------------------------------------------------------------------ vraag
 # vraag 2025 per cluster (Mm³/j) en hoe hard het cluster meegroeit met het scenario
 CLUSTERS = {            # naam: (vraag 2025, groeigevoeligheid)
-    'West':   (46.5, 1.10),
-    'Zuid':   (16.6, 0.80),
-    'Midden': (32.5, 1.00),
-    'Oost':   (14.6, 0.90),
-    'Noord':  (28.0, 1.20),
+    'Utrecht West':                 (46.5, 1.10),
+    'Utrecht Zuid':                 (16.6, 0.80),
+    'Utrecht Randmeren Utrecht':    (32.5, 1.00),
+    'Utrecht Randmeren Gelderland': (14.6, 0.90),
+    'Flevoland':                    (28.0, 1.20),
 }
 SCENARIOS = [           # naam, groei vraag 2025->2050 (gemiddeld), toelichting
     ('Laag', -0.02, 'Fictief. CBS-prognose laag; verbruik daalt naar 120 l p.p.p.d.; klimaat zoals nu.'),
@@ -35,29 +37,69 @@ for s, groei, toel in SCENARIOS:
         vraag.append(rij)
 
 # -------------------------------------------------------------- winningen
-# naam, cluster, capaciteit, lat, lon
-WIN = [
-    ('Lindewaard', 'West', 11.0, 52.090, 4.930), ('Hoge Brug', 'West', 9.0, 52.120, 4.990),
-    ('Kromme Akker', 'West', 7.0, 52.050, 4.880), ('Wilgenoord', 'West', 6.0, 52.140, 4.900),
-    ('Rietveen', 'West', 5.0, 52.030, 4.960), ('Molendijk', 'West', 3.0, 52.070, 5.020),
-    ('Schaapsdrift', 'West', 2.0, 52.110, 4.850), ('Vossenhol', 'West', 1.0, 52.160, 4.960),
-    ('Beekzicht', 'Zuid', 5.0, 51.980, 5.230), ('Dorrewaard', 'Zuid', 3.5, 51.960, 5.330),
-    ('Heidepoort', 'Zuid', 3.5, 52.000, 5.390), ('Klaverhoeve', 'Zuid', 3.0, 51.990, 5.170),
-    ('Zandstede', 'Zuid', 2.0, 51.950, 5.260),
-    ('Eikenrode', 'Midden', 8.0, 52.150, 5.300), ('Bosrand', 'Midden', 6.0, 52.120, 5.360),
-    ('Leemberg', 'Midden', 5.0, 52.180, 5.240), ('Dennenhof', 'Midden', 4.0, 52.100, 5.200),
-    ('Valkenheuvel', 'Midden', 3.0, 52.200, 5.330), ('Mosveld', 'Midden', 2.0, 52.140, 5.420),
-    ('Wolfsberg', 'Oost', 5.0, 52.320, 5.640), ('Hertenkamp', 'Oost', 4.0, 52.280, 5.700),
-    ('Bremhorst', 'Oost', 3.5, 52.250, 5.600), ('Ruigeveld', 'Oost', 3.0, 52.350, 5.580),
-    ('Polderkern', 'Noord', 10.0, 52.470, 5.500), ('Nieuwlandse Dijk', 'Noord', 7.0, 52.430, 5.600),
-    ('Kavel Zeven', 'Noord', 5.0, 52.510, 5.450), ('Lage Vaart', 'Noord', 4.0, 52.400, 5.520),
-    ('Meeuwenplaat', 'Noord', 2.0, 52.540, 5.580),
-]
-winningen = [{'naam': n, 'cluster': c, 'gemeente': n, 'capaciteit': cap,
-              'lat': la, 'lon': lo, 'toelichting': ''} for n, c, cap, la, lo in WIN]
+# Werkdocument: Locatie, Type, Vitens cluster (gebruik), Watersysteem, Huidig aanbod, Inzetbare productiecapaciteit
+WERKDOCUMENT = """
+Bremerberg	Winning	Flevoland	Polder	8	7
+Fledite	Winning	Flevoland	Polder	11	11
+Harderbroek	Winning	Flevoland	Polder	10	10
+Harderwijk	Winning	Utrecht Randmeren Gelderland	Flanken	5	5
+Putten	Winning	Utrecht Randmeren Gelderland	Flanken	3,5	3,5
+Fledite ROL	Winning	Utrecht Randmeren Gelderland	Polder	2,2	2,2
+Holk	Winning	Utrecht Randmeren Gelderland	Polder	5	5
+Amersfoort Koedijkerweg	Winning	Utrecht Randmeren Utrecht	Flanken	1,5	1,5
+Laren	Winning	Utrecht Randmeren Utrecht	Flanken	2	2
+Loosdrecht	Winning	Utrecht Randmeren Utrecht	Flanken	2,2	2,2
+Amersfoort Berg	Winning	Utrecht Randmeren Utrecht	Heuvelrug	1,5	1,5
+Soestduinen	Winning	Utrecht Randmeren Utrecht	Heuvelrug	9	9
+Eemdijk	Winning	Utrecht Randmeren Utrecht	Polder	5	5
+Fledite ROL	Winning	Utrecht Randmeren Utrecht	Polder	1,8	1,8
+Spiekzand ROL	Winning	Utrecht Randmeren Utrecht	Polder	5	5
+Beerschoten	Winning	Utrecht West	Flanken	8	8
+Bilthoven	Winning	Utrecht West	Flanken	2	1,2
+Benschop	Winning	Utrecht West	Polder	3	0
+Groenekan	Winning	Utrecht West	Polder	7,5	6
+Linschoten	Winning	Utrecht West	Polder	10	10
+Bunnik	Winning	Utrecht West	Riviergebied	3,5	3,5
+De Meern	Winning	Utrecht West	Riviergebied	1,9	1,9
+Leidsche Rijn	Winning	Utrecht West	Riviergebied	5,3	5
+Nieuwegein	Winning	Utrecht West	Riviergebied	2,5	2,5
+Tull en 't Waal	Winning	Utrecht West	Riviergebied	6	6
+Driebergen	Winning	Utrecht Zuid	Flanken	0,9	0,9
+Leersum	Winning	Utrecht Zuid	Flanken	0,8	0,8
+Veenendaal	Winning	Utrecht Zuid	Flanken	3	3
+Woudenberg	Winning	Utrecht Zuid	Flanken	3,4	2,2
+Zeist	Winning	Utrecht Zuid	Flanken	5	5
+Rhenen	Winning	Utrecht Zuid	Heuvelrug	2	2
+Cothen	Winning	Utrecht Zuid	Riviergebied	3	3
+"""
+
+# Benaderde ligging op plaatsnaam (gemeente, lat, lon); staat niet in het werkdocument.
+LIGGING = {
+    'Amersfoort Berg': ('Amersfoort', 52.14, 5.37), 'Amersfoort Koedijkerweg': ('Amersfoort', 52.18, 5.40),
+    'Beerschoten': ('De Bilt', 52.09, 5.20), 'Benschop': ('Lopik', 52.01, 4.98), 'Bilthoven': ('De Bilt', 52.13, 5.20),
+    'Bremerberg': ('Dronten', 52.42, 5.65), 'Bunnik': ('Bunnik', 52.07, 5.20), 'Cothen': ('Wijk bij Duurstede', 52.00, 5.31),
+    'De Meern': ('Utrecht', 52.08, 5.03), 'Driebergen': ('Utrechtse Heuvelrug', 52.05, 5.28), 'Eemdijk': ('Bunschoten', 52.25, 5.33),
+    'Fledite': ('Zeewolde', 52.30, 5.42), 'Fledite ROL': ('Zeewolde', 52.30, 5.42), 'Groenekan': ('De Bilt', 52.12, 5.15),
+    'Harderbroek': ('Zeewolde', 52.37, 5.57), 'Harderwijk': ('Harderwijk', 52.34, 5.62), 'Holk': ('Nijkerk', 52.23, 5.45),
+    'Laren': ('Laren', 52.26, 5.23), 'Leersum': ('Utrechtse Heuvelrug', 52.01, 5.43), 'Leidsche Rijn': ('Utrecht', 52.10, 5.05),
+    'Linschoten': ('Montfoort', 52.06, 4.91), 'Loosdrecht': ('Wijdemeren', 52.20, 5.12), 'Nieuwegein': ('Nieuwegein', 52.03, 5.09),
+    'Putten': ('Putten', 52.26, 5.61), 'Rhenen': ('Rhenen', 51.96, 5.57), 'Soestduinen': ('Soest', 52.15, 5.30),
+    'Spiekzand ROL': ('Zeewolde', 52.33, 5.50), "Tull en 't Waal": ('Houten', 52.00, 5.13), 'Veenendaal': ('Veenendaal', 52.03, 5.55),
+    'Woudenberg': ('Woudenberg', 52.08, 5.42), 'Zeist': ('Zeist', 52.09, 5.24),
+}
+
+getal = lambda t: float(t.replace(',', '.'))
+winningen = []
+for regel in WERKDOCUMENT.strip().splitlines():
+    naam, typ, cluster, systeem, huidig, cap = regel.split('\t')
+    gem, la, lo = LIGGING[naam]
+    winningen.append({'naam': naam, 'type': typ, 'cluster': cluster, 'watersysteem': systeem,
+                      'huidig_aanbod': getal(huidig), 'capaciteit': getal(cap), 'gemeente': gem,
+                      'lat': la, 'lon': lo, 'toelichting': 'Ligging benaderd op plaatsnaam.'})
+assert len(winningen) == 32 and abs(sum(w['capaciteit'] for w in winningen) - 132.7) < 1e-9
 
 # ------------------------------------------------------------ maatregelen
-META = {'aangeleverd_door': 'J. Voorbeeld (fictief)', 'datum': '2026-11-12', 'bron': 'Fictief overzicht maatregelen'}
+META = {'aangeleverd_door': 'J. Voorbeeld (fictief)', 'datum': '2026-11-12', 'bron': 'Fictief voorbeeld, geen echte plannen'}
 GEEN = None
 
 
@@ -83,70 +125,70 @@ N0 = ('geen invloed', 'Geen gebied in de buurt.'); NET = ('voldoende', 'Bestaand
 
 M = [
     # S0 – besparing (vraag omlaag)
-    maatregel('besparing-huishoudens', 'Waterbesparing huishoudens', 'Campagnes en waterbesparende toestellen bij huishoudens.',
+    maatregel('besparing-huishoudens', 'Waterbesparing huishoudens', 'Fictief voorbeeld: campagnes en waterbesparende toestellen bij huishoudens.',
               'waterbesparing', 'S0', 6.0, 2030, True, 'besloten', 'alle',
               politiek='Breed draagvlak in de regio.', eff=[('Huishoudens', 'aandacht', 'Vraagt gedragsverandering van bewoners.')]),
-    maatregel('besparing-bedrijven', 'Waterbesparing bedrijven', 'Afspraken met grootverbruikers over hergebruik van proceswater.',
+    maatregel('besparing-bedrijven', 'Waterbesparing bedrijven', 'Fictief voorbeeld: afspraken met grootverbruikers over hergebruik van proceswater.',
               'waterbesparing', 'S0', 2.0, 2035, True, 'verkenning', 'alle',
               politiek='Bedrijven vragen een overgangstermijn.', eff=[('Bedrijven', 'aandacht', 'Investering in hergebruik nodig.')]),
-    maatregel('slimme-meters', 'Slimme watermeters', 'Inzicht in verbruik en lekverlies met slimme meters.',
+    maatregel('slimme-meters', 'Slimme watermeters', 'Fictief voorbeeld: inzicht in verbruik en lekverlies met slimme meters.',
               'waterbesparing', 'S0', 1.0, 2032, False, 'idee', 'alle', eff=[('Privacy', 'aandacht', 'Meetgegevens vragen zorgvuldige omgang.')]),
     # S1 – afnames van bestaande winningen (aanbod omlaag)
-    maatregel('afname-schaapsdrift', 'Sluiting Schaapsdrift (natuur)', 'Winning sluit om verdroging van het nabije natuurgebied te stoppen.',
-              'afname', 'S1', 2.0, 2030, True, 'besloten', 'West', winning='Schaapsdrift'),
-    maatregel('afname-eikenrode', 'Lagere vergunning Eikenrode', 'Vergunning wordt verlaagd vanwege landbouwschade.',
-              'afname', 'S1', 2.5, 2035, True, 'verkenning', 'Midden', winning='Eikenrode'),
-    maatregel('afname-kavel-zeven', 'Einde levensduur Kavel Zeven', 'Zuivering is aan het einde van de levensduur en sluit.',
-              'afname', 'S1', 5.0, 2040, True, 'verkenning', 'Noord', winning='Kavel Zeven'),
-    maatregel('afname-heidepoort', 'Verontreiniging Heidepoort', 'Toenemende verontreiniging; een deel van de putten valt weg.',
-              'afname', 'S1', 1.5, 2045, True, 'idee', 'Zuid', winning='Heidepoort'),
+    maatregel('afname-de-meern', 'Sluiting De Meern', 'Fictief voorbeeld: de winning sluit om verdroging van een natuurgebied te stoppen.',
+              'afname', 'S1', 1.9, 2030, True, 'besloten', 'Utrecht West', winning='De Meern'),
+    maatregel('afname-soestduinen', 'Lagere vergunning Soestduinen', 'Fictief voorbeeld: de vergunning wordt verlaagd vanwege landbouwschade.',
+              'afname', 'S1', 2.5, 2035, True, 'verkenning', 'Utrecht Randmeren Utrecht', winning='Soestduinen'),
+    maatregel('afname-harderbroek', 'Einde levensduur Harderbroek', 'Fictief voorbeeld: de zuivering is aan het einde van de levensduur en sluit.',
+              'afname', 'S1', 5.0, 2040, True, 'verkenning', 'Flevoland', winning='Harderbroek'),
+    maatregel('afname-zeist', 'Verontreiniging Zeist', 'Fictief voorbeeld: door verontreiniging valt een deel van de putten weg.',
+              'afname', 'S1', 1.5, 2045, True, 'idee', 'Utrecht Zuid', winning='Zeist'),
     # S1 – instandhouding (aanbod terug op peil)
-    maatregel('herbouw-kavel-zeven', 'Herbouw zuivering Kavel Zeven', 'Nieuwe zuivering op hetzelfde terrein, zodat de winning in bedrijf blijft.',
-              'waterlevering', 'S1', 5.0, 2042, True, 'verkenning', 'Noord', winning='Kavel Zeven', bron='grondwater', ha=1.5, mw=0.8,
+    maatregel('herbouw-harderbroek', 'Herbouw zuivering Harderbroek', 'Fictief voorbeeld: nieuwe zuivering op hetzelfde terrein, zodat de winning in bedrijf blijft.',
+              'waterlevering', 'S1', 5.0, 2042, True, 'verkenning', 'Flevoland', winning='Harderbroek', bron='grondwater', ha=1.5, mw=0.8,
               voetafdruk=voet(GW0, ('in of grenst aan', 'Bestaande winning in de zone.'), N0, NET),
               politiek='Raad steunt behoud van de winning.', eff=[('Bouwverkeer', 'aandacht', 'Twee jaar bouwverkeer.')]),
     # S2 – vergroten op bestaande locatie
-    maatregel('uitbreiding-wolfsberg', 'Uitbreiding Wolfsberg', 'Extra putten en een zuiveringsstraat op het bestaande terrein.',
-              'waterlevering', 'S2', 3.0, 2034, True, 'verkenning', 'Oost', winning='Wolfsberg', bron='grondwater', ha=2.0, mw=1.0,
+    maatregel('uitbreiding-harderwijk', 'Uitbreiding Harderwijk', 'Fictief voorbeeld: extra putten en een zuiveringsstraat op het bestaande terrein.',
+              'waterlevering', 'S2', 3.0, 2034, True, 'verkenning', 'Utrecht Randmeren Gelderland', winning='Harderwijk', bron='grondwater', ha=2.0, mw=1.0,
               voetafdruk=voet(('beperkt', 'Verlaging tot enkele centimeters.'), ('in of grenst aan', 'Zone wordt iets groter.'), ('mogelijk', 'Natura 2000-gebied op 2 km.'), NET),
               eff=[('Natuur', 'aandacht', 'Monitoring van het nabije bos nodig.')]),
-    maatregel('uitbreiding-lindewaard', 'Uitbreiding Lindewaard', 'Vergroten van de vergunning op de bestaande locatie.',
-              'waterlevering', 'S2', 2.5, 2036, False, 'idee', 'West', winning='Lindewaard', bron='grondwater', ha=1.0, mw=0.6,
+    maatregel('uitbreiding-linschoten', 'Uitbreiding Linschoten', 'Fictief voorbeeld: vergroten van de vergunning op de bestaande locatie.',
+              'waterlevering', 'S2', 2.5, 2036, False, 'idee', 'Utrecht West', winning='Linschoten', bron='grondwater', ha=1.0, mw=0.6,
               voetafdruk=voet(('significant', 'Verlaging tot in het natuurgebied.'), ('in of grenst aan', 'Zone moet worden vergroot.'), ('waarschijnlijk', 'Natuurgebied grenst aan de winning.'), NET),
               politiek='Verwachte weerstand van natuurorganisaties.', eff=[('Natuur', 'knelpunt', 'Verdroging van vennen.'), ('Woningbouw', 'kans', 'Maakt een nieuwe wijk mogelijk.')]),
     # S3 – nieuwe winlocatie
-    maatregel('winning-veldhoven-oost', 'Nieuwe winning Veldhoven-Oost', 'Nieuwe grondwaterwinning met zuivering in het oosten van cluster Midden.',
-              'waterlevering', 'S3', 6.0, 2038, True, 'verkenning', 'Midden', gemeente='Veldhoven-Oost', locatie={'lat': 52.17, 'lon': 5.47},
+    maatregel('winning-heideveld', 'Nieuwe winning Heideveld', 'Fictief voorbeeld: nieuwe grondwaterwinning met zuivering op een verzonnen locatie.',
+              'waterlevering', 'S3', 6.0, 2038, True, 'verkenning', 'Utrecht Randmeren Utrecht', gemeente='Heideveld (fictief)', locatie={'lat': 52.20, 'lon': 5.35},
               bron='grondwater', ha=12.0, mw=1.8,
               voetafdruk=voet(('beperkt', 'Verlaging tot 5 cm op 500 m.'), BUITEN, ('mogelijk', 'Beekdal op 2 km.'), ('onvoldoende', 'Nieuw onderstation nodig.')),
               politiek='Raad wil eerst uitsluitsel over landbouwschade.',
               eff=[('Doorlooptijd', 'knelpunt', 'Vergunningtraject van ongeveer acht jaar.'), ('Landbouw', 'aandacht', 'Beperkingen in de nieuwe beschermingszone.'), ('Woningbouw', 'kans', 'Maakt aansluiting van nieuwbouw mogelijk.')]),
-    maatregel('oeverwinning-westmeer', 'Oeverwinning Westmeer', 'Nieuwe oevergrondwaterwinning langs het meer.',
-              'waterlevering', 'S3', 5.0, 2042, False, 'idee', 'West', gemeente='Westmeer', locatie={'lat': 52.10, 'lon': 4.82},
+    maatregel('oeverwinning-westmeer', 'Oeverwinning Westmeer', 'Fictief voorbeeld: nieuwe oevergrondwaterwinning langs een verzonnen meer.',
+              'waterlevering', 'S3', 5.0, 2042, False, 'idee', 'Utrecht West', gemeente='Westmeer (fictief)', locatie={'lat': 52.12, 'lon': 4.92},
               bron='oevergrondwater', ha=15.0, mw=2.5,
               voetafdruk=voet(('beperkt', 'Vooral invloed op het peil van het meer.'), ('in of grenst aan', 'Nieuwe zone rond het meer.'), ('waarschijnlijk', 'Meer is beschermd gebied.'), ('krap', 'Aansluiting na netverzwaring.')),
               eff=[('Recreatie', 'knelpunt', 'Deel van de oever niet meer toegankelijk.')]),
-    maatregel('oppervlaktewater-noord', 'Oppervlaktewater Noordvaart', 'Inname en zuivering van water uit de Noordvaart.',
-              'waterlevering', 'S3', 10.0, 2045, False, 'idee', 'Noord', gemeente='Noordvaart', locatie={'lat': 52.50, 'lon': 5.66},
+    maatregel('oppervlaktewater-noordvaart', 'Oppervlaktewater Noordvaart', 'Fictief voorbeeld: inname en zuivering van water uit een verzonnen vaart.',
+              'waterlevering', 'S3', 10.0, 2045, False, 'idee', 'Flevoland', gemeente='Noordvaart (fictief)', locatie={'lat': 52.45, 'lon': 5.55},
               bron='oppervlaktewater', ha=20.0, mw=4.0,
               voetafdruk=voet(GW0, BUITEN, ('mogelijk', 'Natuurgebied langs de vaart.'), ('onvoldoende', 'Grote aansluiting nodig.')),
               politiek='Past in de regionale strategie; kosten zijn een zorg.',
               eff=[('Energie', 'knelpunt', 'Hoge stroomvraag van de zuivering.'), ('Grondwater', 'kans', 'Ontlast de grondwatervoorraad.')]),
     # andere leverancier: zichtbaar, niet meegerekend (v1)
-    maatregel('oasen-levering-west', 'Levering Oasen naar West', 'Water van een buurbedrijf via een nieuwe verbinding.',
-              'waterlevering', 'S3', 2.0, 2035, True, 'idee', 'West', gemeente='Grensdorp', locatie={'lat': 51.99, 'lon': 4.86},
+    maatregel('oasen-levering-west', 'Levering Oasen naar Utrecht West', 'Fictief voorbeeld: water van een buurbedrijf via een nieuwe verbinding.',
+              'waterlevering', 'S3', 2.0, 2035, True, 'idee', 'Utrecht West', gemeente='Grensdorp (fictief)', locatie={'lat': 51.99, 'lon': 4.90},
               bron='overig', ha=0.5, mw=0.3, voetafdruk=voet(GW0, BUITEN, N0, NET), leverancier='Oasen'),
 ]
 
 data = {
-    'meta': {'naam': 'Voorbeelddata (fictief)', 'schema_versie': 2, 'datum_import': '2026-11-12',
-             'bron': 'Verzonnen namen en waarden, alleen om de tool te tonen', 'voorbeelddata': True},
+    'meta': {'naam': 'Voorbeelddata', 'schema_versie': 2, 'datum_import': '2026-11-12',
+             'bron': 'Winningen: werkdocument V04_1. Vraagscenario\'s en maatregelen: fictief.', 'voorbeelddata': True},
     'winningen': winningen,
     'vraag': vraag,
     'maatregelen': M,
 }
 io.open(sys.argv[1], 'w', encoding='utf-8', newline='\n').write(json.dumps(data, ensure_ascii=False, indent=1) + '\n')
 tot = lambda s, j: sum(r[str(j)] for r in vraag if r['scenario'] == s)
-print('capaciteit', round(sum(w[2] for w in WIN), 2), '| winningen', len(WIN), '| maatregelen', len(M))
+print('capaciteit', round(sum(w['capaciteit'] for w in winningen), 2), '| winningen', len(winningen), '| maatregelen', len(M))
 for s, _, _ in SCENARIOS:
     print(f'{s:14s}', [round(tot(s, j), 1) for j in JAREN])

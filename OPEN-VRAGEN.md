@@ -18,6 +18,8 @@ Besluit opdrachtgever: de data uit het werkdocument (narratieven, criteria, redu
 | J6 | Cluster van een maatregel. | maatregel | Direct gekozen uit de clusters in de tabel Vraag, of via een bestaande winning. De koppeltabel gemeente → cluster is vervallen; gemeente is vrije tekst. |
 | J7 | Capaciteit van een winning: inzetbaar of vergund? | tabel Winningen | Inzetbare productiecapaciteit nu, zoals voorheen. Leveringen blijven met vergunde capaciteit tellen (E1). |
 | J8 | Het werkdocument koppelen aan het nieuwe formaat. | `tools/convert_werkdocument.py` | Niet gedaan: de converter schrijft nog het oude formaat (schema 1) en de acceptatietests op het werkdocument zijn verwijderd (staan in de git-geschiedenis). |
+| J10 | De winningen in `data/voorbeeld.json` zijn nu de **echte** winningen uit het werkdocument (aangeleverd 12-11-2026; 32 stuks, 132,7 Mm³/j). Mag dat in de repo en op GitHub Pages? De oorspronkelijke opdracht vroeg om fictieve voorbeelddata en noemt het werkdocument intern. | `data/voorbeeld.json`, `tools/maak_voorbeeld.py` | Lokaal gecommit, nog niet gepusht. Vraag en maatregelen blijven fictief; elke maatregel heeft "Fictief voorbeeld" in de omschrijving. Ligging (gemeente, lat/lon) benaderd op plaatsnaam. |
+| J11 | Fledite ROL staat twee keer in de tabel (twee clusters). | tabel Winningen | Toegestaan: naam + cluster moet uniek zijn. Een maatregel met winning "Fledite ROL" gebruikt de rij van zijn eigen cluster. |
 | J9 | Datasets in het oude formaat (met narratieven en reductiefactoren). | import, localStorage | Worden niet meer gelezen; de import geeft een duidelijke melding. Opslag in de browser gebruikt een nieuwe sleutel, dus een oude dataset verschijnt niet meer. |
 
 ## A. Bronnen
