@@ -151,7 +151,7 @@ function paneelLijst(t) {
   const lijst = data[t.id];
   const kolommen = t.kolommen.map((k) => ({
     ...k, opties: () => k.keuzes,
-    klasse: k.veld === 'toelichting' ? 'breed' : ['naam', 'scenario', 'cluster', 'gemeente'].includes(k.veld) ? 'middel' : '',
+    klasse: k.veld === 'toelichting' ? 'breed' : ['naam', 'scenario', 'cluster', 'gemeente', 'groep', 'winning'].includes(k.veld) ? 'middel' : '',
   }));
   const nieuw = () => Object.fromEntries(t.kolommen.map((k) => [k.veld, k.type === 'tekst' ? '' : null]));
   const def = {
@@ -326,7 +326,7 @@ function totalenInhoud() {
     el('div', { class: 'kern' },
       el('div', {}, el('b', { text: nf3.format(s.capaciteit) }), 'Mm³/j huidig aanbod'),
       el('div', {}, el('b', { text: s.winningen }), 'winningen'), el('div', {}, el('b', { text: s.clusters }), 'clusters'),
-      el('div', {}, el('b', { text: scenarios(data).length }), "scenario's"), el('div', {}, el('b', { text: s.maatregelen }), 'maatregelen'),
+      el('div', {}, el('b', { text: scenarios(data).length }), "scenario's"), el('div', {}, el('b', { text: s.factoren }), 'factoren'), el('div', {}, el('b', { text: s.maatregelen }), 'maatregelen'),
       el('div', {}, el('b', { class: t.fouten ? 'status-f' : 'status-ok', text: t.fouten }), 'blokkerend'), el('div', {}, el('b', { class: t.waarschuwingen ? 'status-w' : 'status-ok', text: t.waarschuwingen }), 'waarschuwingen')),
     el('h3', { text: 'Vraag per scenario, totaal over de clusters' }), tabel,
   ];
@@ -365,7 +365,7 @@ async function importeer(bestand) {
     dialoog('Importeren mislukt', el('p', { text: `${bestand.name} kon niet worden gelezen: ${e.message}` }), el('p', { class: 'klein', text: 'Verwacht: een .xlsx volgens het template of een .json-export van deze tool. Er is niets gewijzigd.' }));
   }
 }
-const bevestigVervangen = () => !(data.winningen.length || data.vraag.length || data.maatregelen.length)
+const bevestigVervangen = () => !(data.winningen.length || data.vraag.length || data.factoren.length || data.maatregelen.length)
   || confirm('De huidige dataset in deze browser wordt vervangen door het bestand. Doorgaan?');
 
 function afronden(bestand, opmerkingen) {

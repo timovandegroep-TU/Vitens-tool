@@ -233,7 +233,9 @@ export function bouw(a) {
     return `<div class="th">Invulling drinkwateropgave ${c.jaar}${app.state.cluster ? ' · ' + esc(app.clusterNaam()) : ''}</div>`
       + '<div class="tm">Opgave = vraag zonder besparing − bestaand aanbod (capaciteit van de winningen na afnames). Gedekt = (besparing + extra aanbod) ÷ opgave.</div>'
       + kv('Vraag zonder besparing', f1(c.vraag0)) + kv('Bestaand aanbod', f1(c.aanbod0))
+      + (c.factorVraag > 0.005 ? kv('waarvan factoren op de vraag', `+${f1(c.factorVraag)}`) : '')
       + (c.afname > 0.005 ? kv('waarvan afname bestaand aanbod', f1(c.afname)) : '')
+      + (c.factorAanbod > 0.005 ? kv('waarvan factoren op het aanbod', `−${f1(c.factorAanbod)}`) : '')
       + kv('Opgave', f1(c.opgave)) + kv('Besparing (vraag)', f1(c.besparing)) + kv('Extra aanbod', f1(c.levering)) + kv('Tekort', f1(c.tekort));
   });
   speel(false);

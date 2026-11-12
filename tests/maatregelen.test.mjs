@@ -18,10 +18,11 @@ const SCEN = scenarios(basis).map((s) => s.id);
 const CLUSTER = clusters(basis)[0];
 const WINNING = basis.winningen.find((w) => w.cluster === CLUSTER);
 
-/** Dataset zonder maatregelen, plus de opgegeven testmaatregelen. */
+/** Dataset zonder maatregelen en factoren, plus de opgegeven testmaatregelen. */
 function metMaatregelen(...maatregelen) {
   const d = kopie(basis);
   d.maatregelen = maatregelen;
+  d.factoren = [];
   return d;
 }
 const leeg = metMaatregelen();

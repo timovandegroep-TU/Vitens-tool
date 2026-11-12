@@ -3,7 +3,7 @@
   "naam": "Voorbeelddata",
   "schema_versie": 2,
   "datum_import": "2026-11-12",
-  "bron": "Winningen: werkdocument V04_1. Vraagscenario's en maatregelen: fictief.",
+  "bron": "Winningen: werkdocument V04_1. Vraagscenario's, factoren en maatregelen: fictief.",
   "voorbeelddata": true
  },
  "winningen": [
@@ -612,6 +612,60 @@
    "2045": 35.7,
    "2050": 37.41,
    "toelichting": ""
+  }
+ ],
+ "factoren": [
+  {
+   "naam": "Temperatuurstijging",
+   "groep": "Klimaat",
+   "werkt_op": "vraag",
+   "bediening": "schuif",
+   "effect": 8.0,
+   "van": 2026,
+   "tot": 2050,
+   "beginstand": 50,
+   "cluster": "alle",
+   "winning": "",
+   "toelichting": "Fictief voorbeeld. Warmere, drogere zomers verhogen de jaar- en piekvraag."
+  },
+  {
+   "naam": "PFAS-normaanscherping",
+   "groep": "Waterkwaliteit",
+   "werkt_op": "aanbod",
+   "bediening": "schuif",
+   "effect": 6.0,
+   "van": 2027,
+   "tot": 2035,
+   "beginstand": 50,
+   "cluster": "alle",
+   "winning": "",
+   "toelichting": "Fictief voorbeeld. Strengere normen maken bronnen deels onbruikbaar zonder extra zuivering."
+  },
+  {
+   "naam": "PFAS-incident Veenendaal",
+   "groep": "Waterkwaliteit",
+   "werkt_op": "aanbod",
+   "bediening": "schakelaar",
+   "effect": 3.0,
+   "van": 2030,
+   "tot": 2030,
+   "beginstand": 0,
+   "cluster": "Utrecht Zuid",
+   "winning": "Veenendaal",
+   "toelichting": "Fictief voorbeeld. Risico dat één winning uit bedrijf moet."
+  },
+  {
+   "naam": "Verzilting grondwater",
+   "groep": "Waterkwaliteit",
+   "werkt_op": "aanbod",
+   "bediening": "schuif",
+   "effect": 5.0,
+   "van": 2030,
+   "tot": 2050,
+   "beginstand": 30,
+   "cluster": "Utrecht West",
+   "winning": "",
+   "toelichting": "Fictief voorbeeld. Zoutindringing bij lage rivierafvoer raakt winningen in het rivier- en poldergebied."
   }
  ],
  "maatregelen": [

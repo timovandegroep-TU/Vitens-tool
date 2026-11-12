@@ -45,8 +45,14 @@ export function effectenWinningen(data, resultaat, cluster) {
   for (const w of data.winningen) {
     if (cluster && w.cluster !== cluster) continue;
     const cap = typeof w.capaciteit === 'number' ? w.capaciteit : 0;
-    const oorzaken = data.maatregelen.filter((m) => m.soort === 'afname' && m.winning === w.naam && m.cluster === w.cluster && resultaat.maatregelen[m.id]?.actief);
-    const afname = Math.min(cap, oorzaken.reduce((s, m) => s + resultaat.maatregelen[m.id].volume, 0));
+    // afnames (maatregelen) en aanbodfactoren die naar deze winning verwijzen
+    const oorzaken = [
+      ...data.maatregelen.filter((m) => m.soort === 'afname' && m.winning === w.naam && m.cluster === w.cluster && resultaat.maatregelen[m.id]?.actief)
+        .map((m) => ({ naam: m.naam, volume: resultaat.maatregelen[m.id].volume })),
+      ...Object.entries(resultaat.factoren ?? {}).filter(([, f]) => f.winning === w.naam && f.cluster === w.cluster && f.effect > 0)
+        .map(([naam, f]) => ({ naam, volume: f.effect })),
+    ];
+    const afname = Math.min(cap, oorzaken.reduce((s, o) => s + o.volume, 0));
     const pct = cap > 0 ? afname / cap * 100 : 0;
     const niveau = pct >= AFNAME_DREMPELS.knelpunt ? 'knelpunt' : pct >= AFNAME_DREMPELS.aandacht ? 'aandacht' : 'geen';
     const reden = oorzaken.map((m) => m.naam).join(', ');

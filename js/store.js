@@ -29,8 +29,8 @@ export function controleerDataset(obj) {
   const fout = (waarom) => new Error(`Dit is geen dataset van deze tool: ${waarom}.`);
   if (obj == null || typeof obj !== 'object' || Array.isArray(obj)) throw fout('verwacht één object met tabellen');
   if ('narratieven' in obj || 'reductiefactoren' in obj) throw fout('het is het oude formaat met narratieven en reductiefactoren; dat leest deze versie niet meer');
-  if (!['winningen', 'vraag', 'maatregelen'].some((k) => k in obj)) throw fout('geen van de tabellen "winningen", "vraag" of "maatregelen" gevonden');
-  for (const k of ['winningen', 'vraag', 'maatregelen']) {
+  if (!['winningen', 'vraag', 'factoren', 'maatregelen'].some((k) => k in obj)) throw fout('geen van de tabellen "winningen", "vraag", "factoren" of "maatregelen" gevonden');
+  for (const k of ['winningen', 'vraag', 'factoren', 'maatregelen']) {
     if (obj[k] == null) continue;
     if (!Array.isArray(obj[k])) throw fout(`"${k}" moet een lijst zijn`);
     if (obj[k].some((x) => x == null || typeof x !== 'object' || Array.isArray(x))) throw fout(`"${k}" bevat een rij die geen object is`);
@@ -138,7 +138,7 @@ export function voegMaatregelenSamen(data, nieuwe) {
 // ---------------------------------------------------- dataset <-> bladen
 const BLAD_MAATREGELEN = 'Maatregelen', BLAD_UITLEG = 'Uitleg';
 
-/** Dataset -> { bladnaam: [[kop…], [rij…], …] }: Winningen, Vraag, Maatregelen. */
+/** Dataset -> { bladnaam: [[kop…], [rij…], …] }: Winningen, Vraag, Factoren, Maatregelen. */
 export function naarBladen(data0) {
   const data = normaliseer(JSON.parse(JSON.stringify(data0)));
   const bladen = {};
@@ -172,7 +172,7 @@ export function vanBladen(bladen) {
   const data = legeDataset();
   const opmerkingen = [];
   for (const t of TABELLEN) {
-    if (!(t.blad in bladen)) { opmerkingen.push(`Tabblad "${t.blad}" ontbreekt.`); continue; }
+    if (!(t.blad in bladen)) { if (!t.optioneel) opmerkingen.push(`Tabblad "${t.blad}" ontbreekt.`); continue; }
     data[t.id] = alsObjecten(bladen[t.blad]).map((r) => Object.fromEntries(t.kolommen.map((k) => [k.veld, leesCel(k.type, r[k.veld])])));
   }
   if (BLAD_MAATREGELEN in bladen) data.maatregelen = maatregelenUitBladen(bladen);
@@ -215,7 +215,7 @@ export function werkboekNaarBladen(XLSX, wb) {
     [naam.trim(), XLSX.utils.sheet_to_json(wb.Sheets[naam], { header: 1, defval: null, blankrows: false })]));
 }
 
-/** Leeg template: de drie tabbladen met koppen, plus Uitleg. */
+/** Leeg template: de tabbladen met koppen, plus Uitleg. */
 export const leegTemplate = (XLSX) => naarWerkboek(XLSX, { ...legeDataset(), meta: { ...legeDataset().meta, naam: 'Leeg template' } });
 
 // ------------------------------------------------- maatregelen-template

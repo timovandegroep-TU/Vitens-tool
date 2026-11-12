@@ -184,9 +184,24 @@ input[type=range]:focus-visible{outline:2px solid var(--sky);outline-offset:3px;
 .ei{cursor:default}
 #bronregel{right:88px;top:864px;font-size:13px;color:var(--ink-2)}
 
+/* scenariopaneel: vraagscenario's als chips, factoren als rijen met schuif of schakelaar */
+#scenRows{left:20px;right:20px;top:54px;display:flex;flex-wrap:wrap;gap:6px}
+.schip{font:inherit;font-size:13.5px;font-weight:500;border:1.5px solid var(--vt-blauw);background:#fff;border-radius:14px;padding:4px 12px;cursor:pointer;color:var(--vt-blauw);white-space:nowrap}
+.schip:hover{background:var(--tool-plot)}
+.schip[aria-checked=true]{background:var(--navy);color:#fff}
+.schip:focus-visible{outline:2px solid var(--sky);outline-offset:2px}
+#factRows{left:14px;right:10px;top:94px;bottom:70px;overflow-y:auto;scrollbar-width:thin;padding-right:6px}
+.fkop{font-size:12.5px;font-weight:700;color:var(--ink-2);padding:4px 10px 0}
+.frow{display:grid;grid-template-columns:1fr 50px 104px;align-items:center;gap:8px;height:31px;padding:0 10px;border-radius:8px}
+.frow:hover{background:rgba(255,255,255,.55)}
+.fnaam{font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fval{font-size:13.5px;font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.fval.nul{color:var(--tool-status-geen);font-weight:400}
+.frow .ctrl{display:flex;justify-content:flex-end;align-items:center}
+input[type=range].fs{width:100px;height:22px}
+#factRows .leegte{padding:8px 10px}
+
 /* passend maken in de vaste stage */
-#scenRows{top:52px}
-.nrow{height:36px}
 #scenKern{bottom:14px}
 #scenKern div{padding:6px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #opgHead .chip{white-space:nowrap}

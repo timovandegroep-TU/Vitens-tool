@@ -4,6 +4,20 @@ Onduidelijkheden die niet zelf zijn ingevuld. Per vraag: waar het in de bron sta
 
 Status: eerste versie (stap 1). Een antwoord? Zet het erachter en verplaats de vraag naar "Beantwoord".
 
+## K. Factoren (temperatuur, PFAS, verzilting) (12-11-2026)
+
+Gekozen in overleg: per factor een schuif of schakelaar; effect in Mm³/j bij volle stand met lineaire ingroei; werkt op een cluster, op "alle" of op één winning.
+
+| # | Vraag | Waar | Tijdelijke aanname |
+|---|---|---|---|
+| K1 | Horen factoren bij de uitgangssituatie of bij de maatregelen? | `js/model.js` | Uitgangssituatie: een vraagfactor zit in "vraag zonder besparing", een aanbodfactor in het bestaand aanbod. Ze vergroten dus de opgave; maatregelen moeten dat goedmaken. |
+| K2 | Dubbeltelling: het vraagscenario "Hoog + warm" bevat al een klimaateffect, de factor Temperatuurstijging ook. | dummydata | Laten staan; de deskundige moet kiezen waar klimaat zit (in het scenario of als factor). |
+| K3 | Hoe verdeel je een factor op "alle"? | `bereken` | Vraagfactor naar aandeel in de vraag van het scenario, aanbodfactor naar aandeel in de capaciteit. |
+| K4 | Afname door een factor op één winning kan groter worden dan de capaciteit van die winning. | weergave Winningen | Het rekenmodel trekt het volle effect af van het cluster; de weergave Winningen toont maximaal 100%. |
+| K5 | Waar in de visualisatie? | paneel Scenario | Vraagscenario's als chips bovenaan, factoren eronder per groep, scrollbaar. De "+ factor"-knop uit de mockup komt niet terug: factoren komen uit de invoer. |
+| K6 | Gelden de factoren in elk vraagscenario? | – | Ja. Factoren per scenario staan in LATER. |
+| K7 | Factoren in de dummydata zijn verzonnen (Temperatuurstijging, PFAS-normaanscherping, PFAS-incident Veenendaal, Verzilting grondwater). | `data/voorbeeld.json` | Toelichting begint met "Fictief voorbeeld". |
+
 ## J. Eenvoudiger aanlevering: vraagscenario's en vlak aanbod (12-11-2026)
 
 Besluit opdrachtgever: de data uit het werkdocument (narratieven, criteria, reductiefactoren) is **tijdelijk losgelaten**. De secties B, C en D hieronder gaan over het werkdocument en zijn tot die tijd niet van toepassing. Gekozen in overleg: vraag als reeks per cluster, vaste vraagscenario's, afname als maatregel met minteken, één Excel met drie tabbladen.

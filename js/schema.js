@@ -1,13 +1,14 @@
 // Datamodel: keuzelijsten, tabellen en validatie. Puur (geen DOM), dus ook in Node te testen.
 // De structuur staat beschreven in docs/datamodel.schema.json.
 //
-// Een dataset bestaat uit drie lijsten, gelijk aan de drie tabbladen van het Excel-template:
+// Een dataset bestaat uit vier lijsten, gelijk aan de tabbladen van het Excel-template:
 //   winningen   bestaande winningen met hun huidige capaciteit (= huidig aanbod)
 //   vraag       drinkwatervraag per scenario × cluster, per 5 jaar
+//   factoren    invloeden op vraag of aanbod (temperatuur, PFAS, verzilting), instelbaar in de tool
 //   maatregelen dataobjecten die vraag of aanbod veranderen
 // Scenario's en clusters zijn geen aparte tabel: ze volgen uit de tabel Vraag.
 
-import { ALLE_CLUSTERS, JAAR_MIN, JAAR_MAX, VRAAGJAREN, scenarios, clusters } from './model.js';
+import { ALLE_CLUSTERS, JAAR_MIN, JAAR_MAX, VRAAGJAREN, scenarios, clusters, zoekWinning } from './model.js';
 
 export const KEUZES = {
   leverancier: ['Vitens', 'Oasen', 'Waternet'],
@@ -16,6 +17,8 @@ export const KEUZES = {
   status: ['idee', 'verkenning', 'besloten', 'in uitvoering'],
   bron: ['grondwater', 'oevergrondwater', 'oppervlaktewater', 'overig'],
   overigEffect: ['kans', 'aandacht', 'knelpunt'],
+  werktOp: ['vraag', 'aanbod'],
+  bediening: ['schuif', 'schakelaar'],
 };
 
 /** Wat een soort doet: op welke kant van de opgave en met welk teken. */
@@ -83,6 +86,23 @@ export const TABELLEN = [
       { veld: 'toelichting', label: 'Toelichting scenario', type: 'tekst', uitleg: 'Uitgangspunten van het scenario (bv. CBS-variant, verbruik per persoon, klimaat). Eén keer per scenario invullen is genoeg; de tool toont de eerste.' },
     ],
   },
+  {
+    id: 'factoren', blad: 'Factoren', optioneel: true, rij: (f) => String(f.naam ?? ''),
+    uitleg: 'Factoren die de vraag verhogen of het aanbod verlagen, zoals temperatuurstijging, PFAS-vervuiling of verzilting van grondwater. In de visualisatie stelt de gebruiker elke factor in met een schuif (0–100%) of een schakelaar. Factoren horen bij de uitgangssituatie: ze tellen mee in de opgave en gelden in elk vraagscenario.',
+    kolommen: [
+      { veld: 'naam', label: 'Naam', type: 'tekst', uitleg: 'Naam van de factor, uniek; label in de tool (kort houden).' },
+      { veld: 'groep', label: 'Groep', type: 'tekst', uitleg: 'Bv. Klimaat, Waterkwaliteit, Wetgeving. Alleen voor de indeling in de tool.' },
+      { veld: 'werkt_op', label: 'Werkt op', type: 'keuze', keuzes: KEUZES.werktOp, uitleg: 'vraag = de vraag gaat omhoog; aanbod = het aanbod gaat omlaag.' },
+      { veld: 'bediening', label: 'Bediening', type: 'keuze', keuzes: KEUZES.bediening, uitleg: 'schuif = instelbaar van 0 tot 100% van het effect; schakelaar = aan (100%) of uit.' },
+      { veld: 'effect', label: 'Effect', type: 'getal', eenheid: 'Mm³/j', uitleg: 'Effect bij volle stand (100%) zodra de ingroei klaar is. Altijd positief; "werkt op" bepaalt de richting.' },
+      { veld: 'van', label: 'Ingroei van', type: 'getal', uitleg: 'Jaar waarin het effect begint (0%).' },
+      { veld: 'tot', label: 'Ingroei tot', type: 'getal', uitleg: 'Jaar waarin het volle effect is bereikt. Daartussen lineair. Gelijk aan "van" = in één keer.' },
+      { veld: 'beginstand', label: 'Beginstand', type: 'getal', eenheid: '%', uitleg: 'Stand bij het openen van de tool: 0–100. Schakelaar: 0 = uit, anders aan. Leeg = 100.' },
+      { veld: 'cluster', label: 'Cluster', type: 'tekst', uitleg: 'Cluster waarop de factor werkt, of "alle": dan verdeeld naar aandeel in de vraag (vraagfactor) of in de capaciteit (aanbodfactor). Leeg = alle.' },
+      { veld: 'winning', label: 'Winning', type: 'tekst', uitleg: 'Alleen bij een aanbodfactor: de winning die geraakt wordt (bv. PFAS bij één winning). Het effect telt dan op het cluster van die winning en is zichtbaar in de weergave Winningen.' },
+      { veld: 'toelichting', label: 'Toelichting', type: 'tekst', uitleg: 'Korte uitleg en bron; verschijnt in de tooltip.' },
+    ],
+  },
 ];
 
 // ------------------------------------------------------------------ dataset
@@ -90,7 +110,7 @@ export const TABELLEN = [
 export function legeDataset() {
   return {
     meta: { naam: 'Nieuwe dataset', schema_versie: 2, datum_import: null, bron: '', voorbeelddata: false },
-    winningen: [], vraag: [], maatregelen: [],
+    winningen: [], vraag: [], factoren: [], maatregelen: [],
   };
 }
 
@@ -173,6 +193,32 @@ export function valideer(data) {
     }
     const latOk = getal(W, rij, 'lat', w.lat, true), lonOk = getal(W, rij, 'lon', w.lon, true);
     if ((!latOk || !lonOk) && (leeg(w.lat) || leeg(w.lon))) waarschuw(W, rij, 'lat', 'Geen coördinaten: de winning staat niet op de kaart.');
+  }
+
+  // ---------------------------------------------------------- factoren
+  const F = 'Factoren', fnamen = new Set();
+  const isJaar = (v) => Number.isInteger(v) && v >= JAAR_MIN - 1 && v <= JAAR_MAX;
+  for (const f of lijst('factoren')) {
+    const rij = f.naam ?? '';
+    if (leeg(f.naam)) fout(F, rij, 'naam', 'Naam ontbreekt.');
+    else if (fnamen.has(f.naam)) fout(F, rij, 'naam', `Dubbele naam "${f.naam}".`);
+    fnamen.add(f.naam);
+    for (const [veld, opties] of [['werkt_op', KEUZES.werktOp], ['bediening', KEUZES.bediening]]) {
+      if (leeg(f[veld])) fout(F, rij, veld, 'Verplicht veld is leeg.');
+      else if (!opties.includes(f[veld])) fout(F, rij, veld, `"${f[veld]}" is geen geldige keuze (${opties.join(' / ')}).`);
+    }
+    if (getal(F, rij, 'effect', f.effect) && f.effect < 0) fout(F, rij, 'effect', 'Effect is negatief; vul een positief getal in. "Werkt op" bepaalt de richting.');
+    const vanOk = getal(F, rij, 'van', f.van) && (isJaar(f.van) || (fout(F, rij, 'van', `${f.van} is geen jaartal van ${JAAR_MIN - 1} t/m ${JAAR_MAX}.`), false));
+    const totOk = getal(F, rij, 'tot', f.tot) && (isJaar(f.tot) || (fout(F, rij, 'tot', `${f.tot} is geen jaartal van ${JAAR_MIN - 1} t/m ${JAAR_MAX}.`), false));
+    if (vanOk && totOk && f.tot < f.van) fout(F, rij, 'tot', '"Ingroei tot" ligt vóór "ingroei van".');
+    if (getal(F, rij, 'beginstand', f.beginstand, true) && (f.beginstand < 0 || f.beginstand > 100)) fout(F, rij, 'beginstand', 'Beginstand moet tussen 0 en 100 liggen.');
+    if (!leeg(f.cluster) && f.cluster !== ALLE_CLUSTERS && !vraagClusters.has(String(f.cluster).trim())) fout(F, rij, 'cluster', `Onbekend cluster "${f.cluster}": het staat niet in de tabel Vraag.`);
+    if (!leeg(f.winning)) {
+      const w = zoekWinning(data, f.winning, f.cluster);
+      if (f.werkt_op === 'vraag') fout(F, rij, 'winning', 'Een winning hoort alleen bij een factor op het aanbod.');
+      else if (!w) fout(F, rij, 'winning', `Winning "${f.winning}" staat niet in de tabel Winningen.`);
+      else if (!leeg(f.cluster) && f.cluster !== ALLE_CLUSTERS && f.cluster !== w.cluster) waarschuw(F, rij, 'cluster', `Cluster "${f.cluster}" wijkt af van de winning (${w.cluster}); de tool gebruikt het cluster van de winning.`);
+    }
   }
 
   // ------------------------------------------------------- maatregelen

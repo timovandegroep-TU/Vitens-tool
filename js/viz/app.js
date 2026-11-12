@@ -1,5 +1,5 @@
 // Visualisatie: laadt de dataset, houdt de stand bij en stuurt de panelen aan.
-import { bereken, standaardAan, scenarios, JAAR_MIN, JAAR_MAX } from '../model.js';
+import { bereken, standaardAan, standaardStanden, scenarios, JAAR_MIN, JAAR_MAX } from '../model.js';
 import { normaliseer, valideer, telling } from '../schema.js';
 import { laadOpgeslagen, controleerDataset } from '../store.js';
 import { START_ZICHTJAAR } from '../config.js';
@@ -43,7 +43,7 @@ function start({ data, voorbeeld }) {
 
   const state = {};
   const begin = () => Object.assign(state, {
-    scenario: scenarios(data)[0]?.id ?? '', jaar: START_ZICHTJAAR, cluster: null, aan: standaardAan(data),
+    scenario: scenarios(data)[0]?.id ?? '', jaar: START_ZICHTJAAR, cluster: null, aan: standaardAan(data), standen: standaardStanden(data),
     show: { vraag: true, aanbod: true, zonder: true, reserve: false }, view: 'chart', effecten: 'maatregelen',
   });
   let cache = new Map();
@@ -54,7 +54,7 @@ function start({ data, voorbeeld }) {
       const sleutel = `${scenario}|${jaar}`;
       if (!cache.has(sleutel)) {
         const aan = Object.fromEntries(data.maatregelen.map((m) => [m.id, !!state.aan[m.id] && !geblokkeerd.has(m.id)]));
-        cache.set(sleutel, bereken(data, scenario, jaar, aan));
+        cache.set(sleutel, bereken(data, scenario, jaar, aan, state.standen));
       }
       return cache.get(sleutel);
     },
@@ -96,7 +96,7 @@ function start({ data, voorbeeld }) {
   begin();
   scenario.bouw(app); maatregelen.bouw(app); opgave.bouw(app); effecten.bouw(app);
   app.update();
-  $('#reset').addEventListener('click', () => { hideTip(); opgave.speel(false); begin(); maatregelen.bouw(app); app.update(); });
+  $('#reset').addEventListener('click', () => { hideTip(); opgave.speel(false); begin(); scenario.bouw(app); maatregelen.bouw(app); app.update(); });
 }
 
 laadData().then(start).catch((e) => {

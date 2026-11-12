@@ -2,6 +2,7 @@
 #   Winningen:   de winningen uit het werkdocument V04_1 (aangeleverd door de opdrachtgever,
 #                12-11-2026). Gemeente en coördinaten zijn benaderd op plaatsnaam.
 #   Vraag:       FICTIEF: vier vraagscenario's, orde van grootte als het werkdocument.
+#   Factoren:    FICTIEF: temperatuur, PFAS en verzilting.
 #   Maatregelen: FICTIEF: verzonnen voorbeelden op echte winningen en verzonnen nieuwe locaties.
 #
 # Gebruik:  python tools/maak_voorbeeld.py data/voorbeeld.json
@@ -180,11 +181,31 @@ M = [
               bron='overig', ha=0.5, mw=0.3, voetafdruk=voet(GW0, BUITEN, N0, NET), leverancier='Oasen'),
 ]
 
+# --------------------------------------------------------------- factoren
+# FICTIEF: invloeden op vraag of aanbod, instelbaar in de tool (schuif of schakelaar).
+def factor(naam, groep, werkt_op, bediening, effect, van, tot, beginstand, cluster='alle', winning='', toelichting=''):
+    return {'naam': naam, 'groep': groep, 'werkt_op': werkt_op, 'bediening': bediening, 'effect': effect,
+            'van': van, 'tot': tot, 'beginstand': beginstand, 'cluster': cluster, 'winning': winning,
+            'toelichting': 'Fictief voorbeeld. ' + toelichting}
+
+
+FACTOREN = [
+    factor('Temperatuurstijging', 'Klimaat', 'vraag', 'schuif', 8.0, 2026, 2050, 50,
+           toelichting='Warmere, drogere zomers verhogen de jaar- en piekvraag.'),
+    factor('PFAS-normaanscherping', 'Waterkwaliteit', 'aanbod', 'schuif', 6.0, 2027, 2035, 50,
+           toelichting='Strengere normen maken bronnen deels onbruikbaar zonder extra zuivering.'),
+    factor('PFAS-incident Veenendaal', 'Waterkwaliteit', 'aanbod', 'schakelaar', 3.0, 2030, 2030, 0, cluster='Utrecht Zuid', winning='Veenendaal',
+           toelichting='Risico dat één winning uit bedrijf moet.'),
+    factor('Verzilting grondwater', 'Waterkwaliteit', 'aanbod', 'schuif', 5.0, 2030, 2050, 30, cluster='Utrecht West',
+           toelichting='Zoutindringing bij lage rivierafvoer raakt winningen in het rivier- en poldergebied.'),
+]
+
 data = {
     'meta': {'naam': 'Voorbeelddata', 'schema_versie': 2, 'datum_import': '2026-11-12',
-             'bron': 'Winningen: werkdocument V04_1. Vraagscenario\'s en maatregelen: fictief.', 'voorbeelddata': True},
+             'bron': 'Winningen: werkdocument V04_1. Vraagscenario\'s, factoren en maatregelen: fictief.', 'voorbeelddata': True},
     'winningen': winningen,
     'vraag': vraag,
+    'factoren': FACTOREN,
     'maatregelen': M,
 }
 io.open(sys.argv[1], 'w', encoding='utf-8', newline='\n').write(json.dumps(data, ensure_ascii=False, indent=1) + '\n')

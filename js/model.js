@@ -1,11 +1,13 @@
 // Rekenmodel drinkwateropgave: vraag per scenario, aanbod van de bestaande winningen,
-// en maatregelen die een van beide veranderen.
+// factoren (temperatuur, PFAS, verzilting, …) die daar op werken, en maatregelen die een
+// van beide veranderen.
 // Pure functies, geen DOM, geen opslag: draait in de browser en in Node (tests).
 // Alle volumes in Mm³/j. `data` volgt docs/datamodel.schema.json.
 //
-//   vraag   = vraag van het gekozen scenario − besparingen
-//   aanbod  = capaciteit van de winningen − afnames + leveringen
-//   opgave  = vraag zonder besparing − aanbod zonder leveringen (afnames tellen wel mee)
+//   vraag0  = vraag van het gekozen scenario + factoren op de vraag
+//   aanbod0 = capaciteit van de winningen − afnames − factoren op het aanbod   ("bestaand aanbod")
+//   vraag   = vraag0 − besparingen;  aanbod = aanbod0 + leveringen
+//   opgave  = vraag0 − aanbod0
 
 export const JAAR_MIN = 2025;
 export const JAAR_MAX = 2050;
@@ -76,6 +78,32 @@ export function vraagBasis(data, scenario, jaar) {
   return uit;
 }
 
+// ----------------------------------------------------------------- factoren
+/** Ingroei: 0 vóór `van`, 1 vanaf `tot`, lineair daartussen (van ≥ tot: stap op `tot`). */
+export function ingroei(van, tot, jaar) {
+  if (jaar >= tot) return 1;
+  if (jaar <= van || tot <= van) return 0;
+  return (jaar - van) / (tot - van);
+}
+
+/** Beginstand van de factoren: { naam: 0..1 }. Schakelaar: 0 of 1. Leeg = volle stand. */
+export function standaardStanden(data) {
+  return Object.fromEntries((data.factoren ?? []).filter((f) => tekst(f.naam)).map((f) => {
+    const p = typeof f.beginstand === 'number' ? Math.max(0, Math.min(100, f.beginstand)) / 100 : 1;
+    return [f.naam, f.bediening === 'schakelaar' ? (p > 0 ? 1 : 0) : p];
+  }));
+}
+
+/** Effect van een factor in Mm³/j in `jaar` bij stand 0..1 (altijd ≥ 0; de kant bepaalt + of −). */
+export const factorEffect = (f, stand, jaar) => getal(f.effect) * stand * ingroei(getal(f.van), getal(f.tot), jaar);
+
+/** De winning waar een aanbodfactor of maatregel naar verwijst (naam + bij voorkeur hetzelfde cluster). */
+export function zoekWinning(data, naam, cluster) {
+  if (!tekst(naam)) return null;
+  const k = data.winningen.filter((w) => w.naam === naam);
+  return k.find((w) => w.cluster === cluster) ?? k[0] ?? null;
+}
+
 // -------------------------------------------------------------- maatregelen
 /** Telt een maatregel mee? Alleen leverancier Vitens (v1). `reden` zegt waarom niet. */
 export function maatregelStatus(maatregel) {
@@ -95,21 +123,23 @@ export const standaardAan = (data) => Object.fromEntries(data.maatregelen.map((m
  * Onbekend cluster: null (maatregel telt niet mee).
  */
 function verdeel(maatregel, volume, vraag0) {
-  if (maatregel.cluster === ALLE_CLUSTERS) {
-    const totaal = som(vraag0);
-    const n = Object.keys(vraag0).length;
-    return Object.fromEntries(Object.entries(vraag0).map(([id, v]) => [id, volume * (totaal > 0 ? v / totaal : 1 / n)]));
-  }
+  if (maatregel.cluster === ALLE_CLUSTERS) return verdeelNaarAandeel(volume, vraag0);
   return maatregel.cluster in vraag0 ? { [maatregel.cluster]: volume } : null;
 }
 
-function resultaat(vraag0, capaciteit, besparing, levering, afname) {
-  const aanbod0 = capaciteit - afname;              // bestaand aanbod, na afnames
+/** Verdeel `volume` over de clusters naar hun aandeel in `basis` (gelijk als de basis 0 is). */
+function verdeelNaarAandeel(volume, basis) {
+  const totaal = som(basis), n = Object.keys(basis).length;
+  return Object.fromEntries(Object.entries(basis).map(([id, v]) => [id, volume * (totaal > 0 ? v / totaal : 1 / n)]));
+}
+
+function resultaat(vraag0, capaciteit, besparing, levering, afname, factorVraag = 0, factorAanbod = 0) {
+  const aanbod0 = capaciteit - afname - factorAanbod;   // bestaand aanbod, na afnames en factoren
   const vraag = vraag0 - besparing, aanbod = aanbod0 + levering;
   const opgave = vraag0 - aanbod0;                  // > 0 = tekort zonder besparing en levering
   const bijdrage = besparing + levering;
   return {
-    vraag0, capaciteit, afname, aanbod0, vraag, aanbod, besparing, levering, bijdrage, opgave,
+    vraag0, capaciteit, afname, factorVraag, factorAanbod, aanbod0, vraag, aanbod, besparing, levering, bijdrage, opgave,
     saldo: aanbod - vraag,                          // negatief = tekort
     tekort: Math.max(0, vraag - aanbod),
     gedekt: opgave <= 0 ? 1 : Math.min(1, bijdrage / opgave),
@@ -120,18 +150,39 @@ const DOEL = { waterbesparing: 'besparing', waterlevering: 'levering', afname: '
 
 /**
  * Hoofdberekening voor één scenario en één jaar.
- * @param aan  { id: true/false } stand van de schakelaars; ontbrekend = standaard_aan.
+ * @param aan      { id: true/false } stand van de schakelaars; ontbrekend = standaard_aan.
+ * @param standen  { factornaam: 0..1 } stand van de factoren; ontbrekend = beginstand.
  * @returns {
  *   jaar, scenario,
- *   totaal:   { vraag0, capaciteit, afname, aanbod0, vraag, aanbod, besparing, levering, bijdrage, opgave, saldo, tekort, gedekt },
+ *   totaal:   { vraag0, capaciteit, afname, factorVraag, factorAanbod, aanbod0, vraag, aanbod, besparing, levering, bijdrage, opgave, saldo, tekort, gedekt },
  *   clusters: { [cluster]: zelfde velden },
  *   maatregelen: { [id]: { teltMee, reden, aan, volume, actief, perCluster } },
+ *   factoren:    { [naam]: { stand, effect, werktOp, winning, cluster, perCluster } },
  *   ruimtebeslag, stroomvraag   // som over actieve maatregelen in dit jaar
  * }
  */
-export function bereken(data, scenario, jaar, aan = {}) {
-  const vraag0 = vraagBasis(data, scenario, jaar);
+export function bereken(data, scenario, jaar, aan = {}, standen = {}) {
+  const scenarioVraag = vraagBasis(data, scenario, jaar);
   const capaciteit = aanbodBasis(data);
+
+  // factoren: horen bij de uitgangssituatie (tellen mee in de opgave)
+  const fVraag = leegPerCluster(data), fAanbod = leegPerCluster(data);
+  const factoren = {};
+  const standaard = standaardStanden(data);
+  for (const f of data.factoren ?? []) {
+    if (!tekst(f.naam)) continue;
+    const stand = standen[f.naam] ?? standaard[f.naam] ?? 0;
+    const opVraag = f.werkt_op === 'vraag';
+    const effect = factorEffect(f, stand, jaar);
+    const w = opVraag ? null : zoekWinning(data, f.winning, f.cluster);
+    let perCluster;
+    if (w) perCluster = { [w.cluster]: effect };
+    else if (f.cluster === ALLE_CLUSTERS || !tekst(f.cluster)) perCluster = verdeelNaarAandeel(effect, opVraag ? scenarioVraag : capaciteit);
+    else perCluster = f.cluster in fVraag ? { [f.cluster]: effect } : {};
+    for (const [c, v] of Object.entries(perCluster)) (opVraag ? fVraag : fAanbod)[c] += v;
+    factoren[f.naam] = { stand, effect, werktOp: opVraag ? 'vraag' : 'aanbod', winning: w?.naam ?? null, cluster: w?.cluster ?? f.cluster, perCluster };
+  }
+  const vraag0 = Object.fromEntries(Object.keys(scenarioVraag).map((c) => [c, scenarioVraag[c] + fVraag[c]]));
   const effect = { besparing: leegPerCluster(data), levering: leegPerCluster(data), afname: leegPerCluster(data) };
   const maatregelen = {};
   let ruimtebeslag = 0, stroomvraag = 0;
@@ -153,19 +204,19 @@ export function bereken(data, scenario, jaar, aan = {}) {
 
   const perCluster = {};
   for (const c of Object.keys(vraag0)) {
-    perCluster[c] = resultaat(vraag0[c], capaciteit[c], effect.besparing[c], effect.levering[c], effect.afname[c]);
+    perCluster[c] = resultaat(vraag0[c], capaciteit[c], effect.besparing[c], effect.levering[c], effect.afname[c], fVraag[c], fAanbod[c]);
   }
   return {
     jaar, scenario,
-    totaal: resultaat(som(vraag0), som(capaciteit), som(effect.besparing), som(effect.levering), som(effect.afname)),
-    clusters: perCluster, maatregelen, ruimtebeslag, stroomvraag,
+    totaal: resultaat(som(vraag0), som(capaciteit), som(effect.besparing), som(effect.levering), som(effect.afname), som(fVraag), som(fAanbod)),
+    clusters: perCluster, maatregelen, factoren, ruimtebeslag, stroomvraag,
   };
 }
 
 /** `bereken` voor elk jaar 2025–2050 (voor de grafiek). */
-export function reeks(data, scenario, aan = {}) {
+export function reeks(data, scenario, aan = {}, standen = {}) {
   const uit = [];
-  for (let j = JAAR_MIN; j <= JAAR_MAX; j++) uit.push(bereken(data, scenario, j, aan));
+  for (let j = JAAR_MIN; j <= JAAR_MAX; j++) uit.push(bereken(data, scenario, j, aan, standen));
   return uit;
 }
 
@@ -177,6 +228,7 @@ export function samenvatting(data) {
   return {
     winningen: data.winningen.length,
     maatregelen: data.maatregelen.length,
+    factoren: (data.factoren ?? []).length,
     clusters: clusters(data).length,
     capaciteit: som(aanbodBasis(data)),
     vraag: Object.fromEntries(scenarios(data).map((s) => [s.id, VRAAGJAREN.map((j) => som(vraagBasis(data, s.id, j)))])),

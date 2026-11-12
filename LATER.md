@@ -40,5 +40,6 @@ Versie 1 bouwt alleen wat in de opdracht staat. Alles hieronder is bewust uitges
 - **Bandbreedte van de vraag** in de grafiek (staat in de huisstijlreferentie, zit niet in het model).
 - **Werkdocument weer koppelen** (OPEN-VRAGEN J8): converter naar schema 2, acceptatietests terug. Mogelijk ook de reductiefactoren als bron voor afnames per winning.
 - **Vraag opbouwen uit inwoners × verbruik** (CBS-bevolkingsprognose × liter p.p.p.d. + zakelijk) in plaats van een kant-en-klare reeks per cluster.
-- **Vraagfactoren instelbaar** (schuifjes voor groei, verbruik, temperatuur) naast de vaste scenario's.
+- **Factoren per vraagscenario** (bv. temperatuur alleen in de warme scenario's). Nu gelden factoren in elk scenario.
+- **Factoren zelf toevoegen in de visualisatie** ("+ factor" uit de mockup). Nu alleen via de invoer.
 - **Keuzelijsten ook in het volledige template** (nu alleen in het maatregelen-template).

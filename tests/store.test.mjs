@@ -22,12 +22,12 @@ test('roundtrip dataset → .xlsx → dataset (voorbeelddata)', () => {
   assert.deepEqual(zonderMeta(terug.data), zonderMeta(verwacht), 'via .xlsx');
 });
 
-test('leeg template: drie tabbladen plus Uitleg, weer in te lezen zonder fouten', () => {
+test('leeg template: vier tabbladen plus Uitleg, weer in te lezen zonder fouten', () => {
   const wb = viaXlsx(leegTemplate(XLSX));
-  assert.deepEqual(wb.SheetNames, ['Winningen', 'Vraag', 'Maatregelen', 'Uitleg']);
+  assert.deepEqual(wb.SheetNames, ['Winningen', 'Vraag', 'Factoren', 'Maatregelen', 'Uitleg']);
   const { data, opmerkingen } = vanBladen(werkboekNaarBladen(XLSX, wb));
   assert.deepEqual(opmerkingen, []);
-  assert.deepEqual([data.winningen, data.vraag, data.maatregelen], [[], [], []]);
+  assert.deepEqual([data.winningen, data.vraag, data.factoren, data.maatregelen], [[], [], [], []]);
   assert.deepEqual(valideer(data), []);
 });
 
