@@ -12,7 +12,7 @@ const isPunt = (p) => Array.isArray(p) && p.every((v) => typeof v === 'number' &
 /** Kaartkader = omtrek Utrecht plus alle punten in de dataset (dus incl. Flevoland en Gelderland). */
 export function bouw(data) {
   const punten = [...OMTREK_UTRECHT,
-    ...data.gemeenten.map((g) => [g.lon, g.lat]), ...data.winningen.map((w) => [w.lon, w.lat]),
+    ...data.winningen.map((w) => [w.lon, w.lat]),
     ...data.maatregelen.map((m) => [m.locatie?.lon, m.locatie?.lat])].filter(isPunt);
   const lons = punten.map((p) => p[0]), lats = punten.map((p) => p[1]);
   const lo0 = Math.min(...lons), lo1 = Math.max(...lons), la0 = Math.min(...lats), la1 = Math.max(...lats);
@@ -26,7 +26,6 @@ export function bouw(data) {
   document.querySelector('#mapG').innerHTML =
     `<rect x="1" y="1" width="${W - 2}" height="${H - 2}" rx="10" fill="rgba(74,175,224,.10)" stroke="rgba(74,175,224,.35)" stroke-dasharray="3 4"/>`
     + `<path d="${d}" fill="var(--map)" stroke="var(--map)" stroke-width="5" stroke-linejoin="round" opacity=".9"/>`
-    + data.gemeenten.filter((g) => isPunt([g.lon, g.lat])).map((g) => { const [x, y] = project([g.lon, g.lat]); return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="1.3" fill="#fff" opacity=".45"/>`; }).join('')
     + KAARTLABELS.filter((l) => binnen(l.punt)).map((l) => { const [x, y] = project(l.punt); return `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="middle"${l.tekst === 'UTRECHT' ? ' style="fill:#2C3C8A;opacity:.6"' : ''}>${esc(l.tekst)}</text>`; }).join('');
 }
 

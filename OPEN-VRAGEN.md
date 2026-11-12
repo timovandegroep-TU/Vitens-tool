@@ -4,6 +4,22 @@ Onduidelijkheden die niet zelf zijn ingevuld. Per vraag: waar het in de bron sta
 
 Status: eerste versie (stap 1). Een antwoord? Zet het erachter en verplaats de vraag naar "Beantwoord".
 
+## J. Eenvoudiger aanlevering: vraagscenario's en vlak aanbod (12-11-2026)
+
+Besluit opdrachtgever: de data uit het werkdocument (narratieven, criteria, reductiefactoren) is **tijdelijk losgelaten**. De secties B, C en D hieronder gaan over het werkdocument en zijn tot die tijd niet van toepassing. Gekozen in overleg: vraag als reeks per cluster, vaste vraagscenario's, afname als maatregel met minteken, één Excel met drie tabbladen.
+
+| # | Vraag | Waar | Tijdelijke aanname |
+|---|---|---|---|
+| J1 | Welke vraagscenario's komen er, en op welke bronnen (CBS-variant, verbruik per persoon, klimaat)? | tabel Vraag | Dummydata met vier scenario's: Laag, Midden (CBS), Hoog, Hoog + warm. Waarden verzonnen, orde van grootte als het werkdocument. |
+| J2 | Wie levert de vraagreeks per cluster aan, en per hoeveel jaar? | tabel Vraag | Per 5 jaar (2025–2050), per cluster; tussenjaren lineair. |
+| J3 | Is een afname (sluiting, lagere vergunning, einde levensduur) een maatregel die je aan en uit kunt zetten, of een vast gegeven? | soort "afname" | Een maatregel, standaard aan, in spoor S1. Telt mee in het **bestaand aanbod** en dus in de opgave, niet in de "bijdrage" van maatregelen. Uitzetten = laten zien wat er gebeurt als de afname niet doorgaat. |
+| J4 | Opgave en dekking met afnames. | `js/model.js` | Opgave = vraag zonder besparing − bestaand aanbod (capaciteit − afnames). Gedekt = (besparing + extra aanbod) ÷ opgave. |
+| J5 | Gelden maatregelen in elk scenario? (Voorheen per narratief.) | maatregel | Ja: het veld "narratieven" is vervallen. Een scenario verandert alleen de vraag. |
+| J6 | Cluster van een maatregel. | maatregel | Direct gekozen uit de clusters in de tabel Vraag, of via een bestaande winning. De koppeltabel gemeente → cluster is vervallen; gemeente is vrije tekst. |
+| J7 | Capaciteit van een winning: inzetbaar of vergund? | tabel Winningen | Inzetbare productiecapaciteit nu, zoals voorheen. Leveringen blijven met vergunde capaciteit tellen (E1). |
+| J8 | Het werkdocument koppelen aan het nieuwe formaat. | `tools/convert_werkdocument.py` | Niet gedaan: de converter schrijft nog het oude formaat (schema 1) en de acceptatietests op het werkdocument zijn verwijderd (staan in de git-geschiedenis). |
+| J9 | Datasets in het oude formaat (met narratieven en reductiefactoren). | import, localStorage | Worden niet meer gelezen; de import geeft een duidelijke melding. Opslag in de browser gebruikt een nieuwe sleutel, dus een oude dataset verschijnt niet meer. |
+
 ## A. Bronnen
 
 | # | Vraag | Waar | Tijdelijke aanname |

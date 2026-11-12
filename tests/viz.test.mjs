@@ -1,38 +1,44 @@
 // Visualisatie: de pure onderdelen van het effectenpaneel (geen DOM).
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { bereken } from '../js/model.js';
+import { bereken, scenarios } from '../js/model.js';
 import { normaliseer } from '../js/schema.js';
 import { effectenMaatregelen, effectenWinningen } from '../js/viz/effecten.js';
-import { werkdocument, voorbeeld, SKIP_WD, kopie, bijna } from './hulp.mjs';
+import { voorbeeld, kopie, bijna } from './hulp.mjs';
+
+const d = normaliseer(kopie(voorbeeld));
+const S = scenarios(d)[0].id;
 
 test('effecten maatregelen: alleen van maatregelen die in het zichtjaar meetellen, zwaarste eerst', () => {
-  const d = normaliseer(kopie(voorbeeld));
-  const m = d.maatregelen.find((x) => x.soort === 'waterlevering');
+  const m = d.maatregelen.find((x) => x.soort === 'waterlevering' && x.locatie && x.leverancier === 'Vitens');
   const aan = { [m.id]: true };
-  assert.deepEqual(effectenMaatregelen(d, bereken(d, 1, m.ingangsjaar - 1, aan), null), [], 'vóór het ingangsjaar');
-  const lijst = effectenMaatregelen(d, bereken(d, 1, m.ingangsjaar, aan), null);
-  assert.equal(lijst.length, m.overige_effecten.lijst.length + 4, 'overige effecten + vier voetafdrukthema\'s (geen daarvan is licht)');
-  assert.ok(lijst.every((e) => e.groep === m.id && e.naam === m.gemeente));
+  const eigen = (lijst) => lijst.filter((e) => e.groep === m.id);
+  assert.deepEqual(eigen(effectenMaatregelen(d, bereken(d, S, m.ingangsjaar - 1, aan), null)), [], 'vóór het ingangsjaar');
+  const lijst = eigen(effectenMaatregelen(d, bereken(d, S, m.ingangsjaar, aan), null));
+  assert.ok(lijst.length > 0);
   assert.deepEqual(lijst[0].punt, [m.locatie.lon, m.locatie.lat]);
-  const niveaus = lijst.map((e) => e.niveau);
-  assert.deepEqual(niveaus, [...niveaus].sort((a, b) => ['knelpunt', 'aandacht', 'kans', 'geen'].indexOf(a) - ['knelpunt', 'aandacht', 'kans', 'geen'].indexOf(b)));
-  // uitgeschakeld of ander cluster: niets
-  assert.deepEqual(effectenMaatregelen(d, bereken(d, 1, m.ingangsjaar, { [m.id]: false }), null), []);
-  const ander = d.clusters.find((c) => c.id !== m.cluster).id;
-  assert.deepEqual(effectenMaatregelen(d, bereken(d, 1, m.ingangsjaar, aan), ander), []);
+  const volgorde = ['knelpunt', 'aandacht', 'kans', 'geen'];
+  const niveaus = lijst.map((e) => volgorde.indexOf(e.niveau));
+  assert.deepEqual(niveaus, [...niveaus].sort((a, b) => a - b));
+  assert.deepEqual(eigen(effectenMaatregelen(d, bereken(d, S, m.ingangsjaar, { [m.id]: false }), null)), []);
+  // pin van een maatregel op een bestaande winning: coördinaten van de winning
+  const opWinning = d.maatregelen.find((x) => x.winning && !x.locatie && x.soort === 'waterlevering');
+  const w = d.winningen.find((x) => x.naam === opWinning.winning);
+  const p = effectenMaatregelen(d, bereken(d, S, 2050, { [opWinning.id]: true }), null).find((e) => e.groep === opWinning.id);
+  assert.deepEqual(p.punt, [w.lon, w.lat]);
 });
 
-test('effecten winningen: Bilthoven narratief 1 (10% afname in 2030, 25% in 2050)', { skip: SKIP_WD }, () => {
-  const d = normaliseer(kopie(werkdocument));
-  const vind = (jaar) => effectenWinningen(d, 1, jaar, null).find((e) => /bilthoven/i.test(e.naam));
-  assert.equal(effectenWinningen(d, 1, 2030, null).length, d.winningen.length);
-  const a = vind(2030), b = vind(2050), nu = vind(2026);
-  bijna(a.afname, 0.12, 'afname 2030'); assert.equal(a.niveau, 'aandacht'); assert.equal(a.label, '−10%'); assert.match(a.tekst, /bindend: /);
-  bijna(b.afname, 0.30, 'afname 2050'); assert.equal(b.niveau, 'knelpunt');
-  assert.equal(nu.niveau, 'geen'); assert.equal(nu.inLijst, false);
-  const uw = effectenWinningen(d, 1, 2030, 'utrecht-west');
-  assert.ok(uw.length < d.winningen.length && uw.every((e) => d.winningen.find((w) => w.id === e.k).cluster === 'utrecht-west'));
-  const afnames = effectenWinningen(d, 1, 2040, null).map((e) => e.afname);
-  assert.deepEqual(afnames, [...afnames].sort((x, y) => y - x), 'grootste afname eerst');
+test('effecten winningen: afname komt uit de afname-maatregelen die naar de winning verwijzen', () => {
+  const af = d.maatregelen.find((x) => x.soort === 'afname');
+  const w = d.winningen.find((x) => x.naam === af.winning);
+  const vind = (jaar, aan) => effectenWinningen(d, bereken(d, S, jaar, aan), null).find((e) => e.naam === w.naam);
+  assert.equal(effectenWinningen(d, bereken(d, S, 2030), null).length, d.winningen.length);
+  assert.equal(vind(af.ingangsjaar - 1, { [af.id]: true }).niveau, 'geen');
+  const na = vind(af.ingangsjaar, { [af.id]: true });
+  bijna(na.afname, Math.min(w.capaciteit, af.volume), 'afname');
+  assert.notEqual(na.niveau, 'geen');
+  assert.match(na.tekst, new RegExp(af.naam.replace(/[()]/g, '.')));
+  assert.equal(vind(af.ingangsjaar, { [af.id]: false }).afname, 0, 'afname uitgezet');
+  const cl = effectenWinningen(d, bereken(d, S, 2050), w.cluster);
+  assert.ok(cl.length < d.winningen.length && cl.every((e) => d.winningen.find((x) => x.naam === e.naam).cluster === w.cluster));
 });

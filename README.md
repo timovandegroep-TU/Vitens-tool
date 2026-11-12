@@ -1,10 +1,10 @@
 # Visualisatie tool DWR – drinkwateropgave Vitens
 
-Webtool voor de Drinkwaterraad (DWR) provincie Utrecht. De tool laat per narratief zien hoe vraag en aanbod van drinkwater zich tot 2050 ontwikkelen, hoe groot de opgave is en wat maatregelen daaraan doen.
+Webtool voor de Drinkwaterraad (DWR) provincie Utrecht. De tool laat per vraagscenario zien hoe vraag en aanbod van drinkwater zich tot 2050 ontwikkelen, hoe groot de opgave is en wat maatregelen daaraan doen.
 
 De tool bestaat uit twee pagina's:
 
-- **`index.html` – visualisatie.** Kies een narratief en een zichtjaar, zet maatregelen aan of uit en bekijk de dekking van de opgave en de effecten per gemeente.
+- **`index.html` – visualisatie.** Kies een vraagscenario en een zichtjaar, zet maatregelen aan of uit en bekijk de dekking van de opgave en de effecten per gemeente.
 - **`invoer.html` – invoer.** Basisdata en maatregelen invoeren, importeren, controleren en exporteren.
 
 ## Uw data blijft op uw computer
@@ -17,34 +17,49 @@ Dat betekent ook:
 - Wie de browsergegevens wist, wist ook de dataset. Bewaar daarom een export.
 - Zolang er geen eigen dataset is, toont de visualisatie fictieve voorbeelddata met het gele label **Voorbeelddata**.
 
-## Voor de deskundige: basisdata invoeren
+## Voor de deskundige: data aanleveren
 
-1. Open `invoer.html` en klik **Download leeg template (.xlsx)**. Het tabblad *Uitleg* beschrijft elke kolom.
-2. Vul de tabbladen: Narratieven, Clusters, Gemeenten, Criteria, Winningen, Reductiefactoren N1–N4 en Vraag. Volumes in Mm³/j; decimalen met komma of punt.
-3. Klik **Importeren…** en kies het bestand. Na het importeren ziet u een samenvatting met het totale aanbod per narratief en peiljaar. Vergelijk die met uw eigen totalen.
-4. Rechts staat de **validatie**. Rood blokkeert, oranje is een waarschuwing. Een klik op een melding springt naar de cel.
-5. U kunt ook direct in de tabellen typen of een blok cellen uit Excel plakken (Ctrl+V). Bij de reductiefactoren kunt u het blok H4:AP35 uit het werkdocument in één keer plakken.
-6. Bewaar het resultaat met **Download huidige data** (.xlsx of .json).
+Alle data past in één Excel-bestand met drie tabbladen. Op `invoer.html` staat het lege template (**Download leeg template (.xlsx)**); het tabblad *Uitleg* beschrijft elke kolom.
+
+| Tabblad | Eén rij per | Wat de tool ermee doet |
+|---|---|---|
+| **Winningen** | bestaande winning: naam, cluster, capaciteit (Mm³/j), lat/lon | Het huidige aanbod is de som van de capaciteit. |
+| **Vraag** | scenario × cluster: vraag in 2025, 2030, … 2050 | Linksboven kies je een scenario; het scenario verandert alleen de vraag. |
+| **Maatregelen** | maatregel | Elke maatregel wordt een schakelaar in de visualisatie. |
+
+1. Vul de tabbladen en klik **Importeren…**. Na het importeren ziet u een samenvatting met het huidige aanbod en de totale vraag per scenario.
+2. Rechts staat de **validatie**. Rood blokkeert, oranje is een waarschuwing. Een klik op een melding springt naar de cel.
+3. U kunt ook direct in de tabellen typen of een blok cellen uit Excel plakken (Ctrl+V).
+4. Bewaar het resultaat met **Download huidige data** (.xlsx of .json).
+
+Wilt u eerst zien hoe het werkt, klik dan **Voorbeelddata laden**: dat laadt de fictieve dataset `data/voorbeeld.json`.
 
 ### Hoe de tool rekent
 
-- Aanbod per winning = inzetbare capaciteit × de laagste reductiefactor van alle criteria. Een lege factor telt als 1.
-- Peiljaren voor het aanbod zijn 2026 (huidig), 2030, 2040 en 2050; de vraag is er per vijf jaar. Tussenliggende jaren zijn lineair geïnterpoleerd.
-- Opgave = vraag zonder besparing − aanbod zonder maatregelen.
-- Een maatregel telt in één keer mee vanaf het ingangsjaar. Waterlevering verhoogt het aanbod, waterbesparing verlaagt de vraag.
+- **Vraag** = de reeks van het gekozen scenario, per cluster. Tussen de 5-jaarspunten wordt lineair geïnterpoleerd.
+- **Bestaand aanbod** = capaciteit van de winningen, gelijk in elk jaar, min de afnames die aan staan.
+- **Aanbod** = bestaand aanbod + waterleveringen die aan staan.
+- **Opgave** = vraag zonder besparing − bestaand aanbod.
+- Een maatregel telt in één keer mee vanaf het ingangsjaar. Waterlevering verhoogt het aanbod, waterbesparing verlaagt de vraag, een afname verlaagt het bestaand aanbod.
 - Alleen maatregelen met leverancier Vitens tellen mee in deze versie.
-- Gedekt = bijdrage van de maatregelen ÷ opgave.
+- **Gedekt** = (besparing + extra aanbod) ÷ opgave.
 
 Aannames en nog niet beantwoorde vragen staan in [OPEN-VRAGEN.md](OPEN-VRAGEN.md). Wat bewust is uitgesteld staat in [LATER.md](LATER.md).
 
 ## Voor Vitens: maatregelen aanleveren
 
-Een maatregel is één dataobject: wat levert het op, waar ligt het, wat is de fysieke voetafdruk en welke overige effecten zijn er. Er zijn twee manieren.
+Een maatregel is één dataobject: wat doet het met vraag of aanbod, waar ligt het, wat is de fysieke voetafdruk en welke overige effecten zijn er. Er zijn drie soorten:
+
+- **waterlevering**: extra aanbod (S1 herbouw, S2 vergroten, S3 nieuwe locatie);
+- **waterbesparing**: minder vraag (S0);
+- **afname**: een bestaande winning levert minder of sluit (S1). Kies dan in de kolom *winning* om welke winning het gaat.
+
+Bij een maatregel op een bestaande winning komen cluster en kaartlocatie uit het tabblad Winningen. Er zijn twee manieren om aan te leveren.
 
 **Via het formulier**
 
 1. Open `invoer.html`, tabblad **Maatregelen**, en klik **+ Maatregel aanleveren**.
-2. Vul de blokken in. Velden met * zijn verplicht; bij waterbesparing vervallen locatie, bron, ruimtebeslag, stroomvraag en voetafdruk.
+2. Vul de blokken in. Velden met * zijn verplicht; bij waterbesparing en afname vervallen locatie, bron, ruimtebeslag, stroomvraag en voetafdruk.
 3. Rechts ziet u hoe de maatregel in de visualisatie verschijnt.
 
 **Via Excel**
@@ -53,7 +68,7 @@ Een maatregel is één dataobject: wat levert het op, waar ligt het, wat is de f
 2. Vul één rij per maatregel in en importeer het bestand met **Importeer maatregelen-bestand…**.
 3. Een nieuw id wordt toegevoegd, een bestaand id wordt overschreven. De samenvatting laat zien wat er is gebeurd.
 
-Volumes zijn in **Mm³ per jaar**. De tool waarschuwt bij een volume boven 30, omdat dan mogelijk m³ is ingevuld.
+Volumes zijn in **Mm³ per jaar** en altijd positief; de soort bepaalt of het er af of bij gaat. De tool waarschuwt bij een volume boven 30, omdat dan mogelijk m³ is ingevuld.
 
 ## De tool gebruiken
 
@@ -80,7 +95,7 @@ en open `http://localhost:8765/`.
 | `css/tokens.css` | Huisstijl Vitens: kleuren, lettertypen, vormen |
 | `fonts/` | Lettertypen Baloo 2 en Barlow (woff2) |
 | `data/voorbeeld.json` | Fictieve voorbeelddata |
-| `docs/` | JSON-schema van de dataset en een klein voorbeeld |
+| `docs/` | JSON-schema van de dataset |
 | `vendor/` | SheetJS 0.20.3, lokaal opgeslagen |
 | `tools/` | Hulpscripts (Python) |
 | `tests/` | Tests voor model, validatie, import/export en voorbeelddata |
@@ -93,7 +108,7 @@ Geen framework, geen build en geen npm-pakketten.
 npm test
 ```
 
-De tests met werkdocumentdata worden overgeslagen als `private/data.json` ontbreekt. Na een bewuste wijziging van het model of van de voorbeelddata werkt u de snapshot bij met:
+Na een bewuste wijziging van het model of van de voorbeelddata werkt u de snapshot bij met:
 
 ```bash
 node tests/voorbeeld.test.mjs --bijwerken
@@ -105,6 +120,8 @@ node tests/voorbeeld.test.mjs --bijwerken
 python tools/convert_werkdocument.py
 ```
 
-zet `private/werkdocument.xlsx` om naar `private/data.json` en een gevuld template, en controleert de totalen tegen het werkdocument. Vereist `openpyxl`.
+zet `private/werkdocument.xlsx` om naar `private/data.json`. **Let op:** de converter schrijft nog het oude formaat (met narratieven en reductiefactoren), dat deze versie van de tool niet leest. De koppeling met het werkdocument is tijdelijk losgelaten (OPEN-VRAGEN J8).
+
+De fictieve voorbeelddata maakt u opnieuw met `python tools/maak_voorbeeld.py data/voorbeeld.json`.
 
 **Huisstijl.** Kleuren en lettertypen komen uit `css/tokens.css`. De lettertypen Baloo 2 en Barlow staan in `fonts/` (SIL Open Font License) en worden niet van een andere site geladen. Het logo is een tijdelijk bestand; zie OPEN-VRAGEN.md (I2).

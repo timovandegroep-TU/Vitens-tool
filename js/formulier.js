@@ -5,7 +5,7 @@ import {
   MAATREGEL_BLOKKEN, MAATREGEL_VELDEN, VOETAFDRUK, KEUZES, valideerMaatregel, contextVoorMaatregel,
   veldVanMelding, maatregelWeergave, normaliseerMaatregel, maakId, telling,
 } from './schema.js';
-import { ALLE_CLUSTERS } from './model.js';
+import { ALLE_CLUSTERS, clusters } from './model.js';
 import { leesGetal, maatregelNaarRij, rijNaarMaatregel } from './store.js';
 
 /**
@@ -18,16 +18,17 @@ export function bouwFormulier({ data, maatregel, nieuw, opslaan, annuleer }) {
   const start = normaliseerMaatregel(maatregel);
   const rij = maatregelNaarRij(start);
   let effecten = start.overige_effecten.lijst.map((e) => ({ ...e }));
-  let narratieven = [...start.narratieven];
   let idAangeraakt = !nieuw || !!rij.id;
   const ctx = contextVoorMaatregel(data);
   const andereIds = new Set(data.maatregelen.map((m) => m.id).filter((id) => nieuw || id !== start.id));
-  const besparing = () => rij.soort === 'waterbesparing';
+  // Velden die alleen bij een waterlevering horen, zijn verborgen bij besparing en afname.
+  const geenLevering = () => !!rij.soort && rij.soort !== 'waterlevering';
+  const soortNaam = () => (rij.soort === 'afname' ? 'afname' : 'waterbesparing');
 
-  /** Huidige stand als dataobject. Bij waterbesparing vervallen de velden die alleen voor levering gelden. */
+  /** Huidige stand als dataobject. Bij besparing en afname vervallen de velden die alleen voor levering gelden. */
   function object() {
-    const r = { ...rij, narratieven: narratieven.join(','), overige_effecten: '' };
-    if (besparing()) for (const v of MAATREGEL_VELDEN) if (v.alleenLevering) r[v.veld] = null;
+    const r = { ...rij, overige_effecten: '' };
+    if (geenLevering()) for (const v of MAATREGEL_VELDEN) if (v.alleenLevering) r[v.veld] = null;
     const m = rijNaarMaatregel(r);
     m.overige_effecten.lijst = effecten.map((e) => ({ label: (e.label ?? '').trim(), beoordeling: e.beoordeling || null, tekst: (e.tekst ?? '').trim() }));
     return m;
@@ -43,9 +44,9 @@ export function bouwFormulier({ data, maatregel, nieuw, opslaan, annuleer }) {
   const voet = el('div', { class: 'mvoet' });
 
   // ------------------------------------------------------------ velden
-  const opties = (v) => (v.veld === 'gemeente' ? data.gemeenten.map((g) => g.gemeente)
-    : v.veld === 'cluster' ? [ALLE_CLUSTERS, ...data.clusters.map((c) => c.id)] : v.keuzes);
-  const optieLabel = (v, o) => (v.veld === 'cluster' ? (o === ALLE_CLUSTERS ? 'alle clusters' : data.clusters.find((c) => c.id === o)?.naam ?? o) : o);
+  const opties = (v) => (v.veld === 'winning' ? data.winningen.map((w) => w.naam).filter(Boolean)
+    : v.veld === 'cluster' ? [ALLE_CLUSTERS, ...clusters(data)] : v.keuzes);
+  const optieLabel = (v, o) => (v.veld === 'cluster' && o === ALLE_CLUSTERS ? 'alle clusters' : o);
 
   function invoer(v) {
     const id = `mf-${v.veld}`, huidig = rij[v.veld];
@@ -66,14 +67,6 @@ export function bouwFormulier({ data, maatregel, nieuw, opslaan, annuleer }) {
       c.addEventListener('change', () => zet(c.checked ? 'ja' : 'nee'));
       return el('label', { class: 'vink' }, c, 'ja');
     }
-    if (v.type === 'narratieven') {
-      return el('div', { class: 'vinkjes', id, 'data-veld': v.veld, tabindex: '-1' }, ...data.narratieven.map((n) => {
-        const c = el('input', { type: 'checkbox' });
-        c.checked = narratieven.includes(n.id);
-        c.addEventListener('change', () => { narratieven = data.narratieven.map((x) => x.id).filter((x) => (x === n.id ? c.checked : narratieven.includes(x))); gewijzigd(v); });
-        return el('label', { class: 'vink' }, c, `${n.id} ${n.naam}`);
-      }));
-    }
     if (v.type === 'langetekst') {
       const t = el('textarea', { id, rows: '2', 'data-veld': v.veld });
       t.value = huidig ?? '';
@@ -88,8 +81,9 @@ export function bouwFormulier({ data, maatregel, nieuw, opslaan, annuleer }) {
   }
 
   function veld(v) {
-    const verplicht = v.verplicht || (v.levering && !besparing());
-    return el('div', { class: 'veld' + (v.type === 'langetekst' || v.type === 'narratieven' ? ' breed' : ''), 'data-rij': v.veld },
+    const viaWinning = !!rij.winning && ['gemeente', 'lat', 'lon'].includes(v.veld);   // komt dan uit de tabel Winningen
+    const verplicht = v.verplicht || (v.levering && rij.soort === 'waterlevering' && !viaWinning);
+    return el('div', { class: 'veld' + (v.type === 'langetekst' ? ' breed' : ''), 'data-rij': v.veld },
       el('label', { for: `mf-${v.veld}` }, v.label.replace(/^.* – /, ''), v.eenheid ? el('span', { class: 'eenheid', text: ` (${v.eenheid})` }) : null, verplicht ? el('span', { class: 'ster', title: 'verplicht', text: ' *' }) : null),
       invoer(v), el('div', { class: 'hulp', text: v.uitleg }), el('div', { class: 'vmelding', role: 'alert' }));
   }
@@ -120,24 +114,26 @@ export function bouwFormulier({ data, maatregel, nieuw, opslaan, annuleer }) {
   function blok(naam) {
     const velden = MAATREGEL_VELDEN.filter((v) => v.blok === naam);
     if (naam === 'Fysieke voetafdruk') {
-      if (besparing()) return el('fieldset', {}, el('legend', { text: naam }), el('p', { class: 'hulp', text: 'Niet van toepassing bij waterbesparing.' }));
+      if (geenLevering()) return el('fieldset', {}, el('legend', { text: naam }), el('p', { class: 'hulp', text: `Niet van toepassing bij ${soortNaam()}.` }));
       return el('fieldset', {}, el('legend', { text: naam }),
         el('p', { class: 'hulp', text: 'Beoordeling door de informatiegevende partij. De tool rekent deze niet na en toetst niet aan kaartlagen.' }),
         ...Object.entries(VOETAFDRUK).map(([t, def]) => el('div', { class: 'thema' }, el('h4', { text: def.naam }), el('div', { class: 'rooster drie' }, ...velden.filter((v) => v.thema === t).map(veld)))));
     }
-    const zichtbaar = velden.filter((v) => v.veld !== 'overige_effecten' && !(v.alleenLevering && besparing()));
+    const zichtbaar = velden.filter((v) => v.veld !== 'overige_effecten' && !(v.alleenLevering && geenLevering()));
     return el('fieldset', {}, el('legend', { text: naam }),
       el('div', { class: 'rooster' }, ...zichtbaar.map(veld), naam === 'Overige effecten' ? effectenlijst() : null),
-      naam === 'Fysieke kenmerken' && besparing() ? el('p', { class: 'hulp', text: 'Bij waterbesparing vervallen locatie (lat/lon), bron, ruimtebeslag en stroomvraag.' }) : null);
+      naam === 'Fysieke kenmerken' && geenLevering() ? el('p', { class: 'hulp', text: `Bij ${soortNaam()} vervallen locatie (lat/lon), bron, ruimtebeslag en stroomvraag.` }) : null);
   }
 
   // ------------------------------------------------- reageren op invoer
   function gewijzigd(v) {
     if (v?.veld === 'naam' && !idAangeraakt) { rij.id = maakId(rij.naam); form.querySelector('#mf-id').value = rij.id; }
     if (v?.veld === 'id') idAangeraakt = true;
-    if (v?.veld === 'gemeente' && rij.gemeente && ctx.clusterVanGemeente.get(rij.gemeente)) {
-      rij.cluster = ctx.clusterVanGemeente.get(rij.gemeente);          // koppeltabel bepaalt het cluster
-      form.querySelector('#mf-cluster').value = rij.cluster;
+    if (v?.veld === 'winning' && rij.winning && ctx.winningen.get(rij.winning)) {
+      const w = ctx.winningen.get(rij.winning);                       // de winning bepaalt cluster en gemeente
+      if (w.cluster) { rij.cluster = w.cluster; form.querySelector('#mf-cluster').value = rij.cluster; }
+      if (w.gemeente && !rij.gemeente) { rij.gemeente = w.gemeente; form.querySelector('#mf-gemeente').value = rij.gemeente; }
+      tekenBlokken();
     }
     if (v?.veld === 'soort') { tekenBlokken(); form.querySelector('#mf-soort')?.focus(); }
     werkBij();

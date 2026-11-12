@@ -2,12 +2,10 @@
 // De omzetting dataset <-> tabbladen werkt op gewone rijen (arrays), zonder DOM en
 // zonder SheetJS, zodat die met Node te testen is. SheetJS wordt als parameter meegegeven.
 
-import { PEILJAREN, VRAAGJAREN, JAAR_MIN, JAAR_MAX, ALLE_CLUSTERS } from './model.js';
-import {
-  TABELLEN, VOETAFDRUK, KEUZES, GRENZEN, MAATREGEL_VELDEN, legeDataset, normaliseer, normaliseerMaatregel,
-} from './schema.js';
+import { JAAR_MIN, JAAR_MAX, ALLE_CLUSTERS, clusters } from './model.js';
+import { TABELLEN, VOETAFDRUK, GRENZEN, MAATREGEL_VELDEN, legeDataset, normaliseer, normaliseerMaatregel } from './schema.js';
 
-const SLEUTEL = 'dwr-dataset-v1';
+const SLEUTEL = 'dwr-dataset-v2';
 
 // ------------------------------------------------------------ localStorage
 export function bewaar(data) {
@@ -16,7 +14,7 @@ export function bewaar(data) {
 export function laadOpgeslagen() {
   try {
     const tekst = localStorage.getItem(SLEUTEL);
-    return tekst ? normaliseer(JSON.parse(tekst)) : null;
+    return tekst ? normaliseer(controleerDataset(JSON.parse(tekst))) : null;
   } catch { return null; }
 }
 export function wisOpgeslagen() {
@@ -25,20 +23,17 @@ export function wisOpgeslagen() {
 
 /**
  * Is dit een dataset van deze tool? Gooit een fout met uitleg als de vorm niet klopt
- * (bv. een willekeurig .json-bestand). Inhoudelijke fouten meldt de validatie.
+ * (bv. een willekeurig .json-bestand of het oude formaat). Inhoudelijke fouten meldt de validatie.
  */
 export function controleerDataset(obj) {
   const fout = (waarom) => new Error(`Dit is geen dataset van deze tool: ${waarom}.`);
   if (obj == null || typeof obj !== 'object' || Array.isArray(obj)) throw fout('verwacht één object met tabellen');
-  const leeg = legeDataset();
-  if (!['narratieven', 'clusters', 'winningen', 'maatregelen'].some((k) => k in obj)) {
-    throw fout('geen van de tabellen "narratieven", "clusters", "winningen" of "maatregelen" gevonden');
-  }
-  for (const [k, vorm] of Object.entries(leeg)) {
+  if ('narratieven' in obj || 'reductiefactoren' in obj) throw fout('het is het oude formaat met narratieven en reductiefactoren; dat leest deze versie niet meer');
+  if (!['winningen', 'vraag', 'maatregelen'].some((k) => k in obj)) throw fout('geen van de tabellen "winningen", "vraag" of "maatregelen" gevonden');
+  for (const k of ['winningen', 'vraag', 'maatregelen']) {
     if (obj[k] == null) continue;
-    const ok = Array.isArray(vorm) ? Array.isArray(obj[k]) : typeof obj[k] === 'object' && !Array.isArray(obj[k]);
-    if (!ok) throw fout(`"${k}" moet een ${Array.isArray(vorm) ? 'lijst' : 'object'} zijn`);
-    if (Array.isArray(vorm) && obj[k].some((x) => x == null || typeof x !== 'object' || Array.isArray(x))) throw fout(`"${k}" bevat een rij die geen object is`);
+    if (!Array.isArray(obj[k])) throw fout(`"${k}" moet een lijst zijn`);
+    if (obj[k].some((x) => x == null || typeof x !== 'object' || Array.isArray(x))) throw fout(`"${k}" bevat een rij die geen object is`);
   }
   return obj;
 }
@@ -73,59 +68,22 @@ export function leesDatum(v) {
   return m ? `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}` : s;
 }
 
-function leesCel(type, v) {
+export function leesCel(type, v) {
   switch (type) {
-    case 'getal': return leesGetal(v);
-    case 'geheel': { const n = leesGetal(v); return typeof n === 'number' && Number.isInteger(n) ? n : n; }
+    case 'getal': case 'geheel': return leesGetal(v);
     case 'janee': return leesJaNee(v);
     case 'keuze': case 'ref': return leesKeuze(v);
     default: return leesTekst(v);
   }
 }
-const schrijfCel = (type, v) => (type === 'janee' ? (v ? 'ja' : 'nee') : (v ?? null));
-
-/**
- * Geplakt blok voor de reductiefactortabel: het werkdocument heeft na elke groep van
- * drie jaren een scheidingskolom (leeg of "x", kolommen K, O, S, …). Die moet weg.
- * @param blok    [[cel…]…] zoals geplakt, beginnend op de 2030-kolom van een criterium
- * @param ruimte  aantal invulkolommen vanaf de startcel
- * @returns { blok, scheiding: 'ja' | 'nee' | 'twijfel' }
- *   'ja'      zeker Excel-indeling: `blok` is al zonder scheidingskolommen
- *   'twijfel' elke 4e kolom is leeg en het blok past ook zonder strippen: kan allebei.
- *             `blok` is ongewijzigd; de aanroeper vraagt het de gebruiker.
- */
-export function zonderScheidingskolommen(blok, ruimte) {
-  const breedte = Math.max(0, ...blok.map((r) => r.length));
-  const isScheiding = (i) => i % 4 === 3;
-  const cellen = blok.flatMap((r) => r.filter((_, i) => isScheiding(i)));
-  if (breedte < 4 || cellen.some((v) => typeof leesGetal(v) === 'number')) return { blok, scheiding: 'nee' };
-  const zeker = breedte > ruimte || cellen.some((v) => !isLeeg(v));
-  return zeker ? { blok: strip(blok), scheiding: 'ja' } : { blok, scheiding: 'twijfel' };
-}
-const strip = (blok) => blok.map((r) => r.filter((_, i) => i % 4 !== 3));
-export { strip as stripScheidingskolommen };
+const schrijfCel = (type, v) => (type === 'janee' ? (v ? 'ja' : 'nee') : (v === '' ? null : v ?? null));
 
 // --------------------------------------------------- maatregelen <-> rijen
 const THEMAS = Object.keys(VOETAFDRUK);
+const KOLOMTYPE = { getal: 'getal', geheel: 'geheel', janee: 'janee', keuze: 'keuze', ref: 'ref' };
 
-/** Kolommen van het tabblad Maatregelen: één rij per maatregel. */
-export const MAATREGEL_KOLOMMEN = [
-  { veld: 'id', type: 'tekst' }, { veld: 'naam', type: 'tekst' }, { veld: 'omschrijving', type: 'tekst' },
-  { veld: 'leverancier', type: 'keuze', keuzes: KEUZES.leverancier }, { veld: 'soort', type: 'keuze', keuzes: KEUZES.soort },
-  { veld: 'spoor', type: 'keuze', keuzes: KEUZES.spoor }, { veld: 'narratieven', type: 'tekst' },
-  { veld: 'standaard_aan', type: 'janee' }, { veld: 'status', type: 'keuze', keuzes: KEUZES.status },
-  { veld: 'lat', type: 'getal' }, { veld: 'lon', type: 'getal' }, { veld: 'gemeente', type: 'ref' },
-  { veld: 'cluster', type: 'ref' }, { veld: 'bron', type: 'keuze', keuzes: KEUZES.bron },
-  { veld: 'volume', type: 'getal' }, { veld: 'ruimtebeslag', type: 'getal' }, { veld: 'stroomvraag', type: 'getal' },
-  { veld: 'ingangsjaar', type: 'geheel' },
-  ...THEMAS.flatMap((t) => [
-    { veld: `${t}_beoordeling`, type: 'keuze', keuzes: VOETAFDRUK[t].keuzes },
-    { veld: `${t}_toelichting`, type: 'tekst' }, { veld: `${t}_bron`, type: 'tekst' },
-  ]),
-  { veld: 'politiek', type: 'tekst' }, { veld: 'overige_effecten', type: 'tekst' },
-  { veld: 'aangeleverd_door', type: 'tekst' }, { veld: 'datum', type: 'tekst' },
-  { veld: 'bron_document', type: 'tekst' }, { veld: 'onvolledig', type: 'janee' },
-];
+/** Kolommen van het tabblad Maatregelen (één rij per maatregel), in de volgorde van de velden. */
+export const MAATREGEL_KOLOMMEN = MAATREGEL_VELDEN.map((v) => ({ veld: v.veld, type: KOLOMTYPE[v.type] ?? 'tekst', keuzes: v.keuzes }));
 
 const eenRegel = (s) => String(s ?? '').replace(/\s*\r?\n\s*/g, ' ');
 
@@ -134,14 +92,14 @@ export function maatregelNaarRij(m0) {
   const m = normaliseerMaatregel(m0);
   const rij = {
     id: m.id, naam: m.naam, omschrijving: m.omschrijving, leverancier: m.leverancier, soort: m.soort, spoor: m.spoor,
-    narratieven: m.narratieven.join(','), standaard_aan: m.standaard_aan ? 'ja' : 'nee', status: m.status,
-    lat: m.locatie?.lat ?? null, lon: m.locatie?.lon ?? null, gemeente: m.gemeente, cluster: m.cluster, bron: m.bron,
-    volume: m.volume, ruimtebeslag: m.ruimtebeslag, stroomvraag: m.stroomvraag, ingangsjaar: m.ingangsjaar,
+    standaard_aan: m.standaard_aan ? 'ja' : 'nee', status: m.status,
+    volume: m.volume, ingangsjaar: m.ingangsjaar, winning: m.winning, cluster: m.cluster, gemeente: m.gemeente,
+    lat: m.locatie?.lat ?? null, lon: m.locatie?.lon ?? null, bron: m.bron,
+    ruimtebeslag: m.ruimtebeslag, stroomvraag: m.stroomvraag,
     politiek: m.overige_effecten.politiek,
     // één effect per regel: label | beoordeling | tekst
     overige_effecten: m.overige_effecten.lijst.map((e) => [e.label, e.beoordeling ?? '', e.tekst].map(eenRegel).join(' | ')).join('\n'),
     aangeleverd_door: m.meta.aangeleverd_door, datum: m.meta.datum, bron_document: m.meta.bron,
-    onvolledig: m.meta.onvolledig ? 'ja' : 'nee',
   };
   for (const t of THEMAS) for (const k of ['beoordeling', 'toelichting', 'bron']) rij[`${t}_${k}`] = m.voetafdruk?.[t]?.[k] ?? null;
   return rij;
@@ -150,17 +108,16 @@ export function maatregelNaarRij(m0) {
 /** Platte rij { kolom: celwaarde } -> maatregel-dataobject (genormaliseerd). */
 export function rijNaarMaatregel(rij) {
   const c = Object.fromEntries(MAATREGEL_KOLOMMEN.map((k) => [k.veld, leesCel(k.type, rij[k.veld])]));
-  const narratieven = String(rij.narratieven ?? '').split(/[,;.\s]+/).filter(Boolean).map((x) => (/^\d+$/.test(x) ? Number(x) : x));
   const lijst = String(rij.overige_effecten ?? '').split(/\r?\n/).map((r) => r.trim()).filter(Boolean).map((regel) => {
     const [label = '', beoordeling = '', ...rest] = regel.split('|').map((x) => x.trim());
     return { label, beoordeling: beoordeling || null, tekst: rest.join(' | ') };
   });
   return normaliseerMaatregel({
-    ...c, narratieven: narratieven.length ? narratieven : [],
+    ...c,
     locatie: { lat: c.lat, lon: c.lon },
     voetafdruk: Object.fromEntries(THEMAS.map((t) => [t, { beoordeling: c[`${t}_beoordeling`], toelichting: c[`${t}_toelichting`], bron: c[`${t}_bron`] }])),
     overige_effecten: { politiek: c.politiek, lijst },
-    meta: { aangeleverd_door: c.aangeleverd_door, datum: leesDatum(rij.datum), bron: c.bron_document, onvolledig: c.onvolledig },
+    meta: { aangeleverd_door: c.aangeleverd_door, datum: leesDatum(rij.datum), bron: c.bron_document },
   });
 }
 
@@ -179,25 +136,15 @@ export function voegMaatregelenSamen(data, nieuwe) {
 }
 
 // ---------------------------------------------------- dataset <-> bladen
-const bladRF = (n) => `Reductiefactoren N${n}`;
-const BLAD_VRAAG = 'Vraag', BLAD_MAATREGELEN = 'Maatregelen', BLAD_UITLEG = 'Uitleg';
+const BLAD_MAATREGELEN = 'Maatregelen', BLAD_UITLEG = 'Uitleg';
 
-/** Dataset -> { bladnaam: [[kop…], [rij…], …] } (volgorde = volgorde van de tabbladen). */
+/** Dataset -> { bladnaam: [[kop…], [rij…], …] }: Winningen, Vraag, Maatregelen. */
 export function naarBladen(data0) {
   const data = normaliseer(JSON.parse(JSON.stringify(data0)));
   const bladen = {};
   for (const t of TABELLEN) {
     bladen[t.blad] = [t.kolommen.map((k) => k.veld), ...data[t.id].map((x) => t.kolommen.map((k) => schrijfCel(k.type, x[k.veld])))];
   }
-  for (const n of data.narratieven) {
-    const rf = data.reductiefactoren[n.id];
-    bladen[bladRF(n.id)] = [
-      ['winning', ...data.criteria.flatMap((c) => PEILJAREN.map((j) => `${c.id} ${j}`))],
-      ...data.winningen.map((w) => [w.id, ...data.criteria.flatMap((c) => rf[w.id][c.id])]),
-    ];
-  }
-  bladen[BLAD_VRAAG] = [['narratief', 'cluster', ...VRAAGJAREN],
-    ...data.narratieven.flatMap((n) => data.clusters.map((c) => [n.id, c.id, ...VRAAGJAREN.map((j) => data.vraag[n.id][c.id][j])]))];
   bladen[BLAD_MAATREGELEN] = [MAATREGEL_KOLOMMEN.map((k) => k.veld),
     ...data.maatregelen.map((m) => { const r = maatregelNaarRij(m); return MAATREGEL_KOLOMMEN.map((k) => r[k.veld]); })];
   return bladen;
@@ -211,60 +158,26 @@ function alsObjecten(rijen) {
     .map((r) => Object.fromEntries(kop.map((k, i) => [k, r[i] ?? null])));
 }
 
-/** Bevat het werkboek alleen maatregelen (maatregelen-template van Vitens)? */
-export const isMaatregelenBestand = (bladen) => BLAD_MAATREGELEN in bladen && !('Winningen' in bladen);
+/** Bevat het werkboek alleen maatregelen (maatregelen-template)? */
+export const isMaatregelenBestand = (bladen) => BLAD_MAATREGELEN in bladen && !TABELLEN.some((t) => t.blad in bladen);
 
 /** Lees alleen het tabblad Maatregelen. */
 export const maatregelenUitBladen = (bladen) => alsObjecten(bladen[BLAD_MAATREGELEN]).map(rijNaarMaatregel);
 
 /**
  * { bladnaam: rijen } -> dataset.
- * @returns { data, opmerkingen: [tekst] }  opmerkingen = ontbrekende tabbladen e.d.
+ * @returns { data, opmerkingen: [tekst] }  opmerkingen = ontbrekende tabbladen
  */
 export function vanBladen(bladen) {
   const data = legeDataset();
   const opmerkingen = [];
   for (const t of TABELLEN) {
-    if (!(t.blad in bladen)) { opmerkingen.push(`Tabblad "${t.blad}" ontbreekt.`); if (!t.vast && t.id !== 'criteria') data[t.id] = []; continue; }
+    if (!(t.blad in bladen)) { opmerkingen.push(`Tabblad "${t.blad}" ontbreekt.`); continue; }
     data[t.id] = alsObjecten(bladen[t.blad]).map((r) => Object.fromEntries(t.kolommen.map((k) => [k.veld, leesCel(k.type, r[k.veld])])));
   }
-  for (const n of data.narratieven) {
-    const N = String(n.id);
-    data.reductiefactoren[N] = {};
-    if (!(bladRF(N) in bladen)) { opmerkingen.push(`Tabblad "${bladRF(N)}" ontbreekt: alle factoren worden 1.`); continue; }
-    for (const r of alsObjecten(bladen[bladRF(N)])) {
-      const wid = leesTekst(r.winning);
-      const perCrit = {};
-      for (const [kop, v] of Object.entries(r)) {
-        const m = kop.match(/^(.+)\s+(\d{4})$/);
-        const i = m ? PEILJAREN.indexOf(Number(m[2])) : -1;
-        if (i < 0) continue;
-        (perCrit[m[1]] ??= [null, null, null])[i] = leesGetal(v);
-      }
-      data.reductiefactoren[N][wid] = perCrit;
-    }
-  }
-  if (BLAD_VRAAG in bladen) {
-    for (const r of alsObjecten(bladen[BLAD_VRAAG])) {
-      const N = String(leesGetal(r.narratief)), cid = leesTekst(r.cluster);
-      (data.vraag[N] ??= {})[cid] = Object.fromEntries(VRAAGJAREN.map((j) => [String(j), leesGetal(r[j])]));
-    }
-  } else opmerkingen.push(`Tabblad "${BLAD_VRAAG}" ontbreekt.`);
   if (BLAD_MAATREGELEN in bladen) data.maatregelen = maatregelenUitBladen(bladen);
-  // onbekende winningen/criteria/clusters uit de bladen blijven staan zodat de validatie ze meldt
-  const rfRuw = data.reductiefactoren, vraagRuw = data.vraag;
-  normaliseer(data);
-  for (const [N, perW] of Object.entries(rfRuw)) {
-    for (const [wid, perC] of Object.entries(perW)) {
-      for (const [cid, rij] of Object.entries(perC)) {
-        if (!data.reductiefactoren[N]?.[wid]?.[cid]) ((data.reductiefactoren[N] ??= {})[wid] ??= {})[cid] = rij;
-      }
-    }
-  }
-  for (const [N, perC] of Object.entries(vraagRuw)) {
-    for (const [cid, rij] of Object.entries(perC)) if (!data.vraag[N]?.[cid]) (data.vraag[N] ??= {})[cid] = rij;
-  }
-  return { data, opmerkingen };
+  else opmerkingen.push(`Tabblad "${BLAD_MAATREGELEN}" ontbreekt.`);
+  return { data: normaliseer(data), opmerkingen };
 }
 
 /** Tabblad "Uitleg": per tabel en kolom de uitlegtekst. */
@@ -274,14 +187,15 @@ export function uitlegBlad() {
     rijen.push([t.blad, '', '', t.uitleg]);
     for (const k of t.kolommen) rijen.push([t.blad, k.veld, k.type + (k.eenheid ? ` (${k.eenheid})` : ''), k.uitleg]);
   }
-  rijen.push(['Reductiefactoren N1–N4', '', 'getal 0–1', 'Rijen = winningen (id), kolommen = "<criterium-id> <jaar>" voor 2030, 2040 en 2050. Leeg = 1. De factor van een winning is het minimum over de criteria.']);
-  rijen.push([BLAD_VRAAG, '', 'getal (Mm³/j)', 'Eén rij per narratief × cluster; kolommen 2025 t/m 2050 per 5 jaar.']);
-  rijen.push([BLAD_MAATREGELEN, '', '', 'Eén rij per maatregel. Zie het maatregelen-template voor de uitleg per veld.']);
-  rijen.push(['Algemeen', '', '', 'Volumes in Mm³/j. Decimalen met komma of punt. ja/nee-kolommen: "ja" of "nee".']);
+  rijen.push([BLAD_MAATREGELEN, '', '', 'Eén rij per maatregel. Uitleg per kolom: zie hieronder en het maatregelen-template.']);
+  for (const v of MAATREGEL_VELDEN) rijen.push([BLAD_MAATREGELEN, v.veld, v.type + (v.eenheid ? ` (${v.eenheid})` : ''), v.uitleg]);
+  rijen.push(['Algemeen', '', '', 'Volumes in Mm³/j. Decimalen met komma of punt. ja/nee-kolommen: "ja" of "nee". De kopregels niet wijzigen.']);
   return rijen;
 }
 
 // ------------------------------------------------------------- SheetJS
+const kolombreedtes = (rijen, max = 60) => rijen[0].map((k, i) => ({ wch: Math.min(max, Math.max(10, String(k).length + 2, ...rijen.slice(1, 60).map((r) => String(r[i] ?? '').split('\n')[0].length + 1))) }));
+
 /** Dataset -> SheetJS-werkboek. */
 export function naarWerkboek(XLSX, data, { metUitleg = true } = {}) {
   const wb = XLSX.utils.book_new();
@@ -289,7 +203,7 @@ export function naarWerkboek(XLSX, data, { metUitleg = true } = {}) {
   if (metUitleg) bladen[BLAD_UITLEG] = uitlegBlad();
   for (const [naam, rijen] of Object.entries(bladen)) {
     const ws = XLSX.utils.aoa_to_sheet(rijen);
-    ws['!cols'] = rijen[0].map((k, i) => ({ wch: Math.min(60, Math.max(10, String(k).length + 2, ...rijen.slice(1, 40).map((r) => String(r[i] ?? '').length + 1))) }));
+    ws['!cols'] = kolombreedtes(rijen);
     XLSX.utils.book_append_sheet(wb, ws, naam);
   }
   return wb;
@@ -301,7 +215,7 @@ export function werkboekNaarBladen(XLSX, wb) {
     [naam.trim(), XLSX.utils.sheet_to_json(wb.Sheets[naam], { header: 1, defval: null, blankrows: false })]));
 }
 
-/** Leeg template: alle tabbladen met koppen; narratieven en criteria vooringevuld. */
+/** Leeg template: de drie tabbladen met koppen, plus Uitleg. */
 export const leegTemplate = (XLSX) => naarWerkboek(XLSX, { ...legeDataset(), meta: { ...legeDataset().meta, naam: 'Leeg template' } });
 
 // ------------------------------------------------- maatregelen-template
@@ -309,27 +223,28 @@ const MAX_RIJEN = 500;                       // gegevensvalidatie geldt voor rij
 const kolomletter = (i) => { let s = ''; for (let n = i + 1; n > 0; n = Math.floor((n - 1) / 26)) s = String.fromCharCode(65 + (n - 1) % 26) + s; return s; };
 const xml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-/** Keuzelijsten voor het template: { kolomnaam: [opties] }. Gemeenten en clusters komen uit de dataset. */
+/** Keuzelijsten voor het template: { kolomnaam: [opties] }. Clusters en winningen komen uit de dataset. */
 export function templateLijsten(data) {
   const uit = {};
   for (const k of MAATREGEL_KOLOMMEN) {
     if (k.type === 'janee') uit[k.veld] = ['ja', 'nee'];
     else if (k.keuzes) uit[k.veld] = [...k.keuzes];
   }
-  uit.gemeente = (data.gemeenten ?? []).map((g) => g.gemeente).filter(Boolean);
-  uit.cluster = [ALLE_CLUSTERS, ...(data.clusters ?? []).map((c) => c.id).filter(Boolean)];
+  uit.winning = (data.winningen ?? []).map((w) => w.naam).filter(Boolean);
+  uit.cluster = [ALLE_CLUSTERS, ...clusters(data)];
   return uit;
 }
 
 /** Tabblad "Uitleg" van het maatregelen-template. */
 export function maatregelUitlegBlad(lijsten) {
   const rijen = [['Kolom', 'Blok', 'Naam', 'Verplicht', 'Keuzes / eenheid', 'Uitleg']];
+  const lang = new Set(['winning']);
   for (const v of MAATREGEL_VELDEN) {
     rijen.push([v.veld, v.blok, v.label, v.verplicht ? 'ja' : v.levering ? 'bij waterlevering' : 'nee',
-      lijsten[v.veld] && v.veld !== 'gemeente' ? lijsten[v.veld].join(' / ') : v.veld === 'gemeente' ? 'zie tabblad Lijsten' : v.eenheid ?? '', v.uitleg]);
+      lijsten[v.veld] ? (lang.has(v.veld) ? 'zie tabblad Lijsten' : lijsten[v.veld].join(' / ')) : v.eenheid ?? '', v.uitleg]);
   }
-  rijen.push([], ['Algemeen', '', '', '', '', 'Eén rij per maatregel op het tabblad Maatregelen; de kopregel niet wijzigen. Volumes in Mm³/j. Decimalen met komma of punt. Bij importeren op de invoerpagina: een nieuw id wordt toegevoegd, een bestaand id overschreven.']);
-  rijen.push(['Algemeen', '', '', '', '', 'Bij waterbesparing blijven lat, lon, bron, ruimtebeslag, stroomvraag en de voetafdruk leeg.']);
+  rijen.push([], ['Algemeen', '', '', '', '', 'Eén rij per maatregel op het tabblad Maatregelen; de kopregel niet wijzigen. Volumes in Mm³/j, altijd positief. Decimalen met komma of punt. Bij importeren op de invoerpagina: een nieuw id wordt toegevoegd, een bestaand id overschreven.']);
+  rijen.push(['Algemeen', '', '', '', '', 'Bij waterbesparing en afname blijven lat, lon, bron, ruimtebeslag, stroomvraag en de voetafdruk leeg.']);
   return rijen;
 }
 
@@ -366,7 +281,7 @@ function validatieXml(lijsten, lijstKolom, aantalLijstRijen) {
  */
 export function maatregelenTemplate(XLSX, data, maatregelen = []) {
   const lijsten = templateLijsten(data);
-  const namen = Object.keys(lijsten);
+  const namen = Object.keys(lijsten).filter((n) => lijsten[n].length);
   const lijstKolom = Object.fromEntries(namen.map((n, i) => [n, i]));
   const aantal = Object.fromEntries(namen.map((n) => [n, lijsten[n].length]));
   const hoogte = Math.max(0, ...Object.values(aantal));
@@ -379,7 +294,7 @@ export function maatregelenTemplate(XLSX, data, maatregelen = []) {
   const wb = XLSX.utils.book_new();
   for (const [naam, rijen] of Object.entries(bladen)) {
     const ws = XLSX.utils.aoa_to_sheet(rijen);
-    ws['!cols'] = rijen[0].map((k, i) => ({ wch: Math.min(70, Math.max(12, String(k).length + 2, ...rijen.slice(1, 60).map((r) => String(r[i] ?? '').split('\n')[0].length + 1))) }));
+    ws['!cols'] = kolombreedtes(rijen, 70);
     XLSX.utils.book_append_sheet(wb, ws, naam);
   }
   // gegevensvalidatie invoegen in het eerste blad (Maatregelen)

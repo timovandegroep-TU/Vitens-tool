@@ -1,6 +1,6 @@
 // Paneel EFFECTEN GEMEENTEN: effecten van de actieve maatregelen, of de afname per bestaande winning.
 import { el } from '../dom.js';
-import { winningInJaar, ALLE_CLUSTERS } from '../model.js';
+import { ALLE_CLUSTERS } from '../model.js';
 import { VOETAFDRUK } from '../schema.js';
 import { NIVEAUS, VOETAFDRUK_NIVEAU, AFNAME_DREMPELS } from '../config.js';
 import * as kaart from './kaart.js';
@@ -13,13 +13,13 @@ const LEGENDA = {
 
 /** Effecten van de maatregelen die in het zichtjaar meetellen. Puur. */
 export function effectenMaatregelen(data, resultaat, cluster) {
-  const coord = new Map(data.gemeenten.map((g) => [g.gemeente, [g.lon, g.lat]]));
+  const coord = new Map(data.winningen.map((w) => [w.naam, [w.lon, w.lat]]));
   const uit = [];
   for (const m of data.maatregelen) {
     if (!resultaat.maatregelen[m.id]?.actief) continue;
     if (cluster && m.cluster !== cluster && m.cluster !== ALLE_CLUSTERS) continue;
-    const punt = m.locatie ? [m.locatie.lon, m.locatie.lat] : coord.get(m.gemeente) ?? null;
-    const plek = m.gemeente || m.naam;
+    const punt = m.locatie ? [m.locatie.lon, m.locatie.lat] : coord.get(m.winning) ?? null;
+    const plek = m.gemeente || m.winning || m.naam;
     const voeg = (niveau, tekst, i) => uit.push({ k: `${m.id}|${i}`, groep: m.id, naam: plek, niveau, label: niveau === 'geen' ? '' : niveau, tekst, punt, vorm: 'pin' });
     let n = 0;
     for (const e of m.overige_effecten?.lijst ?? []) {
@@ -35,23 +35,29 @@ export function effectenMaatregelen(data, resultaat, cluster) {
   return uit.sort((a, b) => NIVEAUS[a.niveau].volgorde - NIVEAUS[b.niveau].volgorde);
 }
 
-/** Afname per bestaande winning in het zichtjaar. Puur. */
-export function effectenWinningen(data, narratief, jaar, cluster) {
-  const critNaam = new Map(data.criteria.map((c) => [c.id, c.naam]));
+/**
+ * Afname per bestaande winning in het zichtjaar: de som van de actieve afnames die naar
+ * deze winning verwijzen (kolom "winning" van de maatregel). Puur.
+ */
+export function effectenWinningen(data, resultaat, cluster) {
+  const jaar = resultaat.jaar;
   const uit = [];
   for (const w of data.winningen) {
     if (cluster && w.cluster !== cluster) continue;
-    const r = winningInJaar(data, narratief, w, jaar);
-    const niveau = r.afnamePct >= AFNAME_DREMPELS.knelpunt ? 'knelpunt' : r.afnamePct >= AFNAME_DREMPELS.aandacht ? 'aandacht' : 'geen';
-    const bindend = r.bindend.map((id) => critNaam.get(id) ?? id).join(', ');
+    const cap = typeof w.capaciteit === 'number' ? w.capaciteit : 0;
+    const oorzaken = data.maatregelen.filter((m) => m.soort === 'afname' && m.winning === w.naam && resultaat.maatregelen[m.id]?.actief);
+    const afname = Math.min(cap, oorzaken.reduce((s, m) => s + resultaat.maatregelen[m.id].volume, 0));
+    const pct = cap > 0 ? afname / cap * 100 : 0;
+    const niveau = pct >= AFNAME_DREMPELS.knelpunt ? 'knelpunt' : pct >= AFNAME_DREMPELS.aandacht ? 'aandacht' : 'geen';
+    const reden = oorzaken.map((m) => m.naam).join(', ');
     uit.push({
-      k: w.id, groep: w.id, naam: w.locatie || w.id, niveau, afname: r.afname, inLijst: niveau !== 'geen',
-      label: `−${Math.round(r.afnamePct)}%`,
-      tekst: `−${f1(r.afname)} Mm³/j: ${f1(r.aanbod)} van ${f1(w.capaciteit)}` + (bindend ? ` · bindend: ${bindend}` : ''),
+      k: `w|${w.naam}`, groep: w.naam, naam: w.naam, niveau, afname, inLijst: niveau !== 'geen',
+      label: `−${Math.round(pct)}%`,
+      tekst: `−${f1(afname)} Mm³/j: ${f1(cap - afname)} van ${f1(cap)}` + (reden ? ` · ${reden}` : ''),
       punt: [w.lon, w.lat], vorm: 'stip',
-      tip: () => `<div class="th">${esc(w.locatie || w.id)}</div><div class="tm">${esc([w.type, w.gemeente, w.watersysteem].filter(Boolean).join(' · '))}</div>`
-        + kv('Capaciteit', `${f1(w.capaciteit)} Mm³/j`) + kv(`Aanbod in ${jaar}`, `${f1(r.aanbod)} Mm³/j`) + kv('Afname', `${f1(r.afname)} Mm³/j (${Math.round(r.afnamePct)}%)`)
-        + (bindend ? kv('Bindend criterium', bindend) : '') + (w.te_controleren ? '<div class="tm" style="margin-top:6px">Ligging benaderd (te controleren)</div>' : ''),
+      tip: () => `<div class="th">${esc(w.naam)}</div><div class="tm">${esc([w.gemeente, w.cluster].filter(Boolean).join(' · '))}</div>`
+        + kv('Capaciteit nu', `${f1(cap)} Mm³/j`) + kv(`Aanbod in ${jaar}`, `${f1(cap - afname)} Mm³/j`)
+        + (afname > 0 ? kv('Afname', `${f1(afname)} Mm³/j (${Math.round(pct)}%)`) + kv('Door', reden) : '<div class="tm">Geen actieve afname in dit jaar.</div>'),
     });
   }
   return uit.sort((a, b) => b.afname - a.afname);
@@ -70,12 +76,12 @@ export function bouw(app) {
 }
 
 export function render(app) {
-  const { effecten: modus, narratief, jaar, cluster } = app.state;
+  const { effecten: modus, jaar, cluster } = app.state;
   document.querySelectorAll('#effChips .chip').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.m === modus)));
   document.querySelector('#mapLegend').replaceChildren(...LEGENDA[modus].map(([niveau, tekst]) =>
     el('span', {}, el('i', { style: `background:${NIVEAUS[niveau].kleur}` }), tekst)));
 
-  const items = modus === 'winningen' ? effectenWinningen(app.data, narratief, jaar, cluster) : effectenMaatregelen(app.data, app.resultaat(), cluster);
+  const items = modus === 'winningen' ? effectenWinningen(app.data, app.resultaat(), cluster) : effectenMaatregelen(app.data, app.resultaat(), cluster);
   const ul = document.querySelector('#effList');
   kaart.tekenPunten(items, (k) => {
     markeer(k);
@@ -83,7 +89,7 @@ export function render(app) {
   });
   const lijst = items.filter((e) => e.inLijst !== false);
   if (!lijst.length) {
-    ul.replaceChildren(el('li', { class: 'empty', text: modus === 'winningen' ? `Geen afname van de capaciteit in ${jaar}.` : `Geen effecten van maatregelen in ${jaar}: er telt geen maatregel met aangeleverde effecten mee.` }));
+    ul.replaceChildren(el('li', { class: 'empty', text: modus === 'winningen' ? `Geen afname van bestaande winningen in ${jaar}.` : `Geen effecten van maatregelen in ${jaar}: er telt geen maatregel met aangeleverde effecten mee.` }));
   } else {
     ul.replaceChildren(...lijst.map((e) => {
       const li = el('li', { class: 'ei', 'data-k': e.k },

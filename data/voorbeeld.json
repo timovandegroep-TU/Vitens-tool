@@ -1,745 +1,487 @@
 {
  "meta": {
   "naam": "Voorbeelddata (fictief)",
-  "schema_versie": 1,
-  "datum_import": "2026-11-10",
+  "schema_versie": 2,
+  "datum_import": "2026-11-12",
   "bron": "Verzonnen namen en waarden, alleen om de tool te tonen",
   "voorbeelddata": true
  },
- "narratieven": [
-  {
-   "id": 1,
-   "naam": "Ruim in conflict",
-   "deltascenario": "Scenario A",
-   "lpppd_doel": 130,
-   "toelichting": "Fictief: sterke groei, weinig samenwerking"
-  },
-  {
-   "id": 2,
-   "naam": "Stoom in conflict",
-   "deltascenario": "Scenario B",
-   "lpppd_doel": 130,
-   "toelichting": "Fictief: zeer sterke groei, weinig samenwerking"
-  },
-  {
-   "id": 3,
-   "naam": "Ruim in harmonie",
-   "deltascenario": "Scenario A",
-   "lpppd_doel": 110,
-   "toelichting": "Fictief: beperkte groei, veel samenwerking"
-  },
-  {
-   "id": 4,
-   "naam": "Stoom in harmonie",
-   "deltascenario": "Scenario B",
-   "lpppd_doel": 110,
-   "toelichting": "Fictief: gematigde groei, veel samenwerking"
-  }
- ],
- "clusters": [
-  {
-   "id": "noordrand",
-   "naam": "Noordrand"
-  },
-  {
-   "id": "middengebied",
-   "naam": "Middengebied"
-  },
-  {
-   "id": "zuidoever",
-   "naam": "Zuidoever"
-  }
- ],
- "gemeenten": [
-  {
-   "gemeente": "Waterdorp",
-   "cluster": "noordrand",
-   "lat": 52.19,
-   "lon": 5.2,
-   "te_controleren": false
-  },
-  {
-   "gemeente": "Duinrode",
-   "cluster": "noordrand",
-   "lat": 52.16,
-   "lon": 5.38,
-   "te_controleren": false
-  },
-  {
-   "gemeente": "Bronhuizen",
-   "cluster": "middengebied",
-   "lat": 52.09,
-   "lon": 5.02,
-   "te_controleren": false
-  },
-  {
-   "gemeente": "Veenwijk",
-   "cluster": "middengebied",
-   "lat": 52.07,
-   "lon": 5.22,
-   "te_controleren": false
-  },
-  {
-   "gemeente": "Rivierstad",
-   "cluster": "zuidoever",
-   "lat": 51.97,
-   "lon": 5.12,
-   "te_controleren": false
-  },
-  {
-   "gemeente": "Heuvelbroek",
-   "cluster": "zuidoever",
-   "lat": 52.01,
-   "lon": 5.44,
-   "te_controleren": false
-  }
- ],
- "criteria": [
-  {
-   "id": "instandhouding-intern",
-   "naam": "Instandhouding (intern)",
-   "groep": "Assets",
-   "toelichting": "Einde levensduur en herbouw van eigen installaties"
-  },
-  {
-   "id": "instandhouding-extern",
-   "naam": "Instandhouding (extern)",
-   "groep": "Assets",
-   "toelichting": "Verstoringen van buitenaf"
-  },
-  {
-   "id": "natuur",
-   "naam": "Natuur",
-   "groep": "Grondwaterkwantiteit",
-   "toelichting": "Verdroging in natuurgebieden"
-  },
-  {
-   "id": "landbouw",
-   "naam": "Landbouw",
-   "groep": "Grondwaterkwantiteit",
-   "toelichting": "Landbouwschade"
-  },
-  {
-   "id": "bebouwing",
-   "naam": "Bebouwing (paalrot)",
-   "groep": "Grondwaterkwantiteit",
-   "toelichting": "Paalrot"
-  },
-  {
-   "id": "bodemdaling",
-   "naam": "Bodemdaling",
-   "groep": "Grondwaterkwantiteit",
-   "toelichting": "Bodemdalingsschade"
-  },
-  {
-   "id": "grondwaterkwaliteit",
-   "naam": "Grondwaterkwaliteit",
-   "groep": "Grondwaterkwaliteit",
-   "toelichting": "Risico op verontreiniging"
-  },
-  {
-   "id": "onbekend",
-   "naam": "Incidentele verontreiniging",
-   "groep": "Grondwaterkwaliteit",
-   "toelichting": "Fictief criterium"
-  },
-  {
-   "id": "oppervlaktewaterkwaliteit",
-   "naam": "Oppervlaktewaterkwaliteit",
-   "groep": "Oppervlaktewaterkwaliteit",
-   "toelichting": "Verontreiniging oppervlaktewater"
-  }
- ],
  "winningen": [
   {
-   "id": "waterdorp-noord",
-   "locatie": "Waterdorp Noord",
-   "gemeente": "Waterdorp",
-   "type": "Winning",
-   "cluster": "noordrand",
-   "watersysteem": "Heuvelrug",
-   "vergunning": 9.0,
-   "niet_inzetbaar": 1.0,
-   "capaciteit": 8.0,
-   "lat": 52.205,
-   "lon": 5.18,
-   "te_controleren": false,
+   "naam": "Lindewaard",
+   "cluster": "West",
+   "gemeente": "Lindewaard",
+   "capaciteit": 11.0,
+   "lat": 52.09,
+   "lon": 4.93,
    "toelichting": ""
   },
   {
-   "id": "waterdorp-plas",
-   "locatie": "Waterdorp Plas",
-   "gemeente": "Waterdorp",
-   "type": "Winning",
-   "cluster": "noordrand",
-   "watersysteem": "Flanken",
-   "vergunning": 5.0,
-   "niet_inzetbaar": 0,
+   "naam": "Hoge Brug",
+   "cluster": "West",
+   "gemeente": "Hoge Brug",
+   "capaciteit": 9.0,
+   "lat": 52.12,
+   "lon": 4.99,
+   "toelichting": ""
+  },
+  {
+   "naam": "Kromme Akker",
+   "cluster": "West",
+   "gemeente": "Kromme Akker",
+   "capaciteit": 7.0,
+   "lat": 52.05,
+   "lon": 4.88,
+   "toelichting": ""
+  },
+  {
+   "naam": "Wilgenoord",
+   "cluster": "West",
+   "gemeente": "Wilgenoord",
+   "capaciteit": 6.0,
+   "lat": 52.14,
+   "lon": 4.9,
+   "toelichting": ""
+  },
+  {
+   "naam": "Rietveen",
+   "cluster": "West",
+   "gemeente": "Rietveen",
+   "capaciteit": 5.0,
+   "lat": 52.03,
+   "lon": 4.96,
+   "toelichting": ""
+  },
+  {
+   "naam": "Molendijk",
+   "cluster": "West",
+   "gemeente": "Molendijk",
+   "capaciteit": 3.0,
+   "lat": 52.07,
+   "lon": 5.02,
+   "toelichting": ""
+  },
+  {
+   "naam": "Schaapsdrift",
+   "cluster": "West",
+   "gemeente": "Schaapsdrift",
+   "capaciteit": 2.0,
+   "lat": 52.11,
+   "lon": 4.85,
+   "toelichting": ""
+  },
+  {
+   "naam": "Vossenhol",
+   "cluster": "West",
+   "gemeente": "Vossenhol",
+   "capaciteit": 1.0,
+   "lat": 52.16,
+   "lon": 4.96,
+   "toelichting": ""
+  },
+  {
+   "naam": "Beekzicht",
+   "cluster": "Zuid",
+   "gemeente": "Beekzicht",
+   "capaciteit": 5.0,
+   "lat": 51.98,
+   "lon": 5.23,
+   "toelichting": ""
+  },
+  {
+   "naam": "Dorrewaard",
+   "cluster": "Zuid",
+   "gemeente": "Dorrewaard",
+   "capaciteit": 3.5,
+   "lat": 51.96,
+   "lon": 5.33,
+   "toelichting": ""
+  },
+  {
+   "naam": "Heidepoort",
+   "cluster": "Zuid",
+   "gemeente": "Heidepoort",
+   "capaciteit": 3.5,
+   "lat": 52.0,
+   "lon": 5.39,
+   "toelichting": ""
+  },
+  {
+   "naam": "Klaverhoeve",
+   "cluster": "Zuid",
+   "gemeente": "Klaverhoeve",
+   "capaciteit": 3.0,
+   "lat": 51.99,
+   "lon": 5.17,
+   "toelichting": ""
+  },
+  {
+   "naam": "Zandstede",
+   "cluster": "Zuid",
+   "gemeente": "Zandstede",
+   "capaciteit": 2.0,
+   "lat": 51.95,
+   "lon": 5.26,
+   "toelichting": ""
+  },
+  {
+   "naam": "Eikenrode",
+   "cluster": "Midden",
+   "gemeente": "Eikenrode",
+   "capaciteit": 8.0,
+   "lat": 52.15,
+   "lon": 5.3,
+   "toelichting": ""
+  },
+  {
+   "naam": "Bosrand",
+   "cluster": "Midden",
+   "gemeente": "Bosrand",
+   "capaciteit": 6.0,
+   "lat": 52.12,
+   "lon": 5.36,
+   "toelichting": ""
+  },
+  {
+   "naam": "Leemberg",
+   "cluster": "Midden",
+   "gemeente": "Leemberg",
    "capaciteit": 5.0,
    "lat": 52.18,
-   "lon": 5.25,
-   "te_controleren": false,
+   "lon": 5.24,
    "toelichting": ""
   },
   {
-   "id": "duinrode",
-   "locatie": "Duinrode",
-   "gemeente": "Duinrode",
-   "type": "Winning",
-   "cluster": "noordrand",
-   "watersysteem": "Heuvelrug",
-   "vergunning": 7.0,
-   "niet_inzetbaar": 0.5,
-   "capaciteit": 6.5,
-   "lat": 52.15,
-   "lon": 5.4,
-   "te_controleren": false,
-   "toelichting": ""
-  },
-  {
-   "id": "bronhuizen",
-   "locatie": "Bronhuizen",
-   "gemeente": "Bronhuizen",
-   "type": "Winning",
-   "cluster": "middengebied",
-   "watersysteem": "Polder",
-   "vergunning": 6.0,
-   "niet_inzetbaar": 0,
-   "capaciteit": 6.0,
+   "naam": "Dennenhof",
+   "cluster": "Midden",
+   "gemeente": "Dennenhof",
+   "capaciteit": 4.0,
    "lat": 52.1,
-   "lon": 5.0,
-   "te_controleren": false,
+   "lon": 5.2,
    "toelichting": ""
   },
   {
-   "id": "veenwijk-oost",
-   "locatie": "Veenwijk Oost",
-   "gemeente": "Veenwijk",
-   "type": "Winning",
-   "cluster": "middengebied",
-   "watersysteem": "Flanken",
-   "vergunning": 8.0,
-   "niet_inzetbaar": 0,
-   "capaciteit": 8.0,
-   "lat": 52.06,
-   "lon": 5.26,
-   "te_controleren": false,
-   "toelichting": ""
-  },
-  {
-   "id": "veenwijk-west",
-   "locatie": "Veenwijk West",
-   "gemeente": "Veenwijk",
-   "type": "Winning",
-   "cluster": "middengebied",
-   "watersysteem": "Polder",
-   "vergunning": 4.0,
-   "niet_inzetbaar": 1.0,
+   "naam": "Valkenheuvel",
+   "cluster": "Midden",
+   "gemeente": "Valkenheuvel",
    "capaciteit": 3.0,
-   "lat": 52.08,
-   "lon": 5.17,
-   "te_controleren": false,
+   "lat": 52.2,
+   "lon": 5.33,
    "toelichting": ""
   },
   {
-   "id": "rivierstad",
-   "locatie": "Rivierstad",
-   "gemeente": "Rivierstad",
-   "type": "Winning",
-   "cluster": "zuidoever",
-   "watersysteem": "Rivierengebied",
-   "vergunning": 10.0,
-   "niet_inzetbaar": 0,
+   "naam": "Mosveld",
+   "cluster": "Midden",
+   "gemeente": "Mosveld",
+   "capaciteit": 2.0,
+   "lat": 52.14,
+   "lon": 5.42,
+   "toelichting": ""
+  },
+  {
+   "naam": "Wolfsberg",
+   "cluster": "Oost",
+   "gemeente": "Wolfsberg",
+   "capaciteit": 5.0,
+   "lat": 52.32,
+   "lon": 5.64,
+   "toelichting": ""
+  },
+  {
+   "naam": "Hertenkamp",
+   "cluster": "Oost",
+   "gemeente": "Hertenkamp",
+   "capaciteit": 4.0,
+   "lat": 52.28,
+   "lon": 5.7,
+   "toelichting": ""
+  },
+  {
+   "naam": "Bremhorst",
+   "cluster": "Oost",
+   "gemeente": "Bremhorst",
+   "capaciteit": 3.5,
+   "lat": 52.25,
+   "lon": 5.6,
+   "toelichting": ""
+  },
+  {
+   "naam": "Ruigeveld",
+   "cluster": "Oost",
+   "gemeente": "Ruigeveld",
+   "capaciteit": 3.0,
+   "lat": 52.35,
+   "lon": 5.58,
+   "toelichting": ""
+  },
+  {
+   "naam": "Polderkern",
+   "cluster": "Noord",
+   "gemeente": "Polderkern",
    "capaciteit": 10.0,
-   "lat": 51.96,
-   "lon": 5.1,
-   "te_controleren": false,
+   "lat": 52.47,
+   "lon": 5.5,
    "toelichting": ""
   },
   {
-   "id": "heuvelbroek",
-   "locatie": "Heuvelbroek",
-   "gemeente": "Heuvelbroek",
-   "type": "Winning",
-   "cluster": "zuidoever",
-   "watersysteem": "Flanken",
-   "vergunning": 6.0,
-   "niet_inzetbaar": 0,
-   "capaciteit": 6.0,
-   "lat": 52.02,
-   "lon": 5.46,
-   "te_controleren": false,
+   "naam": "Nieuwlandse Dijk",
+   "cluster": "Noord",
+   "gemeente": "Nieuwlandse Dijk",
+   "capaciteit": 7.0,
+   "lat": 52.43,
+   "lon": 5.6,
+   "toelichting": ""
+  },
+  {
+   "naam": "Kavel Zeven",
+   "cluster": "Noord",
+   "gemeente": "Kavel Zeven",
+   "capaciteit": 5.0,
+   "lat": 52.51,
+   "lon": 5.45,
+   "toelichting": ""
+  },
+  {
+   "naam": "Lage Vaart",
+   "cluster": "Noord",
+   "gemeente": "Lage Vaart",
+   "capaciteit": 4.0,
+   "lat": 52.4,
+   "lon": 5.52,
+   "toelichting": ""
+  },
+  {
+   "naam": "Meeuwenplaat",
+   "cluster": "Noord",
+   "gemeente": "Meeuwenplaat",
+   "capaciteit": 2.0,
+   "lat": 52.54,
+   "lon": 5.58,
    "toelichting": ""
   }
  ],
- "reductiefactoren": {
-  "1": {
-   "waterdorp-noord": {
-    "instandhouding-intern": [1, 0.9, 0.9],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [0.9, 0.75, 0.75],
-    "landbouw": [1, 1, 1],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [1, 1, 1],
-    "grondwaterkwaliteit": [1, 1, 1],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 1, 1]
-   },
-   "waterdorp-plas": {
-    "instandhouding-intern": [1, 1, 1],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [1, 1, 1],
-    "landbouw": [1, 1, 1],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [1, 1, 1],
-    "grondwaterkwaliteit": [1, 1, 1],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 0.9, 0.75]
-   },
-   "duinrode": {
-    "instandhouding-intern": [1, 1, 1],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [0.9, 0.9, 0.75],
-    "landbouw": [1, 1, 1],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [1, 1, 1],
-    "grondwaterkwaliteit": [1, 1, 1],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 1, 1]
-   },
-   "bronhuizen": {
-    "instandhouding-intern": [1, 1, 1],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [1, 1, 1],
-    "landbouw": [1, 1, 1],
-    "bebouwing": [1, 0.9, 0.9],
-    "bodemdaling": [0.75, 0.5, 0.5],
-    "grondwaterkwaliteit": [1, 1, 1],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 1, 1]
-   },
-   "veenwijk-oost": {
-    "instandhouding-intern": [1, 1, 1],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [1, 1, 1],
-    "landbouw": [0.9, 0.9, 0.9],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [1, 1, 1],
-    "grondwaterkwaliteit": [1, 1, 1],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 1, 1]
-   },
-   "veenwijk-west": {
-    "instandhouding-intern": [1, 0, 0],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [1, 1, 1],
-    "landbouw": [1, 1, 1],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [1, 1, 1],
-    "grondwaterkwaliteit": [1, 1, 1],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 1, 1]
-   },
-   "rivierstad": {
-    "instandhouding-intern": [1, 1, 1],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [1, 1, 1],
-    "landbouw": [1, 1, 1],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [1, 1, 1],
-    "grondwaterkwaliteit": [1, 0.9, 0.75],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 1, 1]
-   },
-   "heuvelbroek": {
-    "instandhouding-intern": [1, 1, 1],
-    "instandhouding-extern": [1, 1, 0.9],
-    "natuur": [1, 1, 1],
-    "landbouw": [1, 1, 1],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [1, 1, 1],
-    "grondwaterkwaliteit": [1, 1, 1],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 1, 1]
-   }
+ "vraag": [
+  {
+   "scenario": "Laag",
+   "cluster": "West",
+   "2025": 46.5,
+   "2030": 46.26,
+   "2035": 46.05,
+   "2040": 45.85,
+   "2045": 45.66,
+   "2050": 45.48,
+   "toelichting": "Fictief. CBS-prognose laag; verbruik daalt naar 120 l p.p.p.d.; klimaat zoals nu."
   },
-  "2": {
-   "waterdorp-noord": {
-    "instandhouding-intern": [1, 1, 1],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [0.9, 0.75, 0.5],
-    "landbouw": [1, 1, 1],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [1, 1, 1],
-    "grondwaterkwaliteit": [1, 1, 1],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 1, 1]
-   },
-   "waterdorp-plas": {
-    "instandhouding-intern": [1, 1, 1],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [1, 1, 1],
-    "landbouw": [1, 1, 1],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [1, 1, 1],
-    "grondwaterkwaliteit": [1, 1, 1],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [0.9, 0.75, 0.75]
-   },
-   "duinrode": {
-    "instandhouding-intern": [1, 1, 1],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [0.9, 0.75, 0.75],
-    "landbouw": [1, 1, 1],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [1, 1, 1],
-    "grondwaterkwaliteit": [1, 1, 1],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 1, 1]
-   },
-   "bronhuizen": {
-    "instandhouding-intern": [1, 1, 1],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [1, 1, 1],
-    "landbouw": [1, 1, 1],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [0.75, 0.5, 0.5],
-    "grondwaterkwaliteit": [1, 1, 1],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 1, 1]
-   },
-   "veenwijk-oost": {
-    "instandhouding-intern": [1, 1, 1],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [1, 1, 1],
-    "landbouw": [0.9, 0.75, 0.75],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [1, 1, 1],
-    "grondwaterkwaliteit": [1, 1, 1],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 1, 1]
-   },
-   "veenwijk-west": {
-    "instandhouding-intern": [1, 0, 0],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [1, 1, 1],
-    "landbouw": [1, 1, 1],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [1, 1, 1],
-    "grondwaterkwaliteit": [1, 1, 1],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 1, 1]
-   },
-   "rivierstad": {
-    "instandhouding-intern": [1, 1, 1],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [1, 1, 1],
-    "landbouw": [1, 1, 1],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [1, 1, 1],
-    "grondwaterkwaliteit": [0.9, 0.9, 0.75],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 1, 1]
-   },
-   "heuvelbroek": {
-    "instandhouding-intern": [1, 1, 1],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [1, 1, 1],
-    "landbouw": [1, 1, 1],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [1, 1, 1],
-    "grondwaterkwaliteit": [1, 1, 1],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 1, 1]
-   }
+  {
+   "scenario": "Laag",
+   "cluster": "Zuid",
+   "2025": 16.6,
+   "2030": 16.54,
+   "2035": 16.48,
+   "2040": 16.43,
+   "2045": 16.38,
+   "2050": 16.33,
+   "toelichting": ""
   },
-  "3": {
-   "waterdorp-noord": {
-    "instandhouding-intern": [1, 1, 1],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [1, 0.9, 0.9],
-    "landbouw": [1, 1, 1],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [1, 1, 1],
-    "grondwaterkwaliteit": [1, 1, 1],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 1, 1]
-   },
-   "waterdorp-plas": {
-    "instandhouding-intern": [1, 1, 1],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [1, 1, 1],
-    "landbouw": [1, 1, 1],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [1, 1, 1],
-    "grondwaterkwaliteit": [1, 1, 1],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 1, 1]
-   },
-   "duinrode": {
-    "instandhouding-intern": [1, 1, 1],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [1, 1, 1],
-    "landbouw": [1, 1, 1],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [1, 1, 1],
-    "grondwaterkwaliteit": [1, 1, 1],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 1, 1]
-   },
-   "bronhuizen": {
-    "instandhouding-intern": [1, 1, 1],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [1, 1, 1],
-    "landbouw": [1, 1, 1],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [0.9, 0.75, 0.75],
-    "grondwaterkwaliteit": [1, 1, 1],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 1, 1]
-   },
-   "veenwijk-oost": {
-    "instandhouding-intern": [1, 1, 1],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [1, 1, 1],
-    "landbouw": [1, 1, 1],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [1, 1, 1],
-    "grondwaterkwaliteit": [1, 1, 1],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 1, 1]
-   },
-   "veenwijk-west": {
-    "instandhouding-intern": [1, 0.5, 0.5],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [1, 1, 1],
-    "landbouw": [1, 1, 1],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [1, 1, 1],
-    "grondwaterkwaliteit": [1, 1, 1],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 1, 1]
-   },
-   "rivierstad": {
-    "instandhouding-intern": [1, 1, 1],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [1, 1, 1],
-    "landbouw": [1, 1, 1],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [1, 1, 1],
-    "grondwaterkwaliteit": [1, 1, 0.9],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 1, 1]
-   },
-   "heuvelbroek": {
-    "instandhouding-intern": [1, 1, 1],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [1, 1, 1],
-    "landbouw": [1, 1, 1],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [1, 1, 1],
-    "grondwaterkwaliteit": [1, 1, 1],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 1, 1]
-   }
+  {
+   "scenario": "Laag",
+   "cluster": "Midden",
+   "2025": 32.5,
+   "2030": 32.35,
+   "2035": 32.22,
+   "2040": 32.09,
+   "2045": 31.97,
+   "2050": 31.85,
+   "toelichting": ""
   },
-  "4": {
-   "waterdorp-noord": {
-    "instandhouding-intern": [1, 1, 1],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [0.9, 0.9, 0.75],
-    "landbouw": [1, 1, 1],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [1, 1, 1],
-    "grondwaterkwaliteit": [1, 1, 1],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 1, 1]
-   },
-   "waterdorp-plas": {
-    "instandhouding-intern": [1, 1, 1],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [1, 1, 1],
-    "landbouw": [1, 1, 1],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [1, 1, 1],
-    "grondwaterkwaliteit": [1, 1, 1],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 1, 1]
-   },
-   "duinrode": {
-    "instandhouding-intern": [1, 1, 1],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [1, 0.9, 0.9],
-    "landbouw": [1, 1, 1],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [1, 1, 1],
-    "grondwaterkwaliteit": [1, 1, 1],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 1, 1]
-   },
-   "bronhuizen": {
-    "instandhouding-intern": [1, 1, 1],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [1, 1, 1],
-    "landbouw": [1, 1, 1],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [0.9, 0.75, 0.5],
-    "grondwaterkwaliteit": [1, 1, 1],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 1, 1]
-   },
-   "veenwijk-oost": {
-    "instandhouding-intern": [1, 1, 1],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [1, 1, 1],
-    "landbouw": [1, 1, 1],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [1, 1, 1],
-    "grondwaterkwaliteit": [1, 1, 1],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 1, 1]
-   },
-   "veenwijk-west": {
-    "instandhouding-intern": [1, 0.5, 0],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [1, 1, 1],
-    "landbouw": [1, 1, 1],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [1, 1, 1],
-    "grondwaterkwaliteit": [1, 1, 1],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 1, 1]
-   },
-   "rivierstad": {
-    "instandhouding-intern": [1, 1, 1],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [1, 1, 1],
-    "landbouw": [1, 1, 1],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [1, 1, 1],
-    "grondwaterkwaliteit": [1, 0.9, 0.9],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 1, 1]
-   },
-   "heuvelbroek": {
-    "instandhouding-intern": [1, 1, 1],
-    "instandhouding-extern": [1, 1, 1],
-    "natuur": [1, 1, 1],
-    "landbouw": [1, 1, 1],
-    "bebouwing": [1, 1, 1],
-    "bodemdaling": [1, 1, 1],
-    "grondwaterkwaliteit": [1, 1, 1],
-    "onbekend": [1, 1, 1],
-    "oppervlaktewaterkwaliteit": [1, 1, 1]
-   }
+  {
+   "scenario": "Laag",
+   "cluster": "Oost",
+   "2025": 14.6,
+   "2030": 14.54,
+   "2035": 14.48,
+   "2040": 14.43,
+   "2045": 14.39,
+   "2050": 14.34,
+   "toelichting": ""
+  },
+  {
+   "scenario": "Laag",
+   "cluster": "Noord",
+   "2025": 28.0,
+   "2030": 27.84,
+   "2035": 27.71,
+   "2040": 27.58,
+   "2045": 27.45,
+   "2050": 27.33,
+   "toelichting": ""
+  },
+  {
+   "scenario": "Midden (CBS)",
+   "cluster": "West",
+   "2025": 46.5,
+   "2030": 47.58,
+   "2035": 48.52,
+   "2040": 49.41,
+   "2045": 50.27,
+   "2050": 51.1,
+   "toelichting": "Fictief. CBS-prognose midden; verbruik 128 l p.p.p.d.; gematigde opwarming (+1 °C)."
+  },
+  {
+   "scenario": "Midden (CBS)",
+   "cluster": "Zuid",
+   "2025": 16.6,
+   "2030": 16.88,
+   "2035": 17.12,
+   "2040": 17.35,
+   "2045": 17.58,
+   "2050": 17.8,
+   "toelichting": ""
+  },
+  {
+   "scenario": "Midden (CBS)",
+   "cluster": "Midden",
+   "2025": 32.5,
+   "2030": 33.19,
+   "2035": 33.78,
+   "2040": 34.35,
+   "2045": 34.89,
+   "2050": 35.43,
+   "toelichting": ""
+  },
+  {
+   "scenario": "Midden (CBS)",
+   "cluster": "Oost",
+   "2025": 14.6,
+   "2030": 14.88,
+   "2035": 15.12,
+   "2040": 15.35,
+   "2045": 15.57,
+   "2050": 15.78,
+   "toelichting": ""
+  },
+  {
+   "scenario": "Midden (CBS)",
+   "cluster": "Noord",
+   "2025": 28.0,
+   "2030": 28.71,
+   "2035": 29.33,
+   "2040": 29.91,
+   "2045": 30.47,
+   "2050": 31.02,
+   "toelichting": ""
+  },
+  {
+   "scenario": "Hoog",
+   "cluster": "West",
+   "2025": 46.5,
+   "2030": 48.9,
+   "2035": 50.98,
+   "2040": 52.96,
+   "2045": 54.87,
+   "2050": 56.73,
+   "toelichting": "Fictief. CBS-prognose hoog; verbruik 130 l p.p.p.d.; gematigde opwarming (+1 °C)."
+  },
+  {
+   "scenario": "Hoog",
+   "cluster": "Zuid",
+   "2025": 16.6,
+   "2030": 17.22,
+   "2035": 17.76,
+   "2040": 18.28,
+   "2045": 18.77,
+   "2050": 19.26,
+   "toelichting": ""
+  },
+  {
+   "scenario": "Hoog",
+   "cluster": "Midden",
+   "2025": 32.5,
+   "2030": 34.03,
+   "2035": 35.35,
+   "2040": 36.6,
+   "2045": 37.82,
+   "2050": 39.0,
+   "toelichting": ""
+  },
+  {
+   "scenario": "Hoog",
+   "cluster": "Oost",
+   "2025": 14.6,
+   "2030": 15.22,
+   "2035": 15.75,
+   "2040": 16.26,
+   "2045": 16.75,
+   "2050": 17.23,
+   "toelichting": ""
+  },
+  {
+   "scenario": "Hoog",
+   "cluster": "Noord",
+   "2025": 28.0,
+   "2030": 29.58,
+   "2035": 30.95,
+   "2040": 32.24,
+   "2045": 33.5,
+   "2050": 34.72,
+   "toelichting": ""
+  },
+  {
+   "scenario": "Hoog + warm",
+   "cluster": "West",
+   "2025": 46.5,
+   "2030": 49.86,
+   "2035": 52.78,
+   "2040": 55.54,
+   "2045": 58.22,
+   "2050": 60.82,
+   "toelichting": "Fictief. CBS-prognose hoog; verbruik 132 l p.p.p.d.; warm en droog (+2 °C), meer vraag in droge zomers."
+  },
+  {
+   "scenario": "Hoog + warm",
+   "cluster": "Zuid",
+   "2025": 16.6,
+   "2030": 17.47,
+   "2035": 18.23,
+   "2040": 18.95,
+   "2045": 19.64,
+   "2050": 20.32,
+   "toelichting": ""
+  },
+  {
+   "scenario": "Hoog + warm",
+   "cluster": "Midden",
+   "2025": 32.5,
+   "2030": 34.64,
+   "2035": 36.49,
+   "2040": 38.25,
+   "2045": 39.94,
+   "2050": 41.6,
+   "toelichting": ""
+  },
+  {
+   "scenario": "Hoog + warm",
+   "cluster": "Oost",
+   "2025": 14.6,
+   "2030": 15.46,
+   "2035": 16.21,
+   "2040": 16.92,
+   "2045": 17.61,
+   "2050": 18.28,
+   "toelichting": ""
+  },
+  {
+   "scenario": "Hoog + warm",
+   "cluster": "Noord",
+   "2025": 28.0,
+   "2030": 30.21,
+   "2035": 32.12,
+   "2040": 33.94,
+   "2045": 35.7,
+   "2050": 37.41,
+   "toelichting": ""
   }
- },
- "vraag": {
-  "1": {
-   "noordrand": {
-    "2025": 16.0,
-    "2030": 16.6,
-    "2035": 17.1,
-    "2040": 17.7,
-    "2045": 18.4,
-    "2050": 19.0
-   },
-   "middengebied": {
-    "2025": 15.0,
-    "2030": 15.5,
-    "2035": 16.1,
-    "2040": 16.6,
-    "2045": 17.2,
-    "2050": 17.8
-   },
-   "zuidoever": {
-    "2025": 13.0,
-    "2030": 13.5,
-    "2035": 13.9,
-    "2040": 14.4,
-    "2045": 14.9,
-    "2050": 15.4
-   }
-  },
-  "2": {
-   "noordrand": {
-    "2025": 16.0,
-    "2030": 16.9,
-    "2035": 17.8,
-    "2040": 18.8,
-    "2045": 19.8,
-    "2050": 20.9
-   },
-   "middengebied": {
-    "2025": 15.0,
-    "2030": 15.8,
-    "2035": 16.7,
-    "2040": 17.6,
-    "2045": 18.6,
-    "2050": 19.6
-   },
-   "zuidoever": {
-    "2025": 13.0,
-    "2030": 13.7,
-    "2035": 14.5,
-    "2040": 15.3,
-    "2045": 16.1,
-    "2050": 17.0
-   }
-  },
-  "3": {
-   "noordrand": {
-    "2025": 16.0,
-    "2030": 16.1,
-    "2035": 16.2,
-    "2040": 16.2,
-    "2045": 16.3,
-    "2050": 16.4
-   },
-   "middengebied": {
-    "2025": 15.0,
-    "2030": 15.1,
-    "2035": 15.2,
-    "2040": 15.2,
-    "2045": 15.3,
-    "2050": 15.4
-   },
-   "zuidoever": {
-    "2025": 13.0,
-    "2030": 13.1,
-    "2035": 13.1,
-    "2040": 13.2,
-    "2045": 13.3,
-    "2050": 13.3
-   }
-  },
-  "4": {
-   "noordrand": {
-    "2025": 16.0,
-    "2030": 16.4,
-    "2035": 16.8,
-    "2040": 17.2,
-    "2045": 17.7,
-    "2050": 18.1
-   },
-   "middengebied": {
-    "2025": 15.0,
-    "2030": 15.4,
-    "2035": 15.8,
-    "2040": 16.2,
-    "2045": 16.6,
-    "2050": 17.0
-   },
-   "zuidoever": {
-    "2025": 13.0,
-    "2030": 13.3,
-    "2035": 13.7,
-    "2040": 14.0,
-    "2045": 14.3,
-    "2050": 14.7
-   }
-  }
- },
+ ],
  "maatregelen": [
   {
    "id": "besparing-huishoudens",
@@ -748,19 +490,14 @@
    "leverancier": "Vitens",
    "soort": "waterbesparing",
    "spoor": "S0",
-   "narratieven": [
-    1,
-    2,
-    3,
-    4
-   ],
    "standaard_aan": true,
    "status": "besloten",
-   "locatie": null,
-   "gemeente": null,
+   "winning": null,
    "cluster": "alle",
+   "gemeente": null,
+   "locatie": null,
    "bron": null,
-   "volume": 2.0,
+   "volume": 6.0,
    "ruimtebeslag": null,
    "stroomvraag": null,
    "ingangsjaar": 2030,
@@ -777,8 +514,8 @@
    },
    "meta": {
     "aangeleverd_door": "J. Voorbeeld (fictief)",
-    "datum": "2026-11-10",
-    "bron": "Fictief projectenoverzicht"
+    "datum": "2026-11-12",
+    "bron": "Fictief overzicht maatregelen"
    }
   },
   {
@@ -788,42 +525,32 @@
    "leverancier": "Vitens",
    "soort": "waterbesparing",
    "spoor": "S0",
-   "narratieven": [
-    1,
-    2,
-    3,
-    4
-   ],
-   "standaard_aan": false,
+   "standaard_aan": true,
    "status": "verkenning",
-   "locatie": null,
-   "gemeente": null,
+   "winning": null,
    "cluster": "alle",
+   "gemeente": null,
+   "locatie": null,
    "bron": null,
-   "volume": 1.0,
+   "volume": 2.0,
    "ruimtebeslag": null,
    "stroomvraag": null,
    "ingangsjaar": 2035,
    "voetafdruk": null,
    "overige_effecten": {
-    "politiek": "Bedrijven vragen om een overgangstermijn.",
+    "politiek": "Bedrijven vragen een overgangstermijn.",
     "lijst": [
      {
       "label": "Bedrijven",
       "beoordeling": "aandacht",
       "tekst": "Investering in hergebruik nodig."
-     },
-     {
-      "label": "Economie",
-      "beoordeling": "kans",
-      "tekst": "Minder afhankelijk van drinkwater."
      }
     ]
    },
    "meta": {
     "aangeleverd_door": "J. Voorbeeld (fictief)",
-    "datum": "2026-11-10",
-    "bron": "Fictief projectenoverzicht"
+    "datum": "2026-11-12",
+    "bron": "Fictief overzicht maatregelen"
    }
   },
   {
@@ -833,23 +560,20 @@
    "leverancier": "Vitens",
    "soort": "waterbesparing",
    "spoor": "S0",
-   "narratieven": [
-    1,
-    2
-   ],
    "standaard_aan": false,
    "status": "idee",
-   "locatie": null,
-   "gemeente": null,
+   "winning": null,
    "cluster": "alle",
+   "gemeente": null,
+   "locatie": null,
    "bron": null,
-   "volume": 0.6,
+   "volume": 1.0,
    "ruimtebeslag": null,
    "stroomvraag": null,
    "ingangsjaar": 2032,
    "voetafdruk": null,
    "overige_effecten": {
-    "politiek": "Nog niet besproken.",
+    "politiek": "",
     "lijst": [
      {
       "label": "Privacy",
@@ -860,36 +584,144 @@
    },
    "meta": {
     "aangeleverd_door": "J. Voorbeeld (fictief)",
-    "datum": "2026-11-10",
-    "bron": "Fictief projectenoverzicht"
+    "datum": "2026-11-12",
+    "bron": "Fictief overzicht maatregelen"
    }
   },
   {
-   "id": "renovatie-veenwijk-west",
-   "naam": "Renovatie Veenwijk West",
-   "omschrijving": "Vervangen van putten en zuivering zodat de winning in bedrijf blijft.",
+   "id": "afname-schaapsdrift",
+   "naam": "Sluiting Schaapsdrift (natuur)",
+   "omschrijving": "Winning sluit om verdroging van het nabije natuurgebied te stoppen.",
+   "leverancier": "Vitens",
+   "soort": "afname",
+   "spoor": "S1",
+   "standaard_aan": true,
+   "status": "besloten",
+   "winning": "Schaapsdrift",
+   "cluster": "West",
+   "gemeente": null,
+   "locatie": null,
+   "bron": null,
+   "volume": 2.0,
+   "ruimtebeslag": null,
+   "stroomvraag": null,
+   "ingangsjaar": 2030,
+   "voetafdruk": null,
+   "overige_effecten": {
+    "politiek": "",
+    "lijst": []
+   },
+   "meta": {
+    "aangeleverd_door": "J. Voorbeeld (fictief)",
+    "datum": "2026-11-12",
+    "bron": "Fictief overzicht maatregelen"
+   }
+  },
+  {
+   "id": "afname-eikenrode",
+   "naam": "Lagere vergunning Eikenrode",
+   "omschrijving": "Vergunning wordt verlaagd vanwege landbouwschade.",
+   "leverancier": "Vitens",
+   "soort": "afname",
+   "spoor": "S1",
+   "standaard_aan": true,
+   "status": "verkenning",
+   "winning": "Eikenrode",
+   "cluster": "Midden",
+   "gemeente": null,
+   "locatie": null,
+   "bron": null,
+   "volume": 2.5,
+   "ruimtebeslag": null,
+   "stroomvraag": null,
+   "ingangsjaar": 2035,
+   "voetafdruk": null,
+   "overige_effecten": {
+    "politiek": "",
+    "lijst": []
+   },
+   "meta": {
+    "aangeleverd_door": "J. Voorbeeld (fictief)",
+    "datum": "2026-11-12",
+    "bron": "Fictief overzicht maatregelen"
+   }
+  },
+  {
+   "id": "afname-kavel-zeven",
+   "naam": "Einde levensduur Kavel Zeven",
+   "omschrijving": "Zuivering is aan het einde van de levensduur en sluit.",
+   "leverancier": "Vitens",
+   "soort": "afname",
+   "spoor": "S1",
+   "standaard_aan": true,
+   "status": "verkenning",
+   "winning": "Kavel Zeven",
+   "cluster": "Noord",
+   "gemeente": null,
+   "locatie": null,
+   "bron": null,
+   "volume": 5.0,
+   "ruimtebeslag": null,
+   "stroomvraag": null,
+   "ingangsjaar": 2040,
+   "voetafdruk": null,
+   "overige_effecten": {
+    "politiek": "",
+    "lijst": []
+   },
+   "meta": {
+    "aangeleverd_door": "J. Voorbeeld (fictief)",
+    "datum": "2026-11-12",
+    "bron": "Fictief overzicht maatregelen"
+   }
+  },
+  {
+   "id": "afname-heidepoort",
+   "naam": "Verontreiniging Heidepoort",
+   "omschrijving": "Toenemende verontreiniging; een deel van de putten valt weg.",
+   "leverancier": "Vitens",
+   "soort": "afname",
+   "spoor": "S1",
+   "standaard_aan": true,
+   "status": "idee",
+   "winning": "Heidepoort",
+   "cluster": "Zuid",
+   "gemeente": null,
+   "locatie": null,
+   "bron": null,
+   "volume": 1.5,
+   "ruimtebeslag": null,
+   "stroomvraag": null,
+   "ingangsjaar": 2045,
+   "voetafdruk": null,
+   "overige_effecten": {
+    "politiek": "",
+    "lijst": []
+   },
+   "meta": {
+    "aangeleverd_door": "J. Voorbeeld (fictief)",
+    "datum": "2026-11-12",
+    "bron": "Fictief overzicht maatregelen"
+   }
+  },
+  {
+   "id": "herbouw-kavel-zeven",
+   "naam": "Herbouw zuivering Kavel Zeven",
+   "omschrijving": "Nieuwe zuivering op hetzelfde terrein, zodat de winning in bedrijf blijft.",
    "leverancier": "Vitens",
    "soort": "waterlevering",
    "spoor": "S1",
-   "narratieven": [
-    1,
-    2,
-    3,
-    4
-   ],
    "standaard_aan": true,
-   "status": "besloten",
-   "locatie": {
-    "lat": 52.08,
-    "lon": 5.17
-   },
-   "gemeente": "Veenwijk",
-   "cluster": "middengebied",
+   "status": "verkenning",
+   "winning": "Kavel Zeven",
+   "cluster": "Noord",
+   "gemeente": null,
+   "locatie": null,
    "bron": "grondwater",
-   "volume": 1.5,
-   "ruimtebeslag": 0.5,
-   "stroomvraag": 0.4,
-   "ingangsjaar": 2038,
+   "volume": 5.0,
+   "ruimtebeslag": 1.5,
+   "stroomvraag": 0.8,
+   "ingangsjaar": 2042,
    "voetafdruk": {
     "grondwater": {
      "beoordeling": "geen effect",
@@ -918,56 +750,48 @@
      {
       "label": "Bouwverkeer",
       "beoordeling": "aandacht",
-      "tekst": "Twee jaar bouwverkeer door de kern."
+      "tekst": "Twee jaar bouwverkeer."
      }
     ]
    },
    "meta": {
     "aangeleverd_door": "J. Voorbeeld (fictief)",
-    "datum": "2026-11-10",
-    "bron": "Fictief projectenoverzicht"
+    "datum": "2026-11-12",
+    "bron": "Fictief overzicht maatregelen"
    }
   },
   {
-   "id": "herstel-bronhuizen",
-   "naam": "Herstel putten Bronhuizen",
-   "omschrijving": "Nieuwe putten op het bestaande terrein tegen verstopping.",
+   "id": "uitbreiding-wolfsberg",
+   "naam": "Uitbreiding Wolfsberg",
+   "omschrijving": "Extra putten en een zuiveringsstraat op het bestaande terrein.",
    "leverancier": "Vitens",
    "soort": "waterlevering",
-   "spoor": "S1",
-   "narratieven": [
-    1,
-    2,
-    3,
-    4
-   ],
-   "standaard_aan": false,
+   "spoor": "S2",
+   "standaard_aan": true,
    "status": "verkenning",
-   "locatie": {
-    "lat": 52.1,
-    "lon": 5.0
-   },
-   "gemeente": "Bronhuizen",
-   "cluster": "middengebied",
+   "winning": "Wolfsberg",
+   "cluster": "Oost",
+   "gemeente": null,
+   "locatie": null,
    "bron": "grondwater",
-   "volume": 1.0,
-   "ruimtebeslag": 0.2,
-   "stroomvraag": 0.2,
-   "ingangsjaar": 2033,
+   "volume": 3.0,
+   "ruimtebeslag": 2.0,
+   "stroomvraag": 1.0,
+   "ingangsjaar": 2034,
    "voetafdruk": {
     "grondwater": {
-     "beoordeling": "geen effect",
-     "toelichting": "Geen extra onttrekking.",
+     "beoordeling": "beperkt",
+     "toelichting": "Verlaging tot enkele centimeters.",
      "bron": "Fictieve quickscan"
     },
     "beschermingszone": {
      "beoordeling": "in of grenst aan",
-     "toelichting": "Bestaande winning in de zone.",
+     "toelichting": "Zone wordt iets groter.",
      "bron": "Fictieve quickscan"
     },
     "natura2000": {
-     "beoordeling": "geen invloed",
-     "toelichting": "Geen gebied in de buurt.",
+     "beoordeling": "mogelijk",
+     "toelichting": "Natura 2000-gebied op 2 km.",
      "bron": "Fictieve quickscan"
     },
     "netcapaciteit": {
@@ -977,107 +801,36 @@
     }
    },
    "overige_effecten": {
-    "politiek": "Geen bezwaren bekend.",
-    "lijst": []
-   },
-   "meta": {
-    "aangeleverd_door": "J. Voorbeeld (fictief)",
-    "datum": "2026-11-10",
-    "bron": "Fictief projectenoverzicht"
-   }
-  },
-  {
-   "id": "uitbreiding-rivierstad",
-   "naam": "Uitbreiding Rivierstad",
-   "omschrijving": "Extra zuiveringsstraat op de bestaande locatie.",
-   "leverancier": "Vitens",
-   "soort": "waterlevering",
-   "spoor": "S2",
-   "narratieven": [
-    1,
-    2,
-    3,
-    4
-   ],
-   "standaard_aan": true,
-   "status": "verkenning",
-   "locatie": {
-    "lat": 51.96,
-    "lon": 5.1
-   },
-   "gemeente": "Rivierstad",
-   "cluster": "zuidoever",
-   "bron": "oevergrondwater",
-   "volume": 3.0,
-   "ruimtebeslag": 2.0,
-   "stroomvraag": 1.2,
-   "ingangsjaar": 2034,
-   "voetafdruk": {
-    "grondwater": {
-     "beoordeling": "beperkt",
-     "toelichting": "Verlaging tot enkele centimeters.",
-     "bron": "Fictieve quickscan"
-    },
-    "beschermingszone": {
-     "beoordeling": "buiten",
-     "toelichting": "Ligt buiten de zones.",
-     "bron": "Fictieve quickscan"
-    },
-    "natura2000": {
-     "beoordeling": "mogelijk",
-     "toelichting": "Uiterwaard op 1,5 km.",
-     "bron": "Fictieve quickscan"
-    },
-    "netcapaciteit": {
-     "beoordeling": "krap",
-     "toelichting": "Aansluiting na netverzwaring.",
-     "bron": "Fictieve quickscan"
-    }
-   },
-   "overige_effecten": {
-    "politiek": "Gemeente wil afspraken over de uiterwaard.",
+    "politiek": "",
     "lijst": [
      {
-      "label": "Recreatie",
-      "beoordeling": "kans",
-      "tekst": "Nieuw wandelpad langs het terrein."
-     },
-     {
-      "label": "Landbouw",
+      "label": "Natuur",
       "beoordeling": "aandacht",
-      "tekst": "Mogelijke droogteschade op naastgelegen percelen."
+      "tekst": "Monitoring van het nabije bos nodig."
      }
     ]
    },
    "meta": {
     "aangeleverd_door": "J. Voorbeeld (fictief)",
-    "datum": "2026-11-10",
-    "bron": "Fictief projectenoverzicht"
+    "datum": "2026-11-12",
+    "bron": "Fictief overzicht maatregelen"
    }
   },
   {
-   "id": "uitbreiding-duinrode",
-   "naam": "Uitbreiding Duinrode",
+   "id": "uitbreiding-lindewaard",
+   "naam": "Uitbreiding Lindewaard",
    "omschrijving": "Vergroten van de vergunning op de bestaande locatie.",
    "leverancier": "Vitens",
    "soort": "waterlevering",
    "spoor": "S2",
-   "narratieven": [
-    1,
-    2,
-    3,
-    4
-   ],
    "standaard_aan": false,
    "status": "idee",
-   "locatie": {
-    "lat": 52.15,
-    "lon": 5.4
-   },
-   "gemeente": "Duinrode",
-   "cluster": "noordrand",
+   "winning": "Lindewaard",
+   "cluster": "West",
+   "gemeente": null,
+   "locatie": null,
    "bron": "grondwater",
-   "volume": 2.0,
+   "volume": 2.5,
    "ruimtebeslag": 1.0,
    "stroomvraag": 0.6,
    "ingangsjaar": 2036,
@@ -1120,36 +873,31 @@
    },
    "meta": {
     "aangeleverd_door": "J. Voorbeeld (fictief)",
-    "datum": "2026-11-10",
-    "bron": "Fictief projectenoverzicht"
+    "datum": "2026-11-12",
+    "bron": "Fictief overzicht maatregelen"
    }
   },
   {
-   "id": "winning-heuvelbroek-zuid",
-   "naam": "Nieuwe winning Heuvelbroek Zuid",
-   "omschrijving": "Nieuwe grondwaterwinning met zuivering ten zuiden van Heuvelbroek.",
+   "id": "winning-veldhoven-oost",
+   "naam": "Nieuwe winning Veldhoven-Oost",
+   "omschrijving": "Nieuwe grondwaterwinning met zuivering in het oosten van cluster Midden.",
    "leverancier": "Vitens",
    "soort": "waterlevering",
    "spoor": "S3",
-   "narratieven": [
-    1,
-    2,
-    3,
-    4
-   ],
    "standaard_aan": true,
    "status": "verkenning",
+   "winning": null,
+   "cluster": "Midden",
+   "gemeente": "Veldhoven-Oost",
    "locatie": {
-    "lat": 51.99,
-    "lon": 5.48
+    "lat": 52.17,
+    "lon": 5.47
    },
-   "gemeente": "Heuvelbroek",
-   "cluster": "zuidoever",
    "bron": "grondwater",
-   "volume": 4.0,
+   "volume": 6.0,
    "ruimtebeslag": 12.0,
    "stroomvraag": 1.8,
-   "ingangsjaar": 2040,
+   "ingangsjaar": 2038,
    "voetafdruk": {
     "grondwater": {
      "beoordeling": "beperkt",
@@ -1194,31 +942,26 @@
    },
    "meta": {
     "aangeleverd_door": "J. Voorbeeld (fictief)",
-    "datum": "2026-11-10",
-    "bron": "Fictief projectenoverzicht"
+    "datum": "2026-11-12",
+    "bron": "Fictief overzicht maatregelen"
    }
   },
   {
-   "id": "oeverwinning-waterdorp",
-   "naam": "Oeverwinning Waterdorp",
-   "omschrijving": "Nieuwe oevergrondwaterwinning langs de plas.",
+   "id": "oeverwinning-westmeer",
+   "naam": "Oeverwinning Westmeer",
+   "omschrijving": "Nieuwe oevergrondwaterwinning langs het meer.",
    "leverancier": "Vitens",
    "soort": "waterlevering",
    "spoor": "S3",
-   "narratieven": [
-    1,
-    2,
-    3,
-    4
-   ],
    "standaard_aan": false,
    "status": "idee",
+   "winning": null,
+   "cluster": "West",
+   "gemeente": "Westmeer",
    "locatie": {
-    "lat": 52.17,
-    "lon": 5.28
+    "lat": 52.1,
+    "lon": 4.82
    },
-   "gemeente": "Waterdorp",
-   "cluster": "noordrand",
    "bron": "oevergrondwater",
    "volume": 5.0,
    "ruimtebeslag": 15.0,
@@ -1227,17 +970,17 @@
    "voetafdruk": {
     "grondwater": {
      "beoordeling": "beperkt",
-     "toelichting": "Vooral invloed op het peil van de plas.",
+     "toelichting": "Vooral invloed op het peil van het meer.",
      "bron": "Fictieve quickscan"
     },
     "beschermingszone": {
      "beoordeling": "in of grenst aan",
-     "toelichting": "Nieuwe zone rond de plas.",
+     "toelichting": "Nieuwe zone rond het meer.",
      "bron": "Fictieve quickscan"
     },
     "natura2000": {
      "beoordeling": "waarschijnlijk",
-     "toelichting": "Plas is beschermd gebied.",
+     "toelichting": "Meer is beschermd gebied.",
      "bron": "Fictieve quickscan"
     },
     "netcapaciteit": {
@@ -1247,47 +990,39 @@
     }
    },
    "overige_effecten": {
-    "politiek": "Nog geen standpunt.",
+    "politiek": "",
     "lijst": [
      {
       "label": "Recreatie",
       "beoordeling": "knelpunt",
       "tekst": "Deel van de oever niet meer toegankelijk."
-     },
-     {
-      "label": "Natuur",
-      "beoordeling": "aandacht",
-      "tekst": "Onderzoek naar effect op de plas nodig."
      }
     ]
    },
    "meta": {
     "aangeleverd_door": "J. Voorbeeld (fictief)",
-    "datum": "2026-11-10",
-    "bron": "Fictief projectenoverzicht"
+    "datum": "2026-11-12",
+    "bron": "Fictief overzicht maatregelen"
    }
   },
   {
-   "id": "oppervlaktewater-rivierstad",
-   "naam": "Oppervlaktewater Rivierstad",
-   "omschrijving": "Inname en zuivering van rivierwater.",
+   "id": "oppervlaktewater-noord",
+   "naam": "Oppervlaktewater Noordvaart",
+   "omschrijving": "Inname en zuivering van water uit de Noordvaart.",
    "leverancier": "Vitens",
    "soort": "waterlevering",
    "spoor": "S3",
-   "narratieven": [
-    1,
-    2
-   ],
    "standaard_aan": false,
    "status": "idee",
+   "winning": null,
+   "cluster": "Noord",
+   "gemeente": "Noordvaart",
    "locatie": {
-    "lat": 51.95,
-    "lon": 5.15
+    "lat": 52.5,
+    "lon": 5.66
    },
-   "gemeente": "Rivierstad",
-   "cluster": "zuidoever",
    "bron": "oppervlaktewater",
-   "volume": 6.0,
+   "volume": 10.0,
    "ruimtebeslag": 20.0,
    "stroomvraag": 4.0,
    "ingangsjaar": 2045,
@@ -1304,7 +1039,7 @@
     },
     "natura2000": {
      "beoordeling": "mogelijk",
-     "toelichting": "Uiterwaard naast het innamepunt.",
+     "toelichting": "Natuurgebied langs de vaart.",
      "bron": "Fictieve quickscan"
     },
     "netcapaciteit": {
@@ -1314,7 +1049,7 @@
     }
    },
    "overige_effecten": {
-    "politiek": "Past in de regionale strategie, kosten zijn een zorg.",
+    "politiek": "Past in de regionale strategie; kosten zijn een zorg.",
     "lijst": [
      {
       "label": "Energie",
@@ -1330,8 +1065,61 @@
    },
    "meta": {
     "aangeleverd_door": "J. Voorbeeld (fictief)",
-    "datum": "2026-11-10",
-    "bron": "Fictief projectenoverzicht"
+    "datum": "2026-11-12",
+    "bron": "Fictief overzicht maatregelen"
+   }
+  },
+  {
+   "id": "oasen-levering-west",
+   "naam": "Levering Oasen naar West",
+   "omschrijving": "Water van een buurbedrijf via een nieuwe verbinding.",
+   "leverancier": "Oasen",
+   "soort": "waterlevering",
+   "spoor": "S3",
+   "standaard_aan": true,
+   "status": "idee",
+   "winning": null,
+   "cluster": "West",
+   "gemeente": "Grensdorp",
+   "locatie": {
+    "lat": 51.99,
+    "lon": 4.86
+   },
+   "bron": "overig",
+   "volume": 2.0,
+   "ruimtebeslag": 0.5,
+   "stroomvraag": 0.3,
+   "ingangsjaar": 2035,
+   "voetafdruk": {
+    "grondwater": {
+     "beoordeling": "geen effect",
+     "toelichting": "Geen extra onttrekking.",
+     "bron": "Fictieve quickscan"
+    },
+    "beschermingszone": {
+     "beoordeling": "buiten",
+     "toelichting": "Ligt buiten de zones.",
+     "bron": "Fictieve quickscan"
+    },
+    "natura2000": {
+     "beoordeling": "geen invloed",
+     "toelichting": "Geen gebied in de buurt.",
+     "bron": "Fictieve quickscan"
+    },
+    "netcapaciteit": {
+     "beoordeling": "voldoende",
+     "toelichting": "Bestaande aansluiting volstaat.",
+     "bron": "Fictieve quickscan"
+    }
+   },
+   "overige_effecten": {
+    "politiek": "",
+    "lijst": []
+   },
+   "meta": {
+    "aangeleverd_door": "J. Voorbeeld (fictief)",
+    "datum": "2026-11-12",
+    "bron": "Fictief overzicht maatregelen"
    }
   }
  ]

@@ -38,3 +38,7 @@ Versie 1 bouwt alleen wat in de opdracht staat. Alles hieronder is bewust uitges
 - **Officieel Vitens-logo als svg** (`assets/vitens-logo.svg`). Nu: tijdelijk png uit het voorbeeld.
 - **Status ook met een icoon** in plaats van alleen kleur plus tekst (de huisstijl vraagt: nooit alleen kleur). Nu: kleur met het woord erbij in de lijst en de legenda; de pins op de kaart hebben alleen kleur.
 - **Bandbreedte van de vraag** in de grafiek (staat in de huisstijlreferentie, zit niet in het model).
+- **Werkdocument weer koppelen** (OPEN-VRAGEN J8): converter naar schema 2, acceptatietests terug. Mogelijk ook de reductiefactoren als bron voor afnames per winning.
+- **Vraag opbouwen uit inwoners × verbruik** (CBS-bevolkingsprognose × liter p.p.p.d. + zakelijk) in plaats van een kant-en-klare reeks per cluster.
+- **Vraagfactoren instelbaar** (schuifjes voor groei, verbruik, temperatuur) naast de vaste scenario's.
+- **Keuzelijsten ook in het volledige template** (nu alleen in het maatregelen-template).

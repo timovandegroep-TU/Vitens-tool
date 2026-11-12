@@ -1,6 +1,6 @@
 // Paneel DRINKWATEROPGAVE: zichtjaar, grafiek, tabel, legenda en dekkingsbalk (uit de mockup).
 import { el } from '../dom.js';
-import { JAAR_MIN, JAAR_MAX, NU, AANBODJAREN, VRAAGJAREN, isDatapunt } from '../model.js';
+import { JAAR_MIN, JAAR_MAX, NU, VRAAGJAREN, isDatapunt, clusters } from '../model.js';
 import { AFSPEEL_MS, RESERVE_FACTOR } from '../config.js';
 import { attachTip, showTip, moveTip, hideTip, tipSleutel, esc, f1, kv } from './tooltip.js';
 
@@ -91,7 +91,6 @@ function renderChart() {
   }
   if (sh.zonder) {
     s += `<path d="${pathOf(S.map((c) => [c.jaar, c.aanbod0]))}" fill="none" stroke="#707070" stroke-width="1.7" stroke-dasharray="1.5 3.5" stroke-linecap="round"/>`;
-    s += AANBODJAREN.map((j) => `<circle class="punt" cx="${X(j)}" cy="${Y(app.zicht(j).aanbod0)}" r="2.6" fill="#fff" stroke="#707070" stroke-width="1.4"/>`).join('');
   }
   if (sh.vraag) {
     s += `<path d="${pathOf(tot(vraag))}" fill="none" stroke="var(--vraag)" stroke-width="3" stroke-linecap="round"/>`;
@@ -101,7 +100,6 @@ function renderChart() {
   if (sh.aanbod) {
     s += `<path d="${pathOf(tot(aanbod))}" fill="none" stroke="var(--navy)" stroke-width="3.5" stroke-linecap="round"/>`;
     s += `<path d="${pathOf(vanaf(aanbod))}" fill="none" stroke="var(--navy)" stroke-width="3.5" stroke-dasharray="13 8"/>`;
-    s += AANBODJAREN.map((j) => `<circle class="punt" cx="${X(j)}" cy="${Y(app.zicht(j).aanbod)}" r="3" fill="#fff" stroke="var(--navy)" stroke-width="1.8"/>`).join('');
   }
   // nu-lijn
   s += `<line x1="${X(NU)}" x2="${X(NU)}" y1="${CH.T - 6}" y2="${CH.B}" stroke="var(--navy)" stroke-width="1.6"/>`;
@@ -152,7 +150,7 @@ function chartTip(t) {
   let h = `<div class="th">${t} · ${t <= NU ? 'huidig' : 'projectie'}${app.state.cluster ? ' · ' + esc(app.clusterNaam()) : ''}</div>`;
   if (sh.vraag) h += `<div class="tr">${lkey('#4AAFE0', 3)}<b>${f1(c.vraag)}</b><span>Vraag${soort(dp.vraag)}</span></div>`;
   if (sh.aanbod) h += `<div class="tr">${lkey('#2C3C8A', 3.5)}<b>${f1(c.aanbod)}</b><span>Aanbod${soort(dp.aanbod)}</span></div>`;
-  if (sh.zonder) h += `<div class="tr">${lkey('#707070', 1.7, '1.5 3.5')}<b>${f1(c.aanbod0)}</b><span>Zonder maatregelen</span></div>`;
+  if (sh.zonder) h += `<div class="tr">${lkey('#707070', 1.7, '1.5 3.5')}<b>${f1(c.aanbod0)}</b><span>Bestaand aanbod</span></div>`;
   if (sh.reserve) h += `<div class="tr">${lkey('#56639F', 1.4, '5 3')}<b>${f1(c.vraag * RESERVE_FACTOR)}</b><span>Reservenorm</span></div>`;
   return h + '<div class="sep"></div>' + kv('Vraag zonder besparing', f1(c.vraag0)) + kv('Tekort', `${f1(c.tekort)} Mm³/j`)
     + `<div class="tm" style="margin:4px 0 0">Klik om ${t} als zichtjaar te kiezen</div>`;
@@ -162,7 +160,7 @@ function chartTip(t) {
 const LEG = [
   { k: 'vraag', label: 'Vraag', key: '<svg width="34" height="8"><line x1="1" y1="4" x2="33" y2="4" stroke="#4AAFE0" stroke-width="3" stroke-linecap="round"/></svg>' },
   { k: 'aanbod', label: 'Aanbod', key: '<svg width="34" height="8"><line x1="1" y1="4" x2="33" y2="4" stroke="#2C3C8A" stroke-width="3.5" stroke-linecap="round"/></svg>' },
-  { k: 'zonder', label: 'Zonder maatregelen', key: '<svg width="34" height="8"><line x1="1" y1="4" x2="33" y2="4" stroke="#707070" stroke-width="1.7" stroke-dasharray="1.5 3.5" stroke-linecap="round"/></svg>' },
+  { k: 'zonder', label: 'Bestaand aanbod', key: '<svg width="34" height="8"><line x1="1" y1="4" x2="33" y2="4" stroke="#707070" stroke-width="1.7" stroke-dasharray="1.5 3.5" stroke-linecap="round"/></svg>' },
 ];
 function renderLegend() {
   $('#legend').replaceChildren(...LEG.map((l) => {
@@ -182,12 +180,12 @@ function renderTable() {
   $('#legend').style.visibility = $('#chart').style.visibility = tabel ? 'hidden' : 'visible';
   if (!tabel) return;
   const ys = [...VRAAGJAREN]; if (!ys.includes(app.state.jaar)) { ys.push(app.state.jaar); ys.sort((a, b) => a - b); }
-  let h = '<table><thead><tr><th>Jaar</th><th>Vraag</th><th>Aanbod</th><th>Zonder maatr.</th><th>Opgave</th><th>Maatregelen</th><th>Tekort</th><th>Gedekt</th></tr></thead><tbody>';
+  let h = '<table><thead><tr><th>Jaar</th><th>Vraag</th><th>Aanbod</th><th>Bestaand</th><th>Opgave</th><th>Maatregelen</th><th>Tekort</th><th>Gedekt</th></tr></thead><tbody>';
   for (const y of ys) {
     const c = app.zicht(y);
     h += `<tr class="${y === app.state.jaar ? 'sel' : ''}"><td>${y}</td><td>${f1(c.vraag)}</td><td>${f1(c.aanbod)}</td><td>${f1(c.aanbod0)}</td><td>${c.opgave > 0 ? f1(c.opgave) : '–'}</td><td>${f1(c.bijdrage)}</td><td>${f1(c.tekort)}</td><td>${c.opgave > 0 ? Math.floor(c.gedekt * 100) + '%' : '–'}</td></tr>`;
   }
-  $('#tableView').innerHTML = h + '</tbody></table><div style="font-size:11.5px;color:#707070;margin-top:8px">Alle waarden in Mm³/j · opgave = vraag zonder besparing − aanbod zonder maatregelen</div>';
+  $('#tableView').innerHTML = h + '</tbody></table><div style="font-size:11.5px;color:#707070;margin-top:8px">Alle waarden in Mm³/j · opgave = vraag zonder besparing − bestaand aanbod (na afnames)</div>';
 }
 
 // --------------------------------------------------------- dekkingsbalk
@@ -215,7 +213,7 @@ function renderBar(c) {
 export function bouw(a) {
   app = a;
   const kies = $('#clusterKeuze');
-  kies.replaceChildren(el('option', { value: '', text: 'Totaal' }), ...app.data.clusters.map((c) => el('option', { value: c.id, text: c.naam || c.id })));
+  kies.replaceChildren(el('option', { value: '', text: 'Totaal' }), ...clusters(app.data).map((c) => el('option', { value: c, text: c })));
   kies.addEventListener('change', () => app.kies({ cluster: kies.value || null }));
   $('#zr').addEventListener('input', (e) => { speel(false); app.kies({ jaar: Number(e.target.value) }); });
   $('#play').addEventListener('click', () => speel(!spelend));
@@ -233,8 +231,9 @@ export function bouw(a) {
   attachTip($('#bar'), () => {
     const c = app.zicht(app.state.jaar);
     return `<div class="th">Invulling drinkwateropgave ${c.jaar}${app.state.cluster ? ' · ' + esc(app.clusterNaam()) : ''}</div>`
-      + '<div class="tm">Opgave = vraag zonder besparing − aanbod zonder maatregelen. Gedekt = bijdrage maatregelen ÷ opgave.</div>'
-      + kv('Vraag zonder besparing', f1(c.vraag0)) + kv('Aanbod zonder maatregelen', f1(c.aanbod0))
+      + '<div class="tm">Opgave = vraag zonder besparing − bestaand aanbod (capaciteit van de winningen na afnames). Gedekt = (besparing + extra aanbod) ÷ opgave.</div>'
+      + kv('Vraag zonder besparing', f1(c.vraag0)) + kv('Bestaand aanbod', f1(c.aanbod0))
+      + (c.afname > 0.005 ? kv('waarvan afname bestaand aanbod', f1(c.afname)) : '')
       + kv('Opgave', f1(c.opgave)) + kv('Besparing (vraag)', f1(c.besparing)) + kv('Extra aanbod', f1(c.levering)) + kv('Tekort', f1(c.tekort));
   });
   speel(false);

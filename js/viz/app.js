@@ -1,5 +1,5 @@
 // Visualisatie: laadt de dataset, houdt de stand bij en stuurt de panelen aan.
-import { bereken, standaardAan, JAAR_MIN, JAAR_MAX } from '../model.js';
+import { bereken, standaardAan, scenarios, JAAR_MIN, JAAR_MAX } from '../model.js';
 import { normaliseer, valideer, telling } from '../schema.js';
 import { laadOpgeslagen, controleerDataset } from '../store.js';
 import { START_ZICHTJAAR } from '../config.js';
@@ -24,7 +24,7 @@ fit();
 /** Dataset uit deze browser (ingevoerd op invoer.html); anders het fictieve voorbeeld. */
 async function laadData() {
   const eigen = laadOpgeslagen();
-  if (eigen?.winningen.length && eigen.clusters.length && eigen.narratieven.length) return { data: eigen, voorbeeld: false };
+  if (eigen?.winningen.length && eigen.vraag.length) return { data: eigen, voorbeeld: false };
   const antwoord = await fetch(VOORBEELD);
   if (!antwoord.ok) throw new Error(`${VOORBEELD}: ${antwoord.status}`);
   return { data: normaliseer(controleerDataset(await antwoord.json())), voorbeeld: true };
@@ -43,26 +43,27 @@ function start({ data, voorbeeld }) {
 
   const state = {};
   const begin = () => Object.assign(state, {
-    narratief: data.narratieven[0].id, jaar: START_ZICHTJAAR, cluster: null, aan: standaardAan(data),
+    scenario: scenarios(data)[0]?.id ?? '', jaar: START_ZICHTJAAR, cluster: null, aan: standaardAan(data),
     show: { vraag: true, aanbod: true, zonder: true, reserve: false }, view: 'chart', effecten: 'maatregelen',
   });
   let cache = new Map();
   const app = {
     data, state, geblokkeerd,
     /** Uitkomst van het rekenmodel voor een jaar (gecachet tot de volgende update). */
-    resultaat(jaar = state.jaar) {
-      if (!cache.has(jaar)) {
+    resultaat(jaar = state.jaar, scenario = state.scenario) {
+      const sleutel = `${scenario}|${jaar}`;
+      if (!cache.has(sleutel)) {
         const aan = Object.fromEntries(data.maatregelen.map((m) => [m.id, !!state.aan[m.id] && !geblokkeerd.has(m.id)]));
-        cache.set(jaar, bereken(data, state.narratief, jaar, aan));
+        cache.set(sleutel, bereken(data, scenario, jaar, aan));
       }
-      return cache.get(jaar);
+      return cache.get(sleutel);
     },
     /** Cijfers voor het gekozen beeld (totaal of één cluster) in een jaar. */
-    zicht(jaar) { const r = app.resultaat(jaar); return { ...(state.cluster ? r.clusters[state.cluster] : r.totaal), jaar }; },
-    clusterNaam: () => data.clusters.find((c) => c.id === state.cluster)?.naam ?? state.cluster ?? 'Totaal',
+    zicht(jaar, scenario) { const r = app.resultaat(jaar, scenario); return { ...(state.cluster ? r.clusters[state.cluster] : r.totaal), jaar }; },
+    clusterNaam: () => state.cluster ?? 'Totaal',
     /** Wijzig de stand en teken opnieuw. */
     kies(wijziging) {
-      const lijstAnders = ('narratief' in wijziging && wijziging.narratief !== state.narratief) || ('cluster' in wijziging && wijziging.cluster !== state.cluster);
+      const lijstAnders = 'cluster' in wijziging && wijziging.cluster !== state.cluster;
       Object.assign(state, wijziging);
       state.jaar = Math.max(JAAR_MIN, Math.min(JAAR_MAX, state.jaar));
       if (lijstAnders) { hideTip(); maatregelen.bouw(app); }
@@ -80,7 +81,7 @@ function start({ data, voorbeeld }) {
   // kop: datasetnaam of VOORBEELDDATA, en een waarschuwing bij fouten in de basisdata
   const badge = $('#badge');
   const isVoorbeeld = voorbeeld || data.meta.voorbeelddata;
-  badge.textContent = isVoorbeeld ? 'Voorbeelddata' : data.meta.naam || 'Dataset';
+  badge.textContent = isVoorbeeld ? 'Voorbeelddata' : (data.meta.naam || 'Dataset') + (data.meta.datum_import ? ` · ${data.meta.datum_import.split('-').reverse().join('-')}` : '');
   badge.classList.toggle('naam', !isVoorbeeld);
   badge.title = isVoorbeeld ? 'Alle cijfers, maatregelen en effecten zijn fictief. Voer eigen data in via Invoer.' : `Dataset uit deze browser${data.meta.datum_import ? ', geïmporteerd op ' + data.meta.datum_import.split('-').reverse().join('-') : ''}`;
   if (basisfouten) {

@@ -2,14 +2,12 @@
 /* global XLSX */
 import { el, toon } from './dom.js';
 import { bouwFormulier } from './formulier.js';
-import { PEILJAREN, VRAAGJAREN, AANBODJAREN, factorPeiljaar, samenvatting } from './model.js';
-import {
-  TABELLEN, UITLEG_REDUCTIEFACTOREN, UITLEG_VRAAG, UITLEG_VRAAG_KOLOMMEN, SPOREN, legeDataset, normaliseer, valideer, telling, nieuweMaatregel,
-} from './schema.js';
+import { VRAAGJAREN, samenvatting, scenarios } from './model.js';
+import { TABELLEN, SPOREN, legeDataset, normaliseer, valideer, telling, nieuweMaatregel } from './schema.js';
 import {
   bewaar, laadOpgeslagen, wisOpgeslagen, leesGetal, leesJaNee, naarWerkboek, werkboekNaarBladen, vanBladen,
   leegTemplate, bestandsnaam, isMaatregelenBestand, maatregelenUitBladen, voegMaatregelenSamen,
-  controleerDataset, zonderScheidingskolommen, stripScheidingskolommen, maatregelenTemplate,
+  controleerDataset, maatregelenTemplate,
 } from './store.js';
 
 const $ = (s) => document.querySelector(s);
@@ -19,32 +17,16 @@ const vandaag = () => new Date().toISOString().slice(0, 10);
 let data = laadOpgeslagen() ?? legeDataset();
 let meldingen = [];
 let tab = 'winningen';
-let rfNarratief = 1;
 let vFilter = 'alle';
 let formulier = null;          // { id } = bewerken, { nieuw: true } = nieuw, null = overzicht
 
 const TABS = [
   ...TABELLEN.map((t) => ({ id: t.id, label: t.blad, tabel: (m) => m.tabel === t.blad })),
-  { id: 'reductiefactoren', label: 'Reductiefactoren', tabel: (m) => m.tabel.startsWith('Reductiefactoren') },
-  { id: 'vraag', label: 'Vraag', tabel: (m) => m.tabel === 'Vraag' },
   { id: 'maatregelen', label: 'Maatregelen', tabel: (m) => m.tabel === 'Maatregelen' },
 ];
 
-/** Vul reductiefactoren en vraag aan voor nieuwe winningen/criteria/clusters (verwijdert niets). */
-function vulAan() {
-  for (const n of data.narratieven) {
-    const rf = (data.reductiefactoren[n.id] ??= {}), vr = (data.vraag[n.id] ??= {});
-    for (const w of data.winningen) for (const c of data.criteria) ((rf[w.id] ??= {})[c.id] ??= [null, null, null]);
-    for (const c of data.clusters) {
-      const rij = (vr[c.id] ??= {});
-      for (const j of VRAAGJAREN) rij[j] ??= null;
-    }
-  }
-}
-
 let timer = null;
 function gewijzigd({ opnieuw = false } = {}) {
-  vulAan();
   bewaar(data);
   clearTimeout(timer);
   if (opnieuw) { hervalideer(); renderPaneel(); } else timer = setTimeout(hervalideer, 250);
@@ -56,25 +38,6 @@ function hervalideer() {
 function status(tekst) {
   $('#status').textContent = tekst;
   clearTimeout(status.t); status.t = setTimeout(() => { $('#status').textContent = ''; }, 6000);
-}
-
-// -------------------------------------------------------- id's hernoemen
-/** Bij het wijzigen van een id verhuizen de gekoppelde gegevens mee. */
-function hernoem(tabelId, oud, nieuw) {
-  if (oud === nieuw || nieuw == null || nieuw === '' || oud == null || oud === '') return;
-  const verplaats = (obj) => { if (obj && oud in obj && !(nieuw in obj)) { obj[nieuw] = obj[oud]; delete obj[oud]; } };
-  if (tabelId === 'winningen') Object.values(data.reductiefactoren).forEach(verplaats);
-  if (tabelId === 'criteria') Object.values(data.reductiefactoren).forEach((perW) => Object.values(perW).forEach(verplaats));
-  if (tabelId === 'clusters') {
-    Object.values(data.vraag).forEach(verplaats);
-    for (const lijst of [data.gemeenten, data.winningen, data.maatregelen]) for (const x of lijst) if (x.cluster === oud) x.cluster = nieuw;
-  }
-  if (tabelId === 'gemeenten') for (const lijst of [data.winningen, data.maatregelen]) for (const x of lijst) if (x.gemeente === oud) x.gemeente = nieuw;
-}
-function verwijderGekoppeld(tabelId, id) {
-  if (tabelId === 'winningen') Object.values(data.reductiefactoren).forEach((perW) => delete perW[id]);
-  if (tabelId === 'criteria') Object.values(data.reductiefactoren).forEach((perW) => Object.values(perW).forEach((perC) => delete perC[id]));
-  if (tabelId === 'clusters') Object.values(data.vraag).forEach((perC) => delete perC[id]);
 }
 
 // ------------------------------------------------------- generiek raster
@@ -157,15 +120,10 @@ function lees(type, ruw) {
 function plak(ev) {
   const td = ev.target.closest('td[data-r]');
   const tekst = ev.clipboardData?.getData('text/plain') ?? '';
-  let blok = tekst.replace(/\r?\n$/, '').split(/\r?\n/).map((r) => r.split('\t'));
+  const blok = tekst.replace(/\r?\n$/, '').split(/\r?\n/).map((r) => r.split('\t'));
   if (!td || !raster || (blok.length === 1 && blok[0].length === 1)) return;   // één cel: gewoon plakken
   ev.preventDefault();
   const r0 = Number(td.dataset.r), c0 = Number(td.dataset.c);
-  let extra = '';
-  if (raster.plakFilter) {
-    const gefilterd = raster.plakFilter(blok, c0);
-    if (gefilterd !== blok) { blok = gefilterd; extra = ' Scheidingskolommen uit de Excel zijn overgeslagen.'; }
-  }
   while (raster.voegToe && raster.aantal < r0 + blok.length) { raster.voegToe(); raster.aantal++; }
   let n = 0, buiten = 0;
   blok.forEach((rij, i) => rij.forEach((ruw, j) => {
@@ -175,7 +133,7 @@ function plak(ev) {
     raster.zet(r, c, ruw); n++;
   }));
   gewijzigd({ opnieuw: true });
-  status(`${n} cellen geplakt` + (buiten ? `, ${buiten} vielen buiten de tabel` : '') + '.' + extra);
+  status(`${n} cellen geplakt` + (buiten ? `, ${buiten} vielen buiten de tabel` : '') + '.');
   $(`td[data-r="${r0}"][data-c="${c0}"] input, td[data-r="${r0}"][data-c="${c0}"] select`)?.focus();
 }
 
@@ -189,34 +147,27 @@ function pijltjes(ev) {
 }
 
 // ------------------------------------------------------------- panelen
-const opties = { clusters: () => data.clusters.map((c) => c.id), gemeenten: () => data.gemeenten.map((g) => g.gemeente) };
-
 function paneelLijst(t) {
   const lijst = data[t.id];
   const kolommen = t.kolommen.map((k) => ({
-    ...k, type: t.vast && k.veld === t.sleutel ? 'berekend' : k.type,   // vast id: niet te wijzigen
-    opties: k.type === 'ref' ? opties[k.ref] : () => k.keuzes,
-    klasse: ['toelichting', 'uitleg'].includes(k.veld) ? 'breed' : ['naam', 'locatie', 'deltascenario', 'id', 'gemeente'].includes(k.veld) ? 'middel' : '',
-    herteken: k.veld === t.sleutel,
+    ...k, opties: () => k.keuzes,
+    klasse: k.veld === 'toelichting' ? 'breed' : ['naam', 'scenario', 'cluster', 'gemeente'].includes(k.veld) ? 'middel' : '',
   }));
-  const nieuw = () => Object.fromEntries(t.kolommen.map((k) => [k.veld, k.type === 'janee' ? k.veld === 'te_controleren' : k.type === 'tekst' ? '' : null]));
+  const nieuw = () => Object.fromEntries(t.kolommen.map((k) => [k.veld, k.type === 'tekst' ? '' : null]));
   const def = {
     tabelnaam: t.blad, kolommen, aantal: lijst.length,
     lees: (r, c) => lijst[r][kolommen[c].veld],
-    zet: (r, c, ruw) => {
-      const k = kolommen[c], v = lees(k.type, ruw);
-      if (k.veld === t.sleutel) hernoem(t.id, lijst[r][k.veld], v);
-      lijst[r][k.veld] = v;
-    },
-    rijId: (r) => String(lijst[r][t.sleutel] ?? ''), veldId: (c) => kolommen[c].veld,
-    voegToe: t.vast ? null : () => lijst.push(nieuw()),
-    verwijder: t.vast ? null : (r) => { verwijderGekoppeld(t.id, lijst[r][t.sleutel]); lijst.splice(r, 1); },
+    zet: (r, c, ruw) => { lijst[r][kolommen[c].veld] = lees(kolommen[c].type, ruw); },
+    rijId: (r) => t.rij(lijst[r]), veldId: (c) => kolommen[c].veld,
+    voegToe: () => lijst.push(nieuw()),
+    verwijder: (r) => lijst.splice(r, 1),
   };
   return [
     el('h2', { text: t.blad }), el('p', { class: 'uitleg', text: t.uitleg }), kolomUitleg(t.kolommen),
     el('div', { class: 'balk' },
-      t.vast ? null : el('button', { class: 'knop', type: 'button', text: '+ Rij toevoegen', onclick: () => { def.voegToe(); gewijzigd({ opnieuw: true }); focusCel(lijst.length - 1, 0); } }),
-      el('span', { class: 'tip', text: `${lijst.length} rijen · plakken uit Excel: selecteer een cel en druk Ctrl+V` + (t.vast ? '' : ' (extra rijen worden toegevoegd)') })),
+      el('button', { class: 'knop', type: 'button', text: '+ Rij toevoegen', onclick: () => { def.voegToe(); gewijzigd({ opnieuw: true }); focusCel(lijst.length - 1, 0); } }),
+      el('span', { class: 'tip', text: `${lijst.length} rijen · plakken uit Excel: selecteer een cel en druk Ctrl+V (extra rijen worden toegevoegd)` }),
+      t.id === 'vraag' ? el('span', { class: 'tip', text: `· scenario's: ${scenarios(data).map((x) => x.naam).join(', ') || '–'}` }) : null),
     lijst.length ? el('div', { class: 'tabelwrap' }, bouwRaster(def)) : (raster = { ...def, aantal: 0 }, el('div', { class: 'leeg', text: 'Nog geen rijen. Voeg een rij toe of importeer een bestand.' })),
   ];
 }
@@ -225,94 +176,6 @@ function kolomUitleg(kolommen) {
   const dl = el('dl');
   for (const k of kolommen) dl.append(el('dt', { text: k.label + (k.eenheid ? ` (${k.eenheid})` : '') }), el('dd', { text: k.uitleg }));
   return el('details', { class: 'kolomuitleg' }, el('summary', { text: 'Uitleg per kolom' }), dl);
-}
-
-function narratiefChips() {
-  return data.narratieven.map((n) => {
-    const t = telling(meldingen.filter((m) => m.tabel === `Reductiefactoren N${n.id}`));
-    return el('button', { class: 'chip', type: 'button', 'aria-pressed': String(n.id === rfNarratief), onclick: () => { rfNarratief = n.id; renderPaneel(); renderValidatie(); } },
-      `${n.id} ${n.naam}`, t.fouten ? el('span', { class: 'badge f', text: t.fouten }) : null, t.waarschuwingen ? el('span', { class: 'badge w', text: t.waarschuwingen }) : null);
-  });
-}
-
-function paneelReductiefactoren() {
-  if (!data.narratieven.some((n) => n.id === rfNarratief)) rfNarratief = data.narratieven[0]?.id ?? 1;
-  const N = rfNarratief, crit = data.criteria, win = data.winningen;
-  const rf = () => (data.reductiefactoren[N] ??= {});
-  const kolommen = [
-    ...crit.flatMap((c) => PEILJAREN.map((j, i) => ({ label: String(j), type: 'getal', groep: c.groep, crit: c, i, uitleg: `${c.naam} – ${j}. ${c.toelichting ?? ''}` }))),
-    ...PEILJAREN.map((j, i) => ({ label: String(j), type: 'berekend', groep: 'Totaal', i, uitleg: `Minimum over alle criteria in ${j} (leeg = 1)` })),
-    ...AANBODJAREN.map((j, i) => ({ label: String(j), type: 'berekend', groep: 'Totaal', aanbod: i, uitleg: `Aanbod in ${j} = capaciteit × factor (Mm³/j)` })),
-  ];
-  const def = {
-    tabelnaam: `Reductiefactoren N${N}`, kolommen, aantal: win.length, rijkopLabel: 'Winning',
-    rijkop: (r) => [win[r].locatie || win[r].id, `${win[r].cluster ?? ''} · ${toon(win[r].capaciteit)} Mm³/j`],
-    groepen: [
-      ...crit.map((c) => ({ label: c.naam, span: 3, klasse: `g-${c.groep}`, uitleg: `${c.groep}: ${c.toelichting ?? ''}` })),
-      { label: 'Factor (minimum)', span: 3, klasse: 'g-Totaal', uitleg: 'Het slechtste criterium bepaalt' },
-      { label: 'Aanbod (Mm³/j)', span: 4, klasse: 'g-Totaal', uitleg: 'Capaciteit × factor' },
-    ],
-    lees: (r, c) => {
-      const k = kolommen[c], w = win[r];
-      if (k.crit) return rf()[w.id]?.[k.crit.id]?.[k.i] ?? null;
-      if (k.aanbod != null) return k.aanbod === 0 ? w.capaciteit : typeof w.capaciteit === 'number' ? w.capaciteit * factorPeiljaar(data, N, w.id, k.aanbod - 1).factor : null;
-      return factorPeiljaar(data, N, w.id, k.i).factor;
-    },
-    zet: (r, c, ruw) => { const k = kolommen[c]; if (k.crit) (((rf()[win[r].id] ??= {})[k.crit.id]) ??= [null, null, null])[k.i] = leesGetal(ruw); },
-    rijId: (r) => win[r].id, veldId: (c) => (kolommen[c].crit ? `${kolommen[c].crit.id} ${kolommen[c].label}` : ''),
-    celklasse: (r, c, v) => (typeof v === 'number' && v < 1 ? 'laag' : ''),
-    // De Excel heeft tussen elke groep van 3 jaren een scheidingskolom (leeg of "x"): die vervalt.
-    // Alleen als het blok op de 2030-kolom van een criterium begint; bij twijfel vragen we het.
-    plakFilter: (blok, c0) => {
-      const invul = crit.length * PEILJAREN.length;
-      if (c0 >= invul || c0 % PEILJAREN.length !== 0) return blok;
-      const uit = zonderScheidingskolommen(blok, invul - c0);
-      if (uit.scheiding !== 'twijfel') return uit.blok;
-      return confirm('In het geplakte blok is elke vierde kolom leeg.\n\nKomt dit blok rechtstreeks uit het werkdocument (met een lege scheidingskolom na elke drie jaren)?\n\nOK = ja, scheidingskolommen overslaan\nAnnuleren = nee, precies zo plakken (lege cel = lege factor)')
-        ? stripScheidingskolommen(blok) : blok;
-    },
-  };
-  // na een wijziging de berekende kolommen bijwerken
-  const basisZet = def.zet;
-  def.zet = (r, c, ruw) => { basisZet(r, c, ruw); queueMicrotask(() => werkBerekendBij(def, r)); };
-  return [
-    el('h2', { text: 'Reductiefactoren' }), el('p', { class: 'uitleg', text: UITLEG_REDUCTIEFACTOREN }),
-    kolomUitleg([
-      { label: 'Winning', uitleg: 'Naam, cluster en inzetbare productiecapaciteit uit de tabel Winningen. Rijen ontstaan vanzelf; voeg een winning toe in de tabel Winningen.' },
-      ...crit.map((c) => ({ label: `${c.naam} – 2030 / 2040 / 2050`, uitleg: `${c.groep}. ${c.toelichting ?? ''} Waarde 0–1; leeg = 1.` })),
-      { label: 'Factor (minimum) – 2030 / 2040 / 2050', uitleg: 'Berekend: het minimum over alle criteria in dat peiljaar. Niet in te vullen.' },
-      { label: 'Aanbod – 2026 / 2030 / 2040 / 2050', eenheid: 'Mm³/j', uitleg: 'Berekend: capaciteit × factor; 2026 ("huidig") = capaciteit. Niet in te vullen.' },
-    ]),
-    el('div', { class: 'balk' }, el('span', { class: 'groeplabel', text: 'Narratief:' }), ...narratiefChips()),
-    el('div', { class: 'balk' }, el('b', { id: 'rfTotaal', text: rfTotaalTekst() }),
-      el('span', { class: 'tip', text: 'Plakken uit Excel: kopieer het blok H4:AP35, klik hier de cel 2030 van het eerste criterium en druk Ctrl+V. Lege scheidingskolommen uit de Excel worden overgeslagen.' })),
-    win.length && crit.length ? el('div', { class: 'tabelwrap' }, bouwRaster(def)) : el('div', { class: 'leeg', text: 'Vul eerst de tabellen Winningen en Criteria.' }),
-  ];
-}
-function rfTotaalTekst() {
-  const s = samenvatting(data).aanbod[rfNarratief] ?? [];
-  return `Totaal aanbod narratief ${rfNarratief}: ` + AANBODJAREN.map((j, i) => `${j}: ${nf3.format(s[i] ?? 0)}`).join(' · ') + ' Mm³/j';
-}
-function werkBerekendBij(def, r) {
-  def.kolommen.forEach((k, c) => { if (k.type === 'berekend') { const td = $(`td[data-r="${r}"][data-c="${c}"]`); if (td) td.textContent = toon(def.lees(r, c)); } });
-  const t = $('#rfTotaal'); if (t) t.textContent = rfTotaalTekst();
-}
-
-function paneelVraag() {
-  const rijen = data.narratieven.flatMap((n) => data.clusters.map((c) => ({ n, c })));
-  const kolommen = VRAAGJAREN.map((j) => ({ label: String(j), type: 'getal', jaar: j, uitleg: `Vraag in ${j} (Mm³/j)` }));
-  const def = {
-    tabelnaam: 'Vraag', kolommen, aantal: rijen.length, rijkopLabel: 'Narratief · cluster',
-    rijkop: (r) => [`${rijen[r].n.id} ${rijen[r].n.naam}`, rijen[r].c.naam || rijen[r].c.id],
-    lees: (r, c) => data.vraag[rijen[r].n.id]?.[rijen[r].c.id]?.[kolommen[c].jaar] ?? null,
-    zet: (r, c, ruw) => { ((data.vraag[rijen[r].n.id] ??= {})[rijen[r].c.id] ??= {})[kolommen[c].jaar] = leesGetal(ruw); },
-    rijId: (r) => `N${rijen[r].n.id} ${rijen[r].c.id}`, veldId: (c) => kolommen[c].label,
-  };
-  return [
-    el('h2', { text: 'Vraag' }), el('p', { class: 'uitleg', text: UITLEG_VRAAG }), kolomUitleg(UITLEG_VRAAG_KOLOMMEN),
-    el('div', { class: 'balk' }, el('span', { class: 'tip', text: 'Plakken uit Excel: klik de cel 2025 van het eerste cluster en druk Ctrl+V. Clusters staan in de volgorde van de tabel Clusters.' })),
-    rijen.length ? el('div', { class: 'tabelwrap' }, bouwRaster(def)) : el('div', { class: 'leeg', text: 'Vul eerst de tabel Clusters.' }),
-  ];
 }
 
 function downloadBytes(bytes, naam) {
@@ -339,13 +202,13 @@ function paneelMaatregelen() {
     }
     formulier = null;
   }
-  const koppen = ['Id', 'Naam', 'Leverancier', 'Soort', 'Spoor', 'Narratieven', 'Cluster', 'Volume (Mm³/j)', 'Ingangsjaar', 'Standaard aan', 'Validatie', ''];
+  const koppen = ['Id', 'Naam', 'Leverancier', 'Soort', 'Spoor', 'Winning', 'Cluster', 'Volume (Mm³/j)', 'Ingangsjaar', 'Standaard aan', 'Validatie', ''];
   const table = el('table', { class: 'grid' }, el('thead', {}, el('tr', {}, ...koppen.map((k) => el('th', { text: k })))));
   const tbody = el('tbody');
   for (const m of data.maatregelen) {
     const t = telling(meldingen.filter((x) => x.tabel === 'Maatregelen' && x.rij === m.id));
     const st = t.fouten ? ['status-f', `${t.fouten} blokkerend`] : t.waarschuwingen ? ['status-w', `${t.waarschuwingen} waarschuwing${t.waarschuwingen > 1 ? 'en' : ''}`] : ['status-ok', 'in orde'];
-    tbody.append(el('tr', {}, ...[m.id, m.naam, m.leverancier, m.soort, m.spoor, (m.narratieven ?? []).join(', '), m.cluster, toon(m.volume), m.ingangsjaar, m.standaard_aan ? 'ja' : 'nee']
+    tbody.append(el('tr', {}, ...[m.id, m.naam, m.leverancier, m.soort, m.spoor, m.winning, m.cluster, toon(m.volume), m.ingangsjaar, m.standaard_aan ? 'ja' : 'nee']
       .map((v, i) => el('td', { class: 'tekst', title: i === 4 ? SPOREN[v] : null, text: v ?? '' })), el('td', { class: `tekst ${st[0]}`, text: st[1] }),
     el('td', { class: 'actie' },
       el('button', { class: 'knop mini', type: 'button', text: 'Bewerken', 'aria-label': `Bewerk ${m.id}`, onclick: () => { formulier = { id: m.id }; renderPaneel(); } }), ' ',
@@ -355,17 +218,17 @@ function paneelMaatregelen() {
       } }))));
   }
   table.append(tbody);
-  const geenBasis = !data.clusters.length;
+  const geenBasis = !data.vraag.length;
   return [
     el('h2', { text: 'Maatregelen' }),
     el('p', { class: 'uitleg', text: 'De maatregel-dataobjecten met hun validatiestatus. Lever een maatregel aan via het formulier, of vul het maatregelen-template (.xlsx) in en importeer het: een nieuw id wordt toegevoegd, een bestaand id overschreven.' }),
     el('div', { class: 'balk' },
       el('button', { class: 'knop pri', type: 'button', text: '+ Maatregel aanleveren', onclick: () => { formulier = { nieuw: true }; renderPaneel(); } }),
       el('span', { class: 'scheiding' }),
-      el('button', { class: 'knop', type: 'button', text: 'Download maatregelen-template (.xlsx)', title: 'Leeg template met keuzelijsten (gegevensvalidatie) en een tabblad Uitleg. De lijsten met gemeenten en clusters komen uit de huidige dataset.', onclick: () => downloadBytes(maatregelenTemplate(XLSX, data), 'dwr-maatregelen-template.xlsx') }),
+      el('button', { class: 'knop', type: 'button', text: 'Download maatregelen-template (.xlsx)', title: 'Leeg template met keuzelijsten (gegevensvalidatie) en een tabblad Uitleg. De lijsten met clusters en winningen komen uit de huidige dataset.', onclick: () => downloadBytes(maatregelenTemplate(XLSX, data), 'dwr-maatregelen-template.xlsx') }),
       el('button', { class: 'knop', type: 'button', text: 'Download maatregelen (.xlsx)', title: 'Hetzelfde template, gevuld met de huidige maatregelen', disabled: !data.maatregelen.length, onclick: () => downloadBytes(maatregelenTemplate(XLSX, data, data.maatregelen), bestandsnaam(data, 'xlsx').replace(/^dwr-/, 'dwr-maatregelen-')) }),
       el('button', { class: 'knop', type: 'button', text: 'Importeer maatregelen-bestand…', onclick: () => $('#bestand').click() })),
-    geenBasis ? el('p', { class: 'tip', text: 'Let op: er zijn nog geen clusters en gemeenten. Importeer eerst de basisdata; anders zijn de keuzelijsten in formulier en template leeg.' }) : null,
+    geenBasis ? el('p', { class: 'tip', text: 'Let op: de tabel Vraag is nog leeg, dus er zijn nog geen clusters. Vul eerst Winningen en Vraag; anders zijn de keuzelijsten in formulier en template leeg.' }) : null,
     data.maatregelen.length ? el('div', { class: 'tabelwrap' }, table) : el('div', { class: 'leeg', text: 'Nog geen maatregelen.' }),
   ];
 }
@@ -374,7 +237,7 @@ function renderPaneel() {
   const p = $('#paneel');
   const scroll = p.querySelector('.tabelwrap'), pos = scroll ? [scroll.scrollLeft, scroll.scrollTop] : null;
   const t = TABELLEN.find((x) => x.id === tab);
-  p.replaceChildren(...(t ? paneelLijst(t) : tab === 'reductiefactoren' ? paneelReductiefactoren() : tab === 'vraag' ? paneelVraag() : paneelMaatregelen()));
+  p.replaceChildren(...(t ? paneelLijst(t) : paneelMaatregelen()));
   const nieuw = p.querySelector('.tabelwrap');
   if (pos && nieuw) { nieuw.scrollLeft = pos[0]; nieuw.scrollTop = pos[1]; }
   markeer();
@@ -418,7 +281,6 @@ function focusCel(r, c) {
 function gaNaar(m) {
   const doel = TABS.find((t) => t.tabel(m)); if (!doel) return;
   tab = doel.id;
-  const n = m.tabel.match(/^Reductiefactoren N(\d+)$/); if (n) rfNarratief = Number(n[1]);
   formulier = tab === 'maatregelen' && data.maatregelen.some((x) => x.id === m.rij) ? { id: m.rij } : null;
   renderTabs(); renderPaneel(); renderValidatie();
   if (formulier) { $('#paneel form.mform')?.focusVeld(m.veld); return; }
@@ -438,7 +300,7 @@ function renderValidatie() {
   document.querySelectorAll('.vfilter .chip').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.f === vFilter)));
   const huidig = TABS.find((x) => x.id === tab);
   const zicht = meldingen
-    .filter((m) => vFilter === 'alle' || (vFilter === 'tab' ? huidig.tabel(m) && (tab !== 'reductiefactoren' || m.tabel === `Reductiefactoren N${rfNarratief}`) : m.niveau === vFilter))
+    .filter((m) => vFilter === 'alle' || (vFilter === 'tab' ? huidig.tabel(m) : m.niveau === vFilter))
     .sort((a, b) => (a.niveau === b.niveau ? 0 : a.niveau === 'fout' ? -1 : 1));
   const MAX = 200, ul = $('#vLijst');
   ul.replaceChildren(...zicht.slice(0, MAX).map((m) => el('li', { class: m.niveau, tabindex: '0', role: 'button', title: 'Ga naar deze cel', onclick: () => gaNaar(m), onkeydown: (e) => { if (e.key === 'Enter') gaNaar(m); } },
@@ -455,17 +317,18 @@ function dialoog(titel, ...inhoud) {
   $('#dlg').showModal();
 }
 
-/** Samenvatting: aantallen en totaal aanbod per narratief en peiljaar, om met de Excel te vergelijken. */
+/** Samenvatting: aantallen, huidige capaciteit en de vraag per scenario, om met de bron te vergelijken. */
 function totalenInhoud() {
   const s = samenvatting(data), t = telling(meldingen);
-  const tabel = el('table', {}, el('thead', {}, el('tr', {}, el('th', { text: 'Totaal aanbod (Mm³/j)' }), ...AANBODJAREN.map((j) => el('th', { text: j })))),
-    el('tbody', {}, ...data.narratieven.map((n) => el('tr', {}, el('td', { text: `${n.id} ${n.naam}` }), ...s.aanbod[n.id].map((v) => el('td', { text: nf3.format(v) }))))));
+  const tabel = el('table', {}, el('thead', {}, el('tr', {}, el('th', { text: 'Totale vraag (Mm³/j)' }), ...VRAAGJAREN.map((j) => el('th', { text: j })))),
+    el('tbody', {}, ...scenarios(data).map((x) => el('tr', {}, el('td', { text: x.naam }), ...s.vraag[x.id].map((v) => el('td', { text: nf3.format(v) }))))));
   return [
     el('div', { class: 'kern' },
-      el('div', {}, el('b', { text: s.winningen }), 'winningen'), el('div', {}, el('b', { text: s.maatregelen }), 'maatregelen'),
-      el('div', {}, el('b', { text: data.clusters.length }), 'clusters'), el('div', {}, el('b', { text: data.gemeenten.length }), 'gemeenten'),
+      el('div', {}, el('b', { text: nf3.format(s.capaciteit) }), 'Mm³/j huidig aanbod'),
+      el('div', {}, el('b', { text: s.winningen }), 'winningen'), el('div', {}, el('b', { text: s.clusters }), 'clusters'),
+      el('div', {}, el('b', { text: scenarios(data).length }), "scenario's"), el('div', {}, el('b', { text: s.maatregelen }), 'maatregelen'),
       el('div', {}, el('b', { class: t.fouten ? 'status-f' : 'status-ok', text: t.fouten }), 'blokkerend'), el('div', {}, el('b', { class: t.waarschuwingen ? 'status-w' : 'status-ok', text: t.waarschuwingen }), 'waarschuwingen')),
-    el('h3', { text: 'Vergelijk met de Excel (cellen AV37:AY37 van "Naratief N - winningen")' }), tabel,
+    el('h3', { text: 'Vraag per scenario, totaal over de clusters' }), tabel,
   ];
 }
 
@@ -502,7 +365,7 @@ async function importeer(bestand) {
     dialoog('Importeren mislukt', el('p', { text: `${bestand.name} kon niet worden gelezen: ${e.message}` }), el('p', { class: 'klein', text: 'Verwacht: een .xlsx volgens het template of een .json-export van deze tool. Er is niets gewijzigd.' }));
   }
 }
-const bevestigVervangen = () => !(data.winningen.length || data.maatregelen.length)
+const bevestigVervangen = () => !(data.winningen.length || data.vraag.length || data.maatregelen.length)
   || confirm('De huidige dataset in deze browser wordt vervangen door het bestand. Doorgaan?');
 
 function afronden(bestand, opmerkingen) {
@@ -524,6 +387,19 @@ $('#bestand').addEventListener('change', (e) => { const f = e.target.files[0]; e
 $('#btnXlsx').addEventListener('click', () => XLSX.writeFile(naarWerkboek(XLSX, data), bestandsnaam(data, 'xlsx')));
 $('#btnJson').addEventListener('click', downloadJson);
 $('#btnTemplate').addEventListener('click', () => XLSX.writeFile(leegTemplate(XLSX), 'dwr-leeg-template.xlsx'));
+$('#btnVoorbeeld').addEventListener('click', async () => {
+  try {
+    const antwoord = await fetch('data/voorbeeld.json');
+    if (!antwoord.ok) throw new Error(`status ${antwoord.status}`);
+    const nieuw = normaliseer(controleerDataset(await antwoord.json()));
+    if (!bevestigVervangen()) return;
+    data = nieuw; formulier = null;
+    gewijzigd(); hervalideer(); renderKop(); renderPaneel();
+    status('Fictieve voorbeelddata geladen.');
+  } catch (e) {
+    dialoog('Voorbeelddata laden mislukt', el('p', { text: `data/voorbeeld.json kon niet worden gelezen: ${e.message}` }));
+  }
+});
 $('#btnTotalen').addEventListener('click', () => dialoog('Controletotalen', ...totalenInhoud()));
 $('#btnWis').addEventListener('click', () => {
   if (!confirm('Alle data uit deze browser verwijderen? Download eerst een export als je de data wilt bewaren.')) return;
@@ -536,11 +412,10 @@ addEventListener('drop', (e) => { e.preventDefault(); const f = e.dataTransfer?.
 
 function renderKop() {
   $('#dsNaam').value = data.meta.naam ?? '';
-  $('#dsInfo').textContent = (data.meta.voorbeelddata ? 'VOORBEELDDATA · ' : '') + (data.meta.datum_import ? `geïmporteerd op ${data.meta.datum_import.split('-').reverse().join('-')}` : 'nog niet geïmporteerd');
+  $('#dsInfo').textContent = (data.meta.voorbeelddata ? 'Fictieve voorbeelddata · ' : '') + (data.meta.datum_import ? `geïmporteerd op ${data.meta.datum_import.split('-').reverse().join('-')}` : 'nog niet geïmporteerd');
 }
 $('#dsNaam').addEventListener('change', (e) => { data.meta.naam = e.target.value.trim() || 'Dataset'; gewijzigd(); });
 
 // -------------------------------------------------------------- start
-vulAan();
 if (!data.winningen.length) tab = 'winningen';
 renderKop(); hervalideer(); renderPaneel();

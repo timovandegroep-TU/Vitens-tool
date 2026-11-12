@@ -1,581 +1,761 @@
 {
- "N1 2026": {
+ "Laag 2026": {
   "zonder": {
-   "vraag": 44.32,
-   "aanbod": 52.5
+   "vraag": 138.066,
+   "aanbod": 132.5
   },
   "standaard": {
-   "vraag0": 44.32,
-   "aanbod0": 52.5,
-   "vraag": 44.32,
-   "aanbod": 52.5,
-   "opgave": -8.18,
+   "vraag0": 138.066,
+   "aanbod0": 132.5,
+   "vraag": 138.066,
+   "aanbod": 132.5,
+   "afname": 0,
+   "opgave": 5.566,
    "bijdrage": 0,
-   "tekort": 0
+   "tekort": 5.566
   },
   "clusters": {
-   "noordrand": {
-    "vraag": 16.12,
-    "aanbod": 19.5
+   "West": {
+    "vraag": 46.452,
+    "aanbod": 44
    },
-   "middengebied": {
-    "vraag": 15.1,
+   "Zuid": {
+    "vraag": 16.588,
     "aanbod": 17
    },
-   "zuidoever": {
-    "vraag": 13.1,
-    "aanbod": 16
-   }
-  }
- },
- "N1 2030": {
-  "zonder": {
-   "vraag": 45.6,
-   "aanbod": 48.75
-  },
-  "standaard": {
-   "vraag0": 45.6,
-   "aanbod0": 48.75,
-   "vraag": 43.6,
-   "aanbod": 48.75,
-   "opgave": -3.15,
-   "bijdrage": 2,
-   "tekort": 0
-  },
-  "clusters": {
-   "noordrand": {
-    "vraag": 15.872,
-    "aanbod": 18.05
+   "Midden": {
+    "vraag": 32.47,
+    "aanbod": 28
    },
-   "middengebied": {
-    "vraag": 14.82,
-    "aanbod": 14.7
-   },
-   "zuidoever": {
-    "vraag": 12.908,
-    "aanbod": 16
-   }
-  }
- },
- "N1 2035": {
-  "zonder": {
-   "vraag": 47.1,
-   "aanbod": 45.15
-  },
-  "standaard": {
-   "vraag0": 47.1,
-   "aanbod0": 45.15,
-   "vraag": 45.1,
-   "aanbod": 48.15,
-   "opgave": 1.95,
-   "bijdrage": 5,
-   "tekort": 0
-  },
-  "clusters": {
-   "noordrand": {
-    "vraag": 16.374,
-    "aanbod": 17.2
-   },
-   "middengebied": {
-    "vraag": 15.416,
-    "aanbod": 12.45
-   },
-   "zuidoever": {
-    "vraag": 13.31,
-    "aanbod": 18.5
-   }
-  }
- },
- "N1 2040": {
-  "zonder": {
-   "vraag": 48.7,
-   "aanbod": 41.55
-  },
-  "standaard": {
-   "vraag0": 48.7,
-   "aanbod0": 41.55,
-   "vraag": 46.7,
-   "aanbod": 50.05,
-   "opgave": 7.15,
-   "bijdrage": 10.5,
-   "tekort": 0
-  },
-  "clusters": {
-   "noordrand": {
-    "vraag": 16.973,
-    "aanbod": 16.35
-   },
-   "middengebied": {
-    "vraag": 15.918,
-    "aanbod": 11.7
-   },
-   "zuidoever": {
-    "vraag": 13.809,
-    "aanbod": 22
-   }
-  }
- },
- "N1 2050": {
-  "zonder": {
-   "vraag": 52.2,
-   "aanbod": 37.725
-  },
-  "standaard": {
-   "vraag0": 52.2,
-   "aanbod0": 37.725,
-   "vraag": 50.2,
-   "aanbod": 46.225,
-   "opgave": 14.475,
-   "bijdrage": 10.5,
-   "tekort": 3.975
-  },
-  "clusters": {
-   "noordrand": {
-    "vraag": 18.272,
-    "aanbod": 14.625
-   },
-   "middengebied": {
-    "vraag": 17.118,
-    "aanbod": 11.7
-   },
-   "zuidoever": {
-    "vraag": 14.81,
-    "aanbod": 19.9
-   }
-  }
- },
- "N2 2026": {
-  "zonder": {
-   "vraag": 44.48,
-   "aanbod": 52.5
-  },
-  "standaard": {
-   "vraag0": 44.48,
-   "aanbod0": 52.5,
-   "vraag": 44.48,
-   "aanbod": 52.5,
-   "opgave": -8.02,
-   "bijdrage": 0,
-   "tekort": 0
-  },
-  "clusters": {
-   "noordrand": {
-    "vraag": 16.18,
-    "aanbod": 19.5
-   },
-   "middengebied": {
-    "vraag": 15.16,
-    "aanbod": 17
-   },
-   "zuidoever": {
-    "vraag": 13.14,
-    "aanbod": 16
-   }
-  }
- },
- "N2 2030": {
-  "zonder": {
-   "vraag": 46.4,
-   "aanbod": 47.25
-  },
-  "standaard": {
-   "vraag0": 46.4,
-   "aanbod0": 47.25,
-   "vraag": 44.4,
-   "aanbod": 47.25,
-   "opgave": -0.85,
-   "bijdrage": 2,
-   "tekort": 0
-  },
-  "clusters": {
-   "noordrand": {
-    "vraag": 16.172,
-    "aanbod": 17.55
-   },
-   "middengebied": {
-    "vraag": 15.119,
-    "aanbod": 14.7
-   },
-   "zuidoever": {
-    "vraag": 13.109,
-    "aanbod": 15
-   }
-  }
- },
- "N2 2035": {
-  "zonder": {
-   "vraag": 49,
-   "aanbod": 42.938
-  },
-  "standaard": {
-   "vraag0": 49,
-   "aanbod0": 42.938,
-   "vraag": 47,
-   "aanbod": 45.938,
-   "opgave": 6.063,
-   "bijdrage": 5,
-   "tekort": 1.063
-  },
-  "clusters": {
-   "noordrand": {
-    "vraag": 17.073,
-    "aanbod": 16.087
-   },
-   "middengebied": {
-    "vraag": 16.018,
-    "aanbod": 11.85
-   },
-   "zuidoever": {
-    "vraag": 13.908,
-    "aanbod": 18
-   }
-  }
- },
- "N2 2040": {
-  "zonder": {
-   "vraag": 51.7,
-   "aanbod": 38.625
-  },
-  "standaard": {
-   "vraag0": 51.7,
-   "aanbod0": 38.625,
-   "vraag": 49.7,
-   "aanbod": 47.125,
-   "opgave": 13.075,
-   "bijdrage": 10.5,
-   "tekort": 2.575
-  },
-  "clusters": {
-   "noordrand": {
-    "vraag": 18.073,
-    "aanbod": 14.625
-   },
-   "middengebied": {
-    "vraag": 16.919,
-    "aanbod": 10.5
-   },
-   "zuidoever": {
-    "vraag": 14.708,
-    "aanbod": 22
-   }
-  }
- },
- "N2 2050": {
-  "zonder": {
-   "vraag": 57.5,
-   "aanbod": 35.125
-  },
-  "standaard": {
-   "vraag0": 57.5,
-   "aanbod0": 35.125,
-   "vraag": 55.5,
-   "aanbod": 43.625,
-   "opgave": 22.375,
-   "bijdrage": 10.5,
-   "tekort": 11.875
-  },
-  "clusters": {
-   "noordrand": {
-    "vraag": 20.173,
-    "aanbod": 12.625
-   },
-   "middengebied": {
-    "vraag": 18.918,
-    "aanbod": 10.5
-   },
-   "zuidoever": {
-    "vraag": 16.409,
-    "aanbod": 20.5
-   }
-  }
- },
- "N3 2026": {
-  "zonder": {
-   "vraag": 44.06,
-   "aanbod": 52.5
-  },
-  "standaard": {
-   "vraag0": 44.06,
-   "aanbod0": 52.5,
-   "vraag": 44.06,
-   "aanbod": 52.5,
-   "opgave": -8.44,
-   "bijdrage": 0,
-   "tekort": 0
-  },
-  "clusters": {
-   "noordrand": {
-    "vraag": 16.02,
-    "aanbod": 19.5
-   },
-   "middengebied": {
-    "vraag": 15.02,
-    "aanbod": 17
-   },
-   "zuidoever": {
-    "vraag": 13.02,
-    "aanbod": 16
-   }
-  }
- },
- "N3 2030": {
-  "zonder": {
-   "vraag": 44.3,
-   "aanbod": 51.9
-  },
-  "standaard": {
-   "vraag0": 44.3,
-   "aanbod0": 51.9,
-   "vraag": 42.3,
-   "aanbod": 51.9,
-   "opgave": -7.6,
-   "bijdrage": 2,
-   "tekort": 0
-  },
-  "clusters": {
-   "noordrand": {
-    "vraag": 15.373,
-    "aanbod": 19.5
-   },
-   "middengebied": {
-    "vraag": 14.418,
-    "aanbod": 16.4
-   },
-   "zuidoever": {
-    "vraag": 12.509,
-    "aanbod": 16
-   }
-  }
- },
- "N3 2035": {
-  "zonder": {
-   "vraag": 44.5,
-   "aanbod": 50.3
-  },
-  "standaard": {
-   "vraag0": 44.5,
-   "aanbod0": 50.3,
-   "vraag": 42.5,
-   "aanbod": 53.3,
-   "opgave": -5.8,
-   "bijdrage": 5,
-   "tekort": 0
-  },
-  "clusters": {
-   "noordrand": {
-    "vraag": 15.472,
-    "aanbod": 19.1
-   },
-   "middengebied": {
-    "vraag": 14.517,
-    "aanbod": 15.2
-   },
-   "zuidoever": {
-    "vraag": 12.511,
-    "aanbod": 19
-   }
-  }
- },
- "N3 2040": {
-  "zonder": {
-   "vraag": 44.6,
-   "aanbod": 48.7
-  },
-  "standaard": {
-   "vraag0": 44.6,
-   "aanbod0": 48.7,
-   "vraag": 42.6,
-   "aanbod": 57.2,
-   "opgave": -4.1,
-   "bijdrage": 10.5,
-   "tekort": 0
-  },
-  "clusters": {
-   "noordrand": {
-    "vraag": 15.474,
-    "aanbod": 18.7
-   },
-   "middengebied": {
-    "vraag": 14.518,
+   "Oost": {
+    "vraag": 14.588,
     "aanbod": 15.5
    },
-   "zuidoever": {
-    "vraag": 12.608,
+   "Noord": {
+    "vraag": 27.968,
+    "aanbod": 28
+   }
+  }
+ },
+ "Laag 2030": {
+  "zonder": {
+   "vraag": 137.53,
+   "aanbod": 132.5
+  },
+  "standaard": {
+   "vraag0": 137.53,
+   "aanbod0": 130.5,
+   "vraag": 131.53,
+   "aanbod": 130.5,
+   "afname": 2,
+   "opgave": 7.03,
+   "bijdrage": 6,
+   "tekort": 1.03
+  },
+  "clusters": {
+   "West": {
+    "vraag": 44.242,
+    "aanbod": 42
+   },
+   "Zuid": {
+    "vraag": 15.818,
+    "aanbod": 17
+   },
+   "Midden": {
+    "vraag": 30.939,
+    "aanbod": 28
+   },
+   "Oost": {
+    "vraag": 13.906,
+    "aanbod": 15.5
+   },
+   "Noord": {
+    "vraag": 26.625,
+    "aanbod": 28
+   }
+  }
+ },
+ "Laag 2035": {
+  "zonder": {
+   "vraag": 136.94,
+   "aanbod": 132.5
+  },
+  "standaard": {
+   "vraag0": 136.94,
+   "aanbod0": 128,
+   "vraag": 128.94,
+   "aanbod": 131,
+   "afname": 4.5,
+   "opgave": 8.94,
+   "bijdrage": 11,
+   "tekort": 0
+  },
+  "clusters": {
+   "West": {
+    "vraag": 43.36,
+    "aanbod": 42
+   },
+   "Zuid": {
+    "vraag": 15.517,
+    "aanbod": 17
+   },
+   "Midden": {
+    "vraag": 30.338,
+    "aanbod": 25.5
+   },
+   "Oost": {
+    "vraag": 13.634,
+    "aanbod": 18.5
+   },
+   "Noord": {
+    "vraag": 26.091,
+    "aanbod": 28
+   }
+  }
+ },
+ "Laag 2040": {
+  "zonder": {
+   "vraag": 136.38,
+   "aanbod": 132.5
+  },
+  "standaard": {
+   "vraag0": 136.38,
+   "aanbod0": 123,
+   "vraag": 128.38,
+   "aanbod": 132,
+   "afname": 9.5,
+   "opgave": 13.38,
+   "bijdrage": 17,
+   "tekort": 0
+  },
+  "clusters": {
+   "West": {
+    "vraag": 43.16,
+    "aanbod": 42
+   },
+   "Zuid": {
+    "vraag": 15.466,
+    "aanbod": 17
+   },
+   "Midden": {
+    "vraag": 30.208,
+    "aanbod": 31.5
+   },
+   "Oost": {
+    "vraag": 13.584,
+    "aanbod": 18.5
+   },
+   "Noord": {
+    "vraag": 25.962,
     "aanbod": 23
    }
   }
  },
- "N3 2050": {
+ "Laag 2050": {
   "zonder": {
-   "vraag": 45.1,
-   "aanbod": 47.7
+   "vraag": 135.33,
+   "aanbod": 132.5
   },
   "standaard": {
-   "vraag0": 45.1,
-   "aanbod0": 47.7,
-   "vraag": 43.1,
-   "aanbod": 56.2,
-   "opgave": -2.6,
-   "bijdrage": 10.5,
+   "vraag0": 135.33,
+   "aanbod0": 121.5,
+   "vraag": 127.33,
+   "aanbod": 135.5,
+   "afname": 11,
+   "opgave": 13.83,
+   "bijdrage": 22,
    "tekort": 0
   },
   "clusters": {
-   "noordrand": {
-    "vraag": 15.673,
-    "aanbod": 18.7
+   "West": {
+    "vraag": 42.791,
+    "aanbod": 42
    },
-   "middengebied": {
-    "vraag": 14.717,
+   "Zuid": {
+    "vraag": 15.365,
     "aanbod": 15.5
    },
-   "zuidoever": {
-    "vraag": 12.71,
-    "aanbod": 22
+   "Midden": {
+    "vraag": 29.967,
+    "aanbod": 31.5
+   },
+   "Oost": {
+    "vraag": 13.492,
+    "aanbod": 18.5
+   },
+   "Noord": {
+    "vraag": 25.714,
+    "aanbod": 28
    }
   }
  },
- "N4 2026": {
+ "Midden (CBS) 2026": {
   "zonder": {
-   "vraag": 44.22,
-   "aanbod": 52.5
+   "vraag": 138.808,
+   "aanbod": 132.5
   },
   "standaard": {
-   "vraag0": 44.22,
-   "aanbod0": 52.5,
-   "vraag": 44.22,
-   "aanbod": 52.5,
-   "opgave": -8.28,
+   "vraag0": 138.808,
+   "aanbod0": 132.5,
+   "vraag": 138.808,
+   "aanbod": 132.5,
+   "afname": 0,
+   "opgave": 6.308,
    "bijdrage": 0,
-   "tekort": 0
+   "tekort": 6.308
   },
   "clusters": {
-   "noordrand": {
-    "vraag": 16.08,
-    "aanbod": 19.5
+   "West": {
+    "vraag": 46.716,
+    "aanbod": 44
    },
-   "middengebied": {
-    "vraag": 15.08,
+   "Zuid": {
+    "vraag": 16.656,
     "aanbod": 17
    },
-   "zuidoever": {
-    "vraag": 13.06,
-    "aanbod": 16
-   }
-  }
- },
- "N4 2030": {
-  "zonder": {
-   "vraag": 45.1,
-   "aanbod": 51.1
-  },
-  "standaard": {
-   "vraag0": 45.1,
-   "aanbod0": 51.1,
-   "vraag": 43.1,
-   "aanbod": 51.1,
-   "opgave": -6,
-   "bijdrage": 2,
-   "tekort": 0
-  },
-  "clusters": {
-   "noordrand": {
-    "vraag": 15.673,
-    "aanbod": 18.7
+   "Midden": {
+    "vraag": 32.638,
+    "aanbod": 28
    },
-   "middengebied": {
-    "vraag": 14.717,
-    "aanbod": 16.4
-   },
-   "zuidoever": {
-    "vraag": 12.71,
-    "aanbod": 16
-   }
-  }
- },
- "N4 2035": {
-  "zonder": {
-   "vraag": 46.3,
-   "aanbod": 49.075
-  },
-  "standaard": {
-   "vraag0": 46.3,
-   "aanbod0": 49.075,
-   "vraag": 44.3,
-   "aanbod": 52.075,
-   "opgave": -2.775,
-   "bijdrage": 5,
-   "tekort": 0
-  },
-  "clusters": {
-   "noordrand": {
-    "vraag": 16.074,
-    "aanbod": 18.375
-   },
-   "middengebied": {
-    "vraag": 15.117,
-    "aanbod": 15.2
-   },
-   "zuidoever": {
-    "vraag": 13.108,
-    "aanbod": 18.5
-   }
-  }
- },
- "N4 2040": {
-  "zonder": {
-   "vraag": 47.4,
-   "aanbod": 47.05
-  },
-  "standaard": {
-   "vraag0": 47.4,
-   "aanbod0": 47.05,
-   "vraag": 45.4,
-   "aanbod": 55.55,
-   "opgave": 0.35,
-   "bijdrage": 10.5,
-   "tekort": 0
-  },
-  "clusters": {
-   "noordrand": {
-    "vraag": 16.474,
-    "aanbod": 18.05
-   },
-   "middengebied": {
-    "vraag": 15.516,
+   "Oost": {
+    "vraag": 14.656,
     "aanbod": 15.5
    },
-   "zuidoever": {
-    "vraag": 13.409,
-    "aanbod": 22
+   "Noord": {
+    "vraag": 28.142,
+    "aanbod": 28
    }
   }
  },
- "N4 2050": {
+ "Midden (CBS) 2030": {
   "zonder": {
-   "vraag": 49.8,
-   "aanbod": 42.85
+   "vraag": 141.24,
+   "aanbod": 132.5
   },
   "standaard": {
-   "vraag0": 49.8,
-   "aanbod0": 42.85,
-   "vraag": 47.8,
-   "aanbod": 51.35,
-   "opgave": 6.95,
-   "bijdrage": 10.5,
-   "tekort": 0
+   "vraag0": 141.24,
+   "aanbod0": 130.5,
+   "vraag": 135.24,
+   "aanbod": 130.5,
+   "afname": 2,
+   "opgave": 10.74,
+   "bijdrage": 6,
+   "tekort": 4.74
   },
   "clusters": {
-   "noordrand": {
-    "vraag": 17.373,
-    "aanbod": 16.85
+   "West": {
+    "vraag": 45.559,
+    "aanbod": 42
    },
-   "middengebied": {
-    "vraag": 16.317,
-    "aanbod": 12.5
+   "Zuid": {
+    "vraag": 16.163,
+    "aanbod": 17
    },
-   "zuidoever": {
-    "vraag": 14.11,
-    "aanbod": 22
+   "Midden": {
+    "vraag": 31.78,
+    "aanbod": 28
+   },
+   "Oost": {
+    "vraag": 14.248,
+    "aanbod": 15.5
+   },
+   "Noord": {
+    "vraag": 27.49,
+    "aanbod": 28
+   }
+  }
+ },
+ "Midden (CBS) 2035": {
+  "zonder": {
+   "vraag": 143.87,
+   "aanbod": 132.5
+  },
+  "standaard": {
+   "vraag0": 143.87,
+   "aanbod0": 128,
+   "vraag": 135.87,
+   "aanbod": 131,
+   "afname": 4.5,
+   "opgave": 15.87,
+   "bijdrage": 11,
+   "tekort": 4.87
+  },
+  "clusters": {
+   "West": {
+    "vraag": 45.822,
+    "aanbod": 42
+   },
+   "Zuid": {
+    "vraag": 16.168,
+    "aanbod": 17
+   },
+   "Midden": {
+    "vraag": 31.902,
+    "aanbod": 25.5
+   },
+   "Oost": {
+    "vraag": 14.279,
+    "aanbod": 18.5
+   },
+   "Noord": {
+    "vraag": 27.699,
+    "aanbod": 28
+   }
+  }
+ },
+ "Midden (CBS) 2040": {
+  "zonder": {
+   "vraag": 146.37,
+   "aanbod": 132.5
+  },
+  "standaard": {
+   "vraag0": 146.37,
+   "aanbod0": 123,
+   "vraag": 138.37,
+   "aanbod": 132,
+   "afname": 9.5,
+   "opgave": 23.37,
+   "bijdrage": 17,
+   "tekort": 6.37
+  },
+  "clusters": {
+   "West": {
+    "vraag": 46.709,
+    "aanbod": 42
+   },
+   "Zuid": {
+    "vraag": 16.402,
+    "aanbod": 17
+   },
+   "Midden": {
+    "vraag": 32.473,
+    "aanbod": 31.5
+   },
+   "Oost": {
+    "vraag": 14.511,
+    "aanbod": 18.5
+   },
+   "Noord": {
+    "vraag": 28.275,
+    "aanbod": 23
+   }
+  }
+ },
+ "Midden (CBS) 2050": {
+  "zonder": {
+   "vraag": 151.13,
+   "aanbod": 132.5
+  },
+  "standaard": {
+   "vraag0": 151.13,
+   "aanbod0": 121.5,
+   "vraag": 143.13,
+   "aanbod": 135.5,
+   "afname": 11,
+   "opgave": 29.63,
+   "bijdrage": 22,
+   "tekort": 7.63
+  },
+  "clusters": {
+   "West": {
+    "vraag": 48.395,
+    "aanbod": 42
+   },
+   "Zuid": {
+    "vraag": 16.858,
+    "aanbod": 15.5
+   },
+   "Midden": {
+    "vraag": 33.555,
+    "aanbod": 31.5
+   },
+   "Oost": {
+    "vraag": 14.945,
+    "aanbod": 18.5
+   },
+   "Noord": {
+    "vraag": 29.378,
+    "aanbod": 28
+   }
+  }
+ },
+ "Hoog 2026": {
+  "zonder": {
+   "vraag": 139.55,
+   "aanbod": 132.5
+  },
+  "standaard": {
+   "vraag0": 139.55,
+   "aanbod0": 132.5,
+   "vraag": 139.55,
+   "aanbod": 132.5,
+   "afname": 0,
+   "opgave": 7.05,
+   "bijdrage": 0,
+   "tekort": 7.05
+  },
+  "clusters": {
+   "West": {
+    "vraag": 46.98,
+    "aanbod": 44
+   },
+   "Zuid": {
+    "vraag": 16.724,
+    "aanbod": 17
+   },
+   "Midden": {
+    "vraag": 32.806,
+    "aanbod": 28
+   },
+   "Oost": {
+    "vraag": 14.724,
+    "aanbod": 15.5
+   },
+   "Noord": {
+    "vraag": 28.316,
+    "aanbod": 28
+   }
+  }
+ },
+ "Hoog 2030": {
+  "zonder": {
+   "vraag": 144.95,
+   "aanbod": 132.5
+  },
+  "standaard": {
+   "vraag0": 144.95,
+   "aanbod0": 130.5,
+   "vraag": 138.95,
+   "aanbod": 130.5,
+   "afname": 2,
+   "opgave": 14.45,
+   "bijdrage": 6,
+   "tekort": 8.45
+  },
+  "clusters": {
+   "West": {
+    "vraag": 46.876,
+    "aanbod": 42
+   },
+   "Zuid": {
+    "vraag": 16.507,
+    "aanbod": 17
+   },
+   "Midden": {
+    "vraag": 32.621,
+    "aanbod": 28
+   },
+   "Oost": {
+    "vraag": 14.59,
+    "aanbod": 15.5
+   },
+   "Noord": {
+    "vraag": 28.356,
+    "aanbod": 28
+   }
+  }
+ },
+ "Hoog 2035": {
+  "zonder": {
+   "vraag": 150.79,
+   "aanbod": 132.5
+  },
+  "standaard": {
+   "vraag0": 150.79,
+   "aanbod0": 128,
+   "vraag": 142.79,
+   "aanbod": 131,
+   "afname": 4.5,
+   "opgave": 22.79,
+   "bijdrage": 11,
+   "tekort": 11.79
+  },
+  "clusters": {
+   "West": {
+    "vraag": 48.275,
+    "aanbod": 42
+   },
+   "Zuid": {
+    "vraag": 16.818,
+    "aanbod": 17
+   },
+   "Midden": {
+    "vraag": 33.475,
+    "aanbod": 25.5
+   },
+   "Oost": {
+    "vraag": 14.914,
+    "aanbod": 18.5
+   },
+   "Noord": {
+    "vraag": 29.308,
+    "aanbod": 28
+   }
+  }
+ },
+ "Hoog 2040": {
+  "zonder": {
+   "vraag": 156.34,
+   "aanbod": 132.5
+  },
+  "standaard": {
+   "vraag0": 156.34,
+   "aanbod0": 123,
+   "vraag": 148.34,
+   "aanbod": 132,
+   "afname": 9.5,
+   "opgave": 33.34,
+   "bijdrage": 17,
+   "tekort": 16.34
+  },
+  "clusters": {
+   "West": {
+    "vraag": 50.25,
+    "aanbod": 42
+   },
+   "Zuid": {
+    "vraag": 17.345,
+    "aanbod": 17
+   },
+   "Midden": {
+    "vraag": 34.727,
+    "aanbod": 31.5
+   },
+   "Oost": {
+    "vraag": 15.428,
+    "aanbod": 18.5
+   },
+   "Noord": {
+    "vraag": 30.59,
+    "aanbod": 23
+   }
+  }
+ },
+ "Hoog 2050": {
+  "zonder": {
+   "vraag": 166.94,
+   "aanbod": 132.5
+  },
+  "standaard": {
+   "vraag0": 166.94,
+   "aanbod0": 121.5,
+   "vraag": 158.94,
+   "aanbod": 135.5,
+   "afname": 11,
+   "opgave": 45.44,
+   "bijdrage": 22,
+   "tekort": 23.44
+  },
+  "clusters": {
+   "West": {
+    "vraag": 54.011,
+    "aanbod": 42
+   },
+   "Zuid": {
+    "vraag": 18.337,
+    "aanbod": 15.5
+   },
+   "Midden": {
+    "vraag": 37.131,
+    "aanbod": 31.5
+   },
+   "Oost": {
+    "vraag": 16.404,
+    "aanbod": 18.5
+   },
+   "Noord": {
+    "vraag": 33.056,
+    "aanbod": 28
+   }
+  }
+ },
+ "Hoog + warm 2026": {
+  "zonder": {
+   "vraag": 140.088,
+   "aanbod": 132.5
+  },
+  "standaard": {
+   "vraag0": 140.088,
+   "aanbod0": 132.5,
+   "vraag": 140.088,
+   "aanbod": 132.5,
+   "afname": 0,
+   "opgave": 7.588,
+   "bijdrage": 0,
+   "tekort": 7.588
+  },
+  "clusters": {
+   "West": {
+    "vraag": 47.172,
+    "aanbod": 44
+   },
+   "Zuid": {
+    "vraag": 16.774,
+    "aanbod": 17
+   },
+   "Midden": {
+    "vraag": 32.928,
+    "aanbod": 28
+   },
+   "Oost": {
+    "vraag": 14.772,
+    "aanbod": 15.5
+   },
+   "Noord": {
+    "vraag": 28.442,
+    "aanbod": 28
+   }
+  }
+ },
+ "Hoog + warm 2030": {
+  "zonder": {
+   "vraag": 147.64,
+   "aanbod": 132.5
+  },
+  "standaard": {
+   "vraag0": 147.64,
+   "aanbod0": 130.5,
+   "vraag": 141.64,
+   "aanbod": 130.5,
+   "afname": 2,
+   "opgave": 17.14,
+   "bijdrage": 6,
+   "tekort": 11.14
+  },
+  "clusters": {
+   "West": {
+    "vraag": 47.834,
+    "aanbod": 42
+   },
+   "Zuid": {
+    "vraag": 16.76,
+    "aanbod": 17
+   },
+   "Midden": {
+    "vraag": 33.232,
+    "aanbod": 28
+   },
+   "Oost": {
+    "vraag": 14.832,
+    "aanbod": 15.5
+   },
+   "Noord": {
+    "vraag": 28.982,
+    "aanbod": 28
+   }
+  }
+ },
+ "Hoog + warm 2035": {
+  "zonder": {
+   "vraag": 155.83,
+   "aanbod": 132.5
+  },
+  "standaard": {
+   "vraag0": 155.83,
+   "aanbod0": 128,
+   "vraag": 147.83,
+   "aanbod": 131,
+   "afname": 4.5,
+   "opgave": 27.83,
+   "bijdrage": 11,
+   "tekort": 16.83
+  },
+  "clusters": {
+   "West": {
+    "vraag": 50.07,
+    "aanbod": 42
+   },
+   "Zuid": {
+    "vraag": 17.294,
+    "aanbod": 17
+   },
+   "Midden": {
+    "vraag": 34.617,
+    "aanbod": 25.5
+   },
+   "Oost": {
+    "vraag": 15.378,
+    "aanbod": 18.5
+   },
+   "Noord": {
+    "vraag": 30.471,
+    "aanbod": 28
+   }
+  }
+ },
+ "Hoog + warm 2040": {
+  "zonder": {
+   "vraag": 163.6,
+   "aanbod": 132.5
+  },
+  "standaard": {
+   "vraag0": 163.6,
+   "aanbod0": 123,
+   "vraag": 155.6,
+   "aanbod": 132,
+   "afname": 9.5,
+   "opgave": 40.6,
+   "bijdrage": 17,
+   "tekort": 23.6
+  },
+  "clusters": {
+   "West": {
+    "vraag": 52.824,
+    "aanbod": 42
+   },
+   "Zuid": {
+    "vraag": 18.023,
+    "aanbod": 17
+   },
+   "Midden": {
+    "vraag": 36.38,
+    "aanbod": 31.5
+   },
+   "Oost": {
+    "vraag": 16.093,
+    "aanbod": 18.5
+   },
+   "Noord": {
+    "vraag": 32.28,
+    "aanbod": 23
+   }
+  }
+ },
+ "Hoog + warm 2050": {
+  "zonder": {
+   "vraag": 178.43,
+   "aanbod": 132.5
+  },
+  "standaard": {
+   "vraag0": 178.43,
+   "aanbod0": 121.5,
+   "vraag": 170.43,
+   "aanbod": 135.5,
+   "afname": 11,
+   "opgave": 56.93,
+   "bijdrage": 22,
+   "tekort": 34.93
+  },
+  "clusters": {
+   "West": {
+    "vraag": 58.093,
+    "aanbod": 42
+   },
+   "Zuid": {
+    "vraag": 19.409,
+    "aanbod": 15.5
+   },
+   "Midden": {
+    "vraag": 39.735,
+    "aanbod": 31.5
+   },
+   "Oost": {
+    "vraag": 17.46,
+    "aanbod": 18.5
+   },
+   "Noord": {
+    "vraag": 35.733,
+    "aanbod": 28
    }
   }
  }

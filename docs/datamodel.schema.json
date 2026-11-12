@@ -1,10 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "datamodel.schema.json",
-  "title": "Dataset visualisatietool DWR",
-  "description": "Eén dataset = alle basisdata (narratieven, clusters, gemeenten, criteria, winningen, reductiefactoren, vraag) plus de maatregel-dataobjecten. Volumes in Mm³/j. VOORSTEL stap 1: ter review.",
+  "title": "Dataset visualisatietool DWR (schema 2)",
+  "description": "Eén dataset = drie lijsten, gelijk aan de drie tabbladen van het Excel-template: winningen, vraag en maatregelen. Scenario's en clusters zijn geen aparte tabel; ze volgen uit de lijst vraag. Volumes in Mm³/j. Voorbeeld: data/voorbeeld.json.",
   "type": "object",
-  "required": ["meta", "narratieven", "clusters", "gemeenten", "criteria", "winningen", "reductiefactoren", "vraag", "maatregelen"],
+  "required": ["meta", "winningen", "vraag", "maatregelen"],
   "additionalProperties": false,
   "properties": {
     "meta": {
@@ -13,242 +13,132 @@
       "additionalProperties": false,
       "properties": {
         "naam": { "type": "string", "description": "Naam van de dataset; verschijnt in het label rechtsboven in de visualisatie." },
-        "schema_versie": { "const": 1 },
-        "datum_import": { "type": ["string", "null"], "format": "date", "description": "Datum waarop de dataset is geïmporteerd of geconverteerd (jjjj-mm-dd)." },
-        "bron": { "type": "string", "description": "Herkomst, bv. 'werkdocument V04_1'." },
-        "voorbeelddata": { "type": "boolean", "description": "true = fictieve data; de tool toont dan 'VOORBEELDDATA'." }
-      }
-    },
-
-    "narratieven": {
-      "type": "array", "minItems": 1, "maxItems": 4,
-      "items": {
-        "type": "object",
-        "required": ["id", "naam"],
-        "additionalProperties": false,
-        "properties": {
-          "id": { "type": "integer", "minimum": 1, "maximum": 4 },
-          "naam": { "type": "string", "description": "Ruim in conflict / Stoom in conflict / Ruim in harmonie / Stoom in harmonie." },
-          "deltascenario": { "type": "string", "description": "Vraag-deltascenario, bv. \"Ruim'24 en Warm'24\"." },
-          "lpppd_doel": { "type": ["number", "null"], "description": "Doel liter per persoon per dag (lpppd) in 2040." },
-          "toelichting": { "type": "string" }
-        }
-      }
-    },
-
-    "clusters": {
-      "type": "array", "minItems": 1,
-      "items": {
-        "type": "object",
-        "required": ["id", "naam"],
-        "additionalProperties": false,
-        "properties": {
-          "id": { "$ref": "#/$defs/slug", "description": "Vast id. De converter vertaalt de drie Excel-spellingen ('Cluster Utrecht West', 'Utrecht West', 'Utrecht RM U') hiernaar." },
-          "naam": { "type": "string", "description": "Weergavenaam." }
-        }
-      }
-    },
-
-    "gemeenten": {
-      "description": "Koppeltabel gemeente → cluster. Bepaalt het cluster van een maatregel. v1: één cluster per gemeente.",
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": ["gemeente", "cluster"],
-        "additionalProperties": false,
-        "properties": {
-          "gemeente": { "type": "string" },
-          "cluster": { "$ref": "#/$defs/slug" },
-          "lat": { "type": ["number", "null"], "description": "Middelpunt, WGS84; alleen voor de kaart." },
-          "lon": { "type": ["number", "null"] },
-          "te_controleren": { "type": "boolean" }
-        }
-      }
-    },
-
-    "criteria": {
-      "description": "De kolomgroepen H–AP van 'Naratief N - winningen', in dezelfde volgorde.",
-      "type": "array", "minItems": 1,
-      "items": {
-        "type": "object",
-        "required": ["id", "naam", "groep"],
-        "additionalProperties": false,
-        "properties": {
-          "id": { "$ref": "#/$defs/slug" },
-          "naam": { "type": "string" },
-          "groep": { "enum": ["Assets", "Grondwaterkwantiteit", "Grondwaterkwaliteit", "Oppervlaktewaterkwaliteit"] },
-          "toelichting": { "type": "string", "description": "Koptekst uit de Excel." }
-        }
+        "schema_versie": { "const": 2 },
+        "datum_import": { "type": ["string", "null"], "format": "date" },
+        "bron": { "type": "string", "description": "Herkomst van de dataset." },
+        "voorbeelddata": { "type": "boolean", "description": "true = fictieve data; de tool toont dan het label 'Voorbeelddata'." }
       }
     },
 
     "winningen": {
+      "description": "Bestaande winningen. Huidig aanbod = som van de capaciteit; die blijft gelijk tot een maatregel (levering of afname) het verandert.",
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["id", "locatie", "cluster", "capaciteit"],
+        "required": ["naam", "cluster", "capaciteit"],
         "additionalProperties": false,
         "properties": {
-          "id": { "$ref": "#/$defs/slug", "description": "Uniek. Let op: 'Fledite ROL' komt twee keer voor met verschillend cluster." },
-          "locatie": { "type": "string", "description": "Kolom A 'Locatie'." },
-          "gemeente": { "type": ["string", "null"], "description": "Niet in het werkdocument; initieel afgeleid van de plaatsnaam." },
-          "type": { "type": "string", "description": "Kolom B 'Type'." },
-          "cluster": { "$ref": "#/$defs/slug", "description": "Kolom C 'Vitens Cluster (gebruik)'." },
-          "watersysteem": { "type": "string", "description": "Kolom D 'Watersysteem (winning)'." },
-          "vergunning": { "type": ["number", "null"], "minimum": 0, "description": "Kolom E 'Huidig aanbod' = inzetbare vergunning (vergunning minus bestuurlijke beperkingen), Mm³/j." },
-          "niet_inzetbaar": { "type": ["number", "null"], "minimum": 0, "description": "Aftrek die in de Excel in de formule van kolom F zit (bv. Bilthoven =E8-0,8), Mm³/j. Naam ter review: zie OPEN-VRAGEN." },
-          "capaciteit": { "type": "number", "minimum": 0, "description": "Kolom F 'Inzetbare productiecapaciteit', Mm³/j. Hiermee rekent het model." },
+          "naam": { "type": "string", "minLength": 1, "description": "Uniek. Maatregelen verwijzen hiernaar (veld 'winning')." },
+          "cluster": { "type": "string", "description": "Cluster dat het water gebruikt; moet in de lijst vraag voorkomen." },
+          "gemeente": { "type": "string" },
+          "capaciteit": { "type": "number", "minimum": 0, "description": "Inzetbare productiecapaciteit nu (Mm³/j)." },
           "lat": { "type": ["number", "null"] },
           "lon": { "type": ["number", "null"] },
-          "te_controleren": { "type": "boolean", "description": "true zolang gemeente/coördinaten benaderd zijn." },
           "toelichting": { "type": "string" }
-        }
-      }
-    },
-
-    "reductiefactoren": {
-      "description": "Per narratief-id → winning-id → criterium-id een rij [2030, 2040, 2050]. Waarde tussen 0 en 1; null of ontbrekend = leeg = 1. factor = MIN over criteria.",
-      "type": "object",
-      "propertyNames": { "pattern": "^[1-4]$" },
-      "additionalProperties": {
-        "type": "object",
-        "additionalProperties": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "array", "minItems": 3, "maxItems": 3,
-            "items": { "type": ["number", "null"], "minimum": 0, "maximum": 1 }
-          }
         }
       }
     },
 
     "vraag": {
-      "description": "Per narratief-id → cluster-id → jaar de drinkwatervraag in Mm³/j.",
-      "type": "object",
-      "propertyNames": { "pattern": "^[1-4]$" },
-      "additionalProperties": {
+      "description": "Drinkwatervraag per scenario × cluster, per 5 jaar (Mm³/j). Elk scenario heeft een rij voor elk cluster.",
+      "type": "array",
+      "items": {
         "type": "object",
-        "additionalProperties": {
-          "type": "object",
-          "required": ["2025", "2030", "2035", "2040", "2045", "2050"],
-          "additionalProperties": false,
-          "patternProperties": { "^20(25|30|35|40|45|50)$": { "type": "number", "minimum": 0 } }
+        "required": ["scenario", "cluster", "2025", "2030", "2035", "2040", "2045", "2050"],
+        "additionalProperties": false,
+        "properties": {
+          "scenario": { "type": "string", "minLength": 1, "description": "Naam van het vraagscenario; gelijke naam = zelfde scenario." },
+          "cluster": { "type": "string", "minLength": 1 },
+          "2025": { "type": "number", "minimum": 0 }, "2030": { "type": "number", "minimum": 0 }, "2035": { "type": "number", "minimum": 0 },
+          "2040": { "type": "number", "minimum": 0 }, "2045": { "type": "number", "minimum": 0 }, "2050": { "type": "number", "minimum": 0 },
+          "toelichting": { "type": "string", "description": "Uitgangspunten van het scenario; de tool toont de eerste niet-lege per scenario." }
         }
       }
     },
 
-    "maatregelen": { "type": "array", "items": { "$ref": "#/$defs/maatregel" } }
+    "maatregelen": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/maatregel" }
+    }
   },
 
   "$defs": {
-    "slug": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
-
-    "voetafdrukthema": {
+    "beoordeling": {
       "type": "object",
-      "required": ["beoordeling"],
       "additionalProperties": false,
       "properties": {
-        "beoordeling": { "type": "string" },
+        "beoordeling": { "type": ["string", "null"] },
         "toelichting": { "type": "string" },
         "bron": { "type": "string" }
       }
     },
-
     "maatregel": {
-      "title": "Maatregel-dataobject",
-      "description": "Eén maatregel. De tool kent geen hardgecodeerde maatregelen; elke aanlevering levert een schakelaar op. Beoordelingen komen van de informatiegevende partij en worden niet nagerekend.",
       "type": "object",
-      "required": ["id", "naam", "leverancier", "soort", "spoor", "narratieven", "standaard_aan", "cluster", "volume", "ingangsjaar", "meta"],
+      "required": ["id", "naam", "leverancier", "soort", "spoor", "standaard_aan", "cluster", "volume", "ingangsjaar", "meta"],
       "additionalProperties": false,
       "properties": {
-        "id": { "$ref": "#/$defs/slug", "description": "Uniek en stabiel; een nieuwe aanlevering met hetzelfde id overschrijft de oude." },
-        "naam": { "type": "string", "minLength": 1, "maxLength": 35, "description": "Label in de tool." },
-        "omschrijving": { "type": "string", "description": "Tooltip." },
-        "leverancier": { "enum": ["Vitens", "Oasen", "Waternet"], "default": "Vitens", "description": "Alleen Vitens telt in v1 mee in de opgave." },
-        "soort": { "enum": ["waterlevering", "waterbesparing"], "description": "Levering → aanbod omhoog; besparing → vraag omlaag." },
-        "spoor": { "enum": ["S0", "S1", "S2", "S3"], "description": "S0 besparing; S1 instandhouding; S2 vergroten op bestaande locatie; S3 nieuwe winlocatie." },
-        "narratieven": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "integer", "minimum": 1, "maximum": 4 }, "default": [1, 2, 3, 4] },
-        "standaard_aan": { "type": "boolean", "description": "Beginstand van de schakelaar." },
-        "status": { "enum": ["idee", "verkenning", "besloten", "in uitvoering", null], "description": "Alleen informatief." },
-
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+        "naam": { "type": "string", "minLength": 1 },
+        "omschrijving": { "type": "string" },
+        "leverancier": { "enum": ["Vitens", "Oasen", "Waternet"] },
+        "soort": { "enum": ["waterlevering", "waterbesparing", "afname"], "description": "waterlevering: aanbod omhoog; waterbesparing: vraag omlaag; afname: aanbod omlaag (bestaande winning levert minder)." },
+        "spoor": { "enum": ["S0", "S1", "S2", "S3"] },
+        "standaard_aan": { "type": "boolean" },
+        "status": { "enum": ["idee", "verkenning", "besloten", "in uitvoering", null] },
+        "winning": { "type": ["string", "null"], "description": "Naam van een bestaande winning (bij afname, S1, S2). Geeft cluster en kaartlocatie." },
+        "cluster": { "type": "string", "description": "Cluster uit de lijst vraag, of 'alle' (verdeeld naar vraagaandeel)." },
+        "gemeente": { "type": ["string", "null"] },
         "locatie": {
-          "description": "WGS84. Verplicht bij waterlevering; bij waterbesparing leeg toegestaan.",
-          "oneOf": [
-            { "type": "null" },
-            { "type": "object", "required": ["lat", "lon"], "additionalProperties": false,
-              "properties": { "lat": { "type": "number", "minimum": 50.7, "maximum": 53.6 }, "lon": { "type": "number", "minimum": 3.3, "maximum": 7.3 } } }
-          ]
+          "type": ["object", "null"],
+          "required": ["lat", "lon"],
+          "additionalProperties": false,
+          "properties": { "lat": { "type": "number" }, "lon": { "type": "number" } }
         },
-        "gemeente": { "type": ["string", "null"], "description": "Moet in de koppeltabel staan; bepaalt het cluster." },
-        "cluster": { "description": "Cluster-id, of 'alle' = alle clusters (verdeeld naar aandeel in de basisvraag).", "oneOf": [ { "const": "alle" }, { "$ref": "#/$defs/slug" } ] },
-        "bron": { "enum": ["grondwater", "oevergrondwater", "oppervlaktewater", "overig", null], "description": "Type water." },
-        "volume": { "type": "number", "minimum": 0, "description": "Mm³/j, altijd positief. Waterlevering: vergunde capaciteit. Waterbesparing: verlaagde vraag." },
-        "ruimtebeslag": { "type": ["number", "null"], "minimum": 0, "description": "ha" },
-        "stroomvraag": { "type": ["number", "null"], "minimum": 0, "description": "MW" },
-        "ingangsjaar": { "type": "integer", "minimum": 2025, "maximum": 2050, "description": "Vanaf dit jaar telt het volledige volume mee (stapfunctie)." },
-
+        "bron": { "enum": ["grondwater", "oevergrondwater", "oppervlaktewater", "overig", null] },
+        "volume": { "type": "number", "minimum": 0, "description": "Altijd positief (Mm³/j); de soort bepaalt de richting." },
+        "ruimtebeslag": { "type": ["number", "null"], "minimum": 0 },
+        "stroomvraag": { "type": ["number", "null"], "minimum": 0 },
+        "ingangsjaar": { "type": "integer", "minimum": 2025, "maximum": 2050 },
         "voetafdruk": {
-          "description": "Fysieke voetafdruk per thema, ingevuld door de informatiegevende partij. Verplicht bij waterlevering.",
           "type": ["object", "null"],
           "additionalProperties": false,
           "properties": {
-            "grondwater":         { "allOf": [ { "$ref": "#/$defs/voetafdrukthema" }, { "properties": { "beoordeling": { "enum": ["geen effect", "beperkt", "significant", "onbekend"] } } } ] },
-            "beschermingszone":   { "allOf": [ { "$ref": "#/$defs/voetafdrukthema" }, { "properties": { "beoordeling": { "enum": ["buiten", "in of grenst aan", "onbekend"] } } } ] },
-            "natura2000":         { "allOf": [ { "$ref": "#/$defs/voetafdrukthema" }, { "properties": { "beoordeling": { "enum": ["geen invloed", "mogelijk", "waarschijnlijk", "onbekend"] } } } ] },
-            "netcapaciteit":      { "allOf": [ { "$ref": "#/$defs/voetafdrukthema" }, { "properties": { "beoordeling": { "enum": ["voldoende", "krap", "onvoldoende", "onbekend"] } } } ] }
+            "grondwater": { "$ref": "#/$defs/beoordeling" },
+            "beschermingszone": { "$ref": "#/$defs/beoordeling" },
+            "natura2000": { "$ref": "#/$defs/beoordeling" },
+            "netcapaciteit": { "$ref": "#/$defs/beoordeling" }
           }
         },
-
         "overige_effecten": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "politiek": { "type": "string", "description": "Politieke overwegingen, vrije tekst." },
+            "politiek": { "type": "string" },
             "lijst": {
               "type": "array",
               "items": {
                 "type": "object",
-                "required": ["label", "beoordeling"],
                 "additionalProperties": false,
                 "properties": {
                   "label": { "type": "string" },
-                  "beoordeling": { "enum": ["kans", "aandacht", "knelpunt"] },
+                  "beoordeling": { "enum": ["kans", "aandacht", "knelpunt", null] },
                   "tekst": { "type": "string" }
                 }
               }
             }
           }
         },
-
         "meta": {
-          "description": "Bron en eigenaar: verplicht voor elke maatregel.",
           "type": "object",
           "required": ["aangeleverd_door", "datum", "bron"],
           "additionalProperties": false,
           "properties": {
-            "aangeleverd_door": { "type": "string", "minLength": 1, "description": "Persoon / organisatie." },
-            "datum": { "type": "string", "format": "date" },
-            "bron": { "type": "string", "minLength": 1, "description": "Document of systeem." },
-            "onvolledig": { "type": "boolean", "description": "true = bewust onvolledig aangeleverd (bv. omgezet uit het werkdocument): ontbrekende fysieke kenmerken en voetafdruk geven een waarschuwing in plaats van een blokkerende fout. Zie OPEN-VRAGEN D6." }
+            "aangeleverd_door": { "type": "string", "minLength": 1 },
+            "datum": { "type": "string" },
+            "bron": { "type": "string", "minLength": 1 }
           }
         }
-      },
-      "allOf": [
-        {
-          "if": { "properties": { "soort": { "const": "waterlevering" }, "meta": { "not": { "required": ["onvolledig"], "properties": { "onvolledig": { "const": true } } } } } },
-          "then": {
-            "required": ["locatie", "gemeente", "bron", "ruimtebeslag", "stroomvraag", "voetafdruk"],
-            "properties": {
-              "locatie": { "type": "object" },
-              "gemeente": { "type": "string" },
-              "bron": { "type": "string" },
-              "ruimtebeslag": { "type": "number" },
-              "stroomvraag": { "type": "number" },
-              "voetafdruk": { "type": "object", "required": ["grondwater", "beschermingszone", "natura2000", "netcapaciteit"] }
-            }
-          }
-        }
-      ]
+      }
     }
   }
 }

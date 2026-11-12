@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """Eenmalige converter: werkdocument (Excel) -> private/data.json + gevuld template.
 
+LET OP (12-11-2026): schrijft nog het OUDE formaat (schema 1: narratieven, criteria,
+reductiefactoren). De tool leest sinds schema 2 alleen winningen, vraag en maatregelen;
+de koppeling met het werkdocument is tijdelijk losgelaten (OPEN-VRAGEN J8).
+
 Gebruik (lokaal, vanuit de hoofdmap van de repo):
 
     pip install openpyxl

@@ -1,7 +1,7 @@
 // Paneel MAATREGELEN: één schakelaar per maatregel-dataobject, gegroepeerd per spoor.
 import { el } from '../dom.js';
 import { ALLE_CLUSTERS } from '../model.js';
-import { SPOREN, KEUZES, maatregelWeergave } from '../schema.js';
+import { SPOREN, SOORTEN, KEUZES, maatregelWeergave } from '../schema.js';
 import { attachTip, esc, f1, kv } from './tooltip.js';
 
 /** Schakelaar uit de mockup. */
@@ -13,17 +13,16 @@ export function switchBtn(on, label, cb, big) {
 
 let rijen = [];          // [{ m, row, val, sw }]
 
-/** Maatregelen die in dit narratief (en bij een clusterfilter: op dit cluster) spelen. */
+/** Maatregelen die (bij een clusterfilter) op dit cluster spelen. */
 function zichtbaar(app) {
-  const { narratief, cluster } = app.state;
-  return app.data.maatregelen.filter((m) => (m.narratieven ?? []).includes(narratief)
-    && (!cluster || m.cluster === cluster || m.cluster === ALLE_CLUSTERS));
+  const { cluster } = app.state;
+  return app.data.maatregelen.filter((m) => !cluster || m.cluster === cluster || m.cluster === ALLE_CLUSTERS);
 }
 
 function tip(app, m) {
   const r = app.resultaat().maatregelen[m.id], w = maatregelWeergave(m), jaar = app.state.jaar;
   const bijdrage = app.state.cluster ? r.perCluster[app.state.cluster] ?? 0 : r.volume;
-  const teken = m.soort === 'waterbesparing' ? '−' : '+';
+  const teken = SOORTEN[m.soort]?.teken ?? '';
   const stand = app.geblokkeerd.has(m.id) ? 'niet meegerekend: fouten in de aanlevering'
     : !r.teltMee ? 'niet meegerekend (v1)' : !r.aan ? 'uit' : bijdrage > 0 ? 'telt mee' : `nog niet: gaat in per ${m.ingangsjaar}`;
   return `<div class="th">${esc(m.naam)}</div>` + (w.omschrijving ? `<div class="tm">${esc(w.omschrijving)}</div>` : '')
@@ -35,13 +34,13 @@ function tip(app, m) {
     + (w.noten.length ? '<div class="sep"></div>' + w.noten.map((n) => `<div class="tm">${esc(n)}</div>`).join('') : '');
 }
 
-/** Bouw de lijst opnieuw (bij start en bij wisselen van narratief of cluster). */
+/** Bouw de lijst opnieuw (bij start en bij wisselen van cluster). */
 export function bouw(app) {
   const box = document.querySelector('#measRows');
   const lijst = zichtbaar(app);
   rijen = [];
   if (!lijst.length) {
-    box.replaceChildren(el('div', { class: 'leegte' }, app.data.maatregelen.length ? 'Geen maatregelen voor dit narratief' + (app.state.cluster ? ' en dit cluster.' : '.') : 'Nog geen maatregelen aangeleverd. ',
+    box.replaceChildren(el('div', { class: 'leegte' }, app.data.maatregelen.length ? 'Geen maatregelen voor dit cluster.' : 'Nog geen maatregelen aangeleverd. ',
       app.data.maatregelen.length ? null : el('a', { href: 'invoer.html', text: 'Naar Invoer' })));
     return;
   }
@@ -74,7 +73,7 @@ export function render(app) {
   for (const { m, row, val, sw, vast } of rijen) {
     const mr = r.maatregelen[m.id];
     const v = app.state.cluster ? mr.perCluster[app.state.cluster] ?? 0 : mr.volume;
-    val.textContent = (m.soort === 'waterbesparing' ? '−' : '+') + f1(v);
+    val.textContent = (SOORTEN[m.soort]?.teken ?? '') + f1(v);
     const aan = !vast && app.state.aan[m.id];
     row.classList.toggle('off', !aan || v <= 0);
     sw.setAttribute('aria-checked', String(!!aan));
