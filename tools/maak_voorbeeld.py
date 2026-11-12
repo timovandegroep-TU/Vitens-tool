@@ -20,11 +20,12 @@ CLUSTERS = {            # naam: (vraag 2025, groeigevoeligheid)
     'Utrecht Randmeren Gelderland': (14.6, 0.90),
     'Flevoland':                    (28.0, 1.20),
 }
+# Scenario's bevatten GEEN temperatuureffect: dat staat in de factoren (Klimaat).
 SCENARIOS = [           # naam, groei vraag 2025->2050 (gemiddeld), toelichting
-    ('Laag', -0.02, 'Fictief. CBS-prognose laag; verbruik daalt naar 120 l p.p.p.d.; klimaat zoals nu.'),
-    ('Midden (CBS)', 0.09, 'Fictief. CBS-prognose midden; verbruik 128 l p.p.p.d.; gematigde opwarming (+1 °C).'),
-    ('Hoog', 0.20, 'Fictief. CBS-prognose hoog; verbruik 130 l p.p.p.d.; gematigde opwarming (+1 °C).'),
-    ('Hoog + warm', 0.28, 'Fictief. CBS-prognose hoog; verbruik 132 l p.p.p.d.; warm en droog (+2 °C), meer vraag in droge zomers.'),
+    ('Laag', -0.02, 'Fictief. CBS-prognose laag; verbruik daalt naar 120 l p.p.p.d. Temperatuur: zie factoren.'),
+    ('Midden (CBS)', 0.09, 'Fictief. CBS-prognose midden; verbruik 128 l p.p.p.d. Temperatuur: zie factoren.'),
+    ('Hoog', 0.20, 'Fictief. CBS-prognose hoog; verbruik 130 l p.p.p.d. Temperatuur: zie factoren.'),
+    ('Zeer hoog', 0.25, 'Fictief. CBS-prognose hoog; verbruik stijgt naar 135 l p.p.p.d. Temperatuur: zie factoren.'),
 ]
 
 vraag = []
@@ -183,15 +184,20 @@ M = [
 
 # --------------------------------------------------------------- factoren
 # FICTIEF: invloeden op vraag of aanbod, instelbaar in de tool (schuif of schakelaar).
-def factor(naam, groep, werkt_op, bediening, effect, van, tot, beginstand, cluster='alle', winning='', toelichting=''):
-    return {'naam': naam, 'groep': groep, 'werkt_op': werkt_op, 'bediening': bediening, 'effect': effect,
+def factor(naam, groep, werkt_op, bediening, effect, van, tot, beginstand, cluster='alle', winning='', toelichting='', eenheid='Mm³/j'):
+    return {'naam': naam, 'groep': groep, 'werkt_op': werkt_op, 'bediening': bediening, 'effect': effect, 'eenheid': eenheid,
             'van': van, 'tot': tot, 'beginstand': beginstand, 'cluster': cluster, 'winning': winning,
             'toelichting': 'Fictief voorbeeld. ' + toelichting}
 
 
 FACTOREN = [
-    factor('Temperatuurstijging', 'Klimaat', 'vraag', 'schuif', 8.0, 2026, 2050, 50,
-           toelichting='Warmere, drogere zomers verhogen de jaar- en piekvraag.'),
+    # Klimaat, in procenten (fictief: ca. +3% jaarvraag per °C opwarming)
+    factor('Temperatuurstijging', 'Klimaat', 'vraag', 'schuif', 6.0, 2026, 2050, 50, eenheid='%',
+           toelichting='Jaarvraag +6% bij 100% (ca. +2 °C in 2050), +3% bij 50% (ca. +1 °C). Lineair opbouwend vanaf 2026.'),
+    factor('Droge, hete zomers', 'Klimaat', 'vraag', 'schakelaar', 3.0, 2030, 2030, 0, eenheid='%',
+           toelichting='Vaker droge, hete zomers: jaarvraag +3% vanaf 2030 (bovenop de temperatuurstijging).'),
+    factor('Minder grondwateraanvulling', 'Klimaat', 'aanbod', 'schuif', 4.0, 2030, 2050, 25, eenheid='%',
+           toelichting='Hogere verdamping vermindert de aanvulling: capaciteit van alle winningen −4% bij 100%.'),
     factor('PFAS-normaanscherping', 'Waterkwaliteit', 'aanbod', 'schuif', 6.0, 2027, 2035, 50,
            toelichting='Strengere normen maken bronnen deels onbruikbaar zonder extra zuivering.'),
     factor('PFAS-incident Veenendaal', 'Waterkwaliteit', 'aanbod', 'schakelaar', 3.0, 2030, 2030, 0, cluster='Utrecht Zuid', winning='Veenendaal',

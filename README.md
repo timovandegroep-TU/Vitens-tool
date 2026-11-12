@@ -25,7 +25,7 @@ Alle data past in één Excel-bestand met vier tabbladen. Op `invoer.html` staat
 |---|---|---|
 | **Winningen** | bestaande winning: locatie, type, cluster, watersysteem, huidig aanbod, inzetbare productiecapaciteit (Mm³/j), gemeente, lat/lon | Het huidige aanbod is de som van de inzetbare productiecapaciteit. De eerste zes kolommen staan in de volgorde van het werkdocument: dat blok kunt u in één keer plakken. |
 | **Vraag** | scenario × cluster: vraag in 2025, 2030, … 2050 | Linksboven kies je een scenario; het scenario verandert alleen de vraag. |
-| **Factoren** | factor die de vraag verhoogt of het aanbod verlaagt (temperatuurstijging, PFAS, verzilting): effect in Mm³/j, ingroei van–tot, schuif of schakelaar, cluster/alle/winning | In het scenariopaneel stelt de gebruiker elke factor in. Factoren tellen mee in de opgave. |
+| **Factoren** | factor die de vraag verhoogt of het aanbod verlaagt (temperatuurstijging, PFAS, verzilting): effect in Mm³/j of %, ingroei van–tot, schuif of schakelaar, cluster/alle/winning | In het scenariopaneel stelt de gebruiker elke factor in. Factoren tellen mee in de opgave. |
 | **Maatregelen** | maatregel | Elke maatregel wordt een schakelaar in de visualisatie. |
 
 1. Vul de tabbladen en klik **Importeren…**. Na het importeren ziet u een samenvatting met het huidige aanbod en de totale vraag per scenario.
@@ -38,7 +38,8 @@ Wilt u eerst zien hoe het werkt, klik dan **Voorbeelddata laden**: dat laadt `da
 ### Hoe de tool rekent
 
 - **Vraag** = de reeks van het gekozen scenario, per cluster, plus de factoren op de vraag. Tussen de 5-jaarspunten wordt lineair geïnterpoleerd.
-- **Factor** = effect × stand (0–100%) × ingroei (0 vóór het beginjaar, 100% vanaf het eindjaar, lineair daartussen).
+- **Factor** = effect × stand (0–100%) × ingroei (0 vóór het beginjaar, 100% vanaf het eindjaar, lineair daartussen). Het effect is een vast volume in Mm³/j of een percentage: van de vraag (vraagfactor) of van de capaciteit (aanbodfactor).
+- **Temperatuur** zit niet in de vraagscenario's, maar in de factoren onder Klimaat.
 - **Bestaand aanbod** = capaciteit van de winningen, gelijk in elk jaar, min de afnames die aan staan en de factoren op het aanbod.
 - **Aanbod** = bestaand aanbod + waterleveringen die aan staan.
 - **Opgave** = vraag zonder besparing − bestaand aanbod.

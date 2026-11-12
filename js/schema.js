@@ -19,6 +19,7 @@ export const KEUZES = {
   overigEffect: ['kans', 'aandacht', 'knelpunt'],
   werktOp: ['vraag', 'aanbod'],
   bediening: ['schuif', 'schakelaar'],
+  eenheid: ['Mm³/j', '%'],
 };
 
 /** Wat een soort doet: op welke kant van de opgave en met welk teken. */
@@ -94,7 +95,8 @@ export const TABELLEN = [
       { veld: 'groep', label: 'Groep', type: 'tekst', uitleg: 'Bv. Klimaat, Waterkwaliteit, Wetgeving. Alleen voor de indeling in de tool.' },
       { veld: 'werkt_op', label: 'Werkt op', type: 'keuze', keuzes: KEUZES.werktOp, uitleg: 'vraag = de vraag gaat omhoog; aanbod = het aanbod gaat omlaag.' },
       { veld: 'bediening', label: 'Bediening', type: 'keuze', keuzes: KEUZES.bediening, uitleg: 'schuif = instelbaar van 0 tot 100% van het effect; schakelaar = aan (100%) of uit.' },
-      { veld: 'effect', label: 'Effect', type: 'getal', eenheid: 'Mm³/j', uitleg: 'Effect bij volle stand (100%) zodra de ingroei klaar is. Altijd positief; "werkt op" bepaalt de richting.' },
+      { veld: 'effect', label: 'Effect', type: 'getal', uitleg: 'Effect bij volle stand (100%) zodra de ingroei klaar is, in de eenheid van de volgende kolom. Altijd positief; "werkt op" bepaalt de richting.' },
+      { veld: 'eenheid', label: 'Eenheid', type: 'keuze', keuzes: KEUZES.eenheid, uitleg: 'Mm³/j = vast volume. % = percentage van de vraag in dat jaar (vraagfactor) of van de capaciteit (aanbodfactor), van het cluster, van alle clusters of van de winning. Leeg = Mm³/j.' },
       { veld: 'van', label: 'Ingroei van', type: 'getal', uitleg: 'Jaar waarin het effect begint (0%).' },
       { veld: 'tot', label: 'Ingroei tot', type: 'getal', uitleg: 'Jaar waarin het volle effect is bereikt. Daartussen lineair. Gelijk aan "van" = in één keer.' },
       { veld: 'beginstand', label: 'Beginstand', type: 'getal', eenheid: '%', uitleg: 'Stand bij het openen van de tool: 0–100. Schakelaar: 0 = uit, anders aan. Leeg = 100.' },
@@ -207,7 +209,11 @@ export function valideer(data) {
       if (leeg(f[veld])) fout(F, rij, veld, 'Verplicht veld is leeg.');
       else if (!opties.includes(f[veld])) fout(F, rij, veld, `"${f[veld]}" is geen geldige keuze (${opties.join(' / ')}).`);
     }
-    if (getal(F, rij, 'effect', f.effect) && f.effect < 0) fout(F, rij, 'effect', 'Effect is negatief; vul een positief getal in. "Werkt op" bepaalt de richting.');
+    if (!leeg(f.eenheid) && !KEUZES.eenheid.includes(f.eenheid)) fout(F, rij, 'eenheid', `"${f.eenheid}" is geen geldige keuze (${KEUZES.eenheid.join(' / ')}).`);
+    if (getal(F, rij, 'effect', f.effect)) {
+      if (f.effect < 0) fout(F, rij, 'effect', 'Effect is negatief; vul een positief getal in. "Werkt op" bepaalt de richting.');
+      else if (f.eenheid === '%' && f.effect > 100) fout(F, rij, 'effect', `Effect ${f.effect}% is meer dan 100%.`);
+    }
     const vanOk = getal(F, rij, 'van', f.van) && (isJaar(f.van) || (fout(F, rij, 'van', `${f.van} is geen jaartal van ${JAAR_MIN - 1} t/m ${JAAR_MAX}.`), false));
     const totOk = getal(F, rij, 'tot', f.tot) && (isJaar(f.tot) || (fout(F, rij, 'tot', `${f.tot} is geen jaartal van ${JAAR_MIN - 1} t/m ${JAAR_MAX}.`), false));
     if (vanOk && totOk && f.tot < f.van) fout(F, rij, 'tot', '"Ingroei tot" ligt vóór "ingroei van".');

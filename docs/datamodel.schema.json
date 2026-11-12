@@ -186,7 +186,15 @@
           "effect": {
             "type": "number",
             "minimum": 0,
-            "description": "Mm³/j bij stand 100% na de ingroei."
+            "description": "Effect bij stand 100% na de ingroei, in de eenheid van \"eenheid\"."
+          },
+          "eenheid": {
+            "enum": [
+              "Mm³/j",
+              "%",
+              null
+            ],
+            "description": "% = van de vraag (vraagfactor) of de capaciteit (aanbodfactor). Leeg = Mm³/j."
           },
           "van": {
             "type": "integer"

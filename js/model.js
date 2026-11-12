@@ -94,8 +94,15 @@ export function standaardStanden(data) {
   }));
 }
 
-/** Effect van een factor in Mm³/j in `jaar` bij stand 0..1 (altijd ≥ 0; de kant bepaalt + of −). */
-export const factorEffect = (f, stand, jaar) => getal(f.effect) * stand * ingroei(getal(f.van), getal(f.tot), jaar);
+/**
+ * Effect van een factor in `jaar` bij stand 0..1 (altijd ≥ 0; de kant bepaalt + of −).
+ * Eenheid Mm³/j: het getal zelf. Eenheid %: een fractie (0,06 = 6%) die de aanroeper
+ * nog met de vraag of capaciteit vermenigvuldigt.
+ */
+export const factorEffect = (f, stand, jaar) => getal(f.effect) * (isProcent(f) ? 0.01 : 1) * stand * ingroei(getal(f.van), getal(f.tot), jaar);
+
+/** Is het effect van de factor een percentage (van de vraag of van de capaciteit)? */
+export const isProcent = (f) => f.eenheid === '%';
 
 /** De winning waar een aanbodfactor of maatregel naar verwijst (naam + bij voorkeur hetzelfde cluster). */
 export function zoekWinning(data, naam, cluster) {
@@ -173,12 +180,16 @@ export function bereken(data, scenario, jaar, aan = {}, standen = {}) {
     if (!tekst(f.naam)) continue;
     const stand = standen[f.naam] ?? standaard[f.naam] ?? 0;
     const opVraag = f.werkt_op === 'vraag';
-    const effect = factorEffect(f, stand, jaar);
+    const e = factorEffect(f, stand, jaar);                 // Mm³/j, of een fractie bij %
+    const pct = isProcent(f);
+    const basis = opVraag ? scenarioVraag : capaciteit;     // waar een percentage van genomen wordt
     const w = opVraag ? null : zoekWinning(data, f.winning, f.cluster);
     let perCluster;
-    if (w) perCluster = { [w.cluster]: effect };
-    else if (f.cluster === ALLE_CLUSTERS || !tekst(f.cluster)) perCluster = verdeelNaarAandeel(effect, opVraag ? scenarioVraag : capaciteit);
-    else perCluster = f.cluster in fVraag ? { [f.cluster]: effect } : {};
+    if (w) perCluster = { [w.cluster]: pct ? e * getal(w.capaciteit) : e };
+    else if (f.cluster === ALLE_CLUSTERS || !tekst(f.cluster)) {
+      perCluster = pct ? Object.fromEntries(Object.entries(basis).map(([c, v]) => [c, e * v])) : verdeelNaarAandeel(e, basis);
+    } else perCluster = f.cluster in fVraag ? { [f.cluster]: pct ? e * basis[f.cluster] : e } : {};
+    const effect = som(perCluster);
     for (const [c, v] of Object.entries(perCluster)) (opVraag ? fVraag : fAanbod)[c] += v;
     factoren[f.naam] = { stand, effect, werktOp: opVraag ? 'vraag' : 'aanbod', winning: w?.naam ?? null, cluster: w?.cluster ?? f.cluster, perCluster };
   }

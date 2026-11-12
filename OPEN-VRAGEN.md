@@ -11,7 +11,8 @@ Gekozen in overleg: per factor een schuif of schakelaar; effect in Mm³/j bij vo
 | # | Vraag | Waar | Tijdelijke aanname |
 |---|---|---|---|
 | K1 | Horen factoren bij de uitgangssituatie of bij de maatregelen? | `js/model.js` | Uitgangssituatie: een vraagfactor zit in "vraag zonder besparing", een aanbodfactor in het bestaand aanbod. Ze vergroten dus de opgave; maatregelen moeten dat goedmaken. |
-| K2 | Dubbeltelling: het vraagscenario "Hoog + warm" bevat al een klimaateffect, de factor Temperatuurstijging ook. | dummydata | Laten staan; de deskundige moet kiezen waar klimaat zit (in het scenario of als factor). |
+| K2 | Dubbeltelling: een vraagscenario met klimaateffect plus de factor Temperatuurstijging. | dummydata | Opgelost (besluit opdrachtgever): de vraagscenario's bevatten geen temperatuur meer; "Hoog + warm" heet nu "Zeer hoog" (alleen meer inwoners en verbruik). Temperatuur zit alleen in de factoren onder Klimaat. |
+| K8 | Factoren in procenten. | kolom "eenheid" | % van de vraag van het gekozen scenario in dat jaar (vraagfactor) of van de capaciteit (aanbodfactor), van het cluster, van alle clusters of van de winning. Dummy: temperatuur +6% bij 100% (ca. +2 °C, fictief +3% per °C), droge zomers +3%, minder grondwateraanvulling −4% van de capaciteit. |
 | K3 | Hoe verdeel je een factor op "alle"? | `bereken` | Vraagfactor naar aandeel in de vraag van het scenario, aanbodfactor naar aandeel in de capaciteit. |
 | K4 | Afname door een factor op één winning kan groter worden dan de capaciteit van die winning. | weergave Winningen | Het rekenmodel trekt het volle effect af van het cluster; de weergave Winningen toont maximaal 100%. |
 | K5 | Waar in de visualisatie? | paneel Scenario | Vraagscenario's als chips bovenaan, factoren eronder per groep, scrollbaar. De "+ factor"-knop uit de mockup komt niet terug: factoren komen uit de invoer. |
@@ -24,7 +25,7 @@ Besluit opdrachtgever: de data uit het werkdocument (narratieven, criteria, redu
 
 | # | Vraag | Waar | Tijdelijke aanname |
 |---|---|---|---|
-| J1 | Welke vraagscenario's komen er, en op welke bronnen (CBS-variant, verbruik per persoon, klimaat)? | tabel Vraag | Dummydata met vier scenario's: Laag, Midden (CBS), Hoog, Hoog + warm. Waarden verzonnen, orde van grootte als het werkdocument. |
+| J1 | Welke vraagscenario's komen er, en op welke bronnen (CBS-variant, verbruik per persoon, klimaat)? | tabel Vraag | Dummydata met vier scenario's: Laag, Midden (CBS), Hoog, Zeer hoog (zonder temperatuur; zie K2). Waarden verzonnen, orde van grootte als het werkdocument. |
 | J2 | Wie levert de vraagreeks per cluster aan, en per hoeveel jaar? | tabel Vraag | Per 5 jaar (2025–2050), per cluster; tussenjaren lineair. |
 | J3 | Is een afname (sluiting, lagere vergunning, einde levensduur) een maatregel die je aan en uit kunt zetten, of een vast gegeven? | soort "afname" | Een maatregel, standaard aan, in spoor S1. Telt mee in het **bestaand aanbod** en dus in de opgave, niet in de "bijdrage" van maatregelen. Uitzetten = laten zien wat er gebeurt als de afname niet doorgaat. |
 | J4 | Opgave en dekking met afnames. | `js/model.js` | Opgave = vraag zonder besparing − bestaand aanbod (capaciteit − afnames). Gedekt = (besparing + extra aanbod) ÷ opgave. |

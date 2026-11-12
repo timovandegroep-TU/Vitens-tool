@@ -402,7 +402,7 @@
    "2040": 45.85,
    "2045": 45.66,
    "2050": 45.48,
-   "toelichting": "Fictief. CBS-prognose laag; verbruik daalt naar 120 l p.p.p.d.; klimaat zoals nu."
+   "toelichting": "Fictief. CBS-prognose laag; verbruik daalt naar 120 l p.p.p.d. Temperatuur: zie factoren."
   },
   {
    "scenario": "Laag",
@@ -457,7 +457,7 @@
    "2040": 49.41,
    "2045": 50.27,
    "2050": 51.1,
-   "toelichting": "Fictief. CBS-prognose midden; verbruik 128 l p.p.p.d.; gematigde opwarming (+1 °C)."
+   "toelichting": "Fictief. CBS-prognose midden; verbruik 128 l p.p.p.d. Temperatuur: zie factoren."
   },
   {
    "scenario": "Midden (CBS)",
@@ -512,7 +512,7 @@
    "2040": 52.96,
    "2045": 54.87,
    "2050": 56.73,
-   "toelichting": "Fictief. CBS-prognose hoog; verbruik 130 l p.p.p.d.; gematigde opwarming (+1 °C)."
+   "toelichting": "Fictief. CBS-prognose hoog; verbruik 130 l p.p.p.d. Temperatuur: zie factoren."
   },
   {
    "scenario": "Hoog",
@@ -559,58 +559,58 @@
    "toelichting": ""
   },
   {
-   "scenario": "Hoog + warm",
+   "scenario": "Zeer hoog",
    "cluster": "Utrecht West",
    "2025": 46.5,
-   "2030": 49.86,
-   "2035": 52.78,
-   "2040": 55.54,
-   "2045": 58.22,
-   "2050": 60.82,
-   "toelichting": "Fictief. CBS-prognose hoog; verbruik 132 l p.p.p.d.; warm en droog (+2 °C), meer vraag in droge zomers."
+   "2030": 49.5,
+   "2035": 52.11,
+   "2040": 54.57,
+   "2045": 56.96,
+   "2050": 59.29,
+   "toelichting": "Fictief. CBS-prognose hoog; verbruik stijgt naar 135 l p.p.p.d. Temperatuur: zie factoren."
   },
   {
-   "scenario": "Hoog + warm",
+   "scenario": "Zeer hoog",
    "cluster": "Utrecht Zuid",
    "2025": 16.6,
-   "2030": 17.47,
-   "2035": 18.23,
-   "2040": 18.95,
-   "2045": 19.64,
-   "2050": 20.32,
+   "2030": 17.38,
+   "2035": 18.06,
+   "2040": 18.7,
+   "2045": 19.32,
+   "2050": 19.92,
    "toelichting": ""
   },
   {
-   "scenario": "Hoog + warm",
+   "scenario": "Zeer hoog",
    "cluster": "Utrecht Randmeren Utrecht",
    "2025": 32.5,
-   "2030": 34.64,
-   "2035": 36.49,
-   "2040": 38.25,
-   "2045": 39.94,
-   "2050": 41.6,
+   "2030": 34.41,
+   "2035": 36.06,
+   "2040": 37.63,
+   "2045": 39.15,
+   "2050": 40.62,
    "toelichting": ""
   },
   {
-   "scenario": "Hoog + warm",
+   "scenario": "Zeer hoog",
    "cluster": "Utrecht Randmeren Gelderland",
    "2025": 14.6,
-   "2030": 15.46,
-   "2035": 16.21,
-   "2040": 16.92,
-   "2045": 17.61,
-   "2050": 18.28,
+   "2030": 15.37,
+   "2035": 16.04,
+   "2040": 16.67,
+   "2045": 17.29,
+   "2050": 17.89,
    "toelichting": ""
   },
   {
-   "scenario": "Hoog + warm",
+   "scenario": "Zeer hoog",
    "cluster": "Flevoland",
    "2025": 28.0,
-   "2030": 30.21,
-   "2035": 32.12,
-   "2040": 33.94,
-   "2045": 35.7,
-   "2050": 37.41,
+   "2030": 29.97,
+   "2035": 31.68,
+   "2040": 33.3,
+   "2045": 34.87,
+   "2050": 36.4,
    "toelichting": ""
   }
  ],
@@ -620,13 +620,42 @@
    "groep": "Klimaat",
    "werkt_op": "vraag",
    "bediening": "schuif",
-   "effect": 8.0,
+   "effect": 6.0,
+   "eenheid": "%",
    "van": 2026,
    "tot": 2050,
    "beginstand": 50,
    "cluster": "alle",
    "winning": "",
-   "toelichting": "Fictief voorbeeld. Warmere, drogere zomers verhogen de jaar- en piekvraag."
+   "toelichting": "Fictief voorbeeld. Jaarvraag +6% bij 100% (ca. +2 °C in 2050), +3% bij 50% (ca. +1 °C). Lineair opbouwend vanaf 2026."
+  },
+  {
+   "naam": "Droge, hete zomers",
+   "groep": "Klimaat",
+   "werkt_op": "vraag",
+   "bediening": "schakelaar",
+   "effect": 3.0,
+   "eenheid": "%",
+   "van": 2030,
+   "tot": 2030,
+   "beginstand": 0,
+   "cluster": "alle",
+   "winning": "",
+   "toelichting": "Fictief voorbeeld. Vaker droge, hete zomers: jaarvraag +3% vanaf 2030 (bovenop de temperatuurstijging)."
+  },
+  {
+   "naam": "Minder grondwateraanvulling",
+   "groep": "Klimaat",
+   "werkt_op": "aanbod",
+   "bediening": "schuif",
+   "effect": 4.0,
+   "eenheid": "%",
+   "van": 2030,
+   "tot": 2050,
+   "beginstand": 25,
+   "cluster": "alle",
+   "winning": "",
+   "toelichting": "Fictief voorbeeld. Hogere verdamping vermindert de aanvulling: capaciteit van alle winningen −4% bij 100%."
   },
   {
    "naam": "PFAS-normaanscherping",
@@ -634,6 +663,7 @@
    "werkt_op": "aanbod",
    "bediening": "schuif",
    "effect": 6.0,
+   "eenheid": "Mm³/j",
    "van": 2027,
    "tot": 2035,
    "beginstand": 50,
@@ -647,6 +677,7 @@
    "werkt_op": "aanbod",
    "bediening": "schakelaar",
    "effect": 3.0,
+   "eenheid": "Mm³/j",
    "van": 2030,
    "tot": 2030,
    "beginstand": 0,
@@ -660,6 +691,7 @@
    "werkt_op": "aanbod",
    "bediening": "schuif",
    "effect": 5.0,
+   "eenheid": "Mm³/j",
    "van": 2030,
    "tot": 2050,
    "beginstand": 30,

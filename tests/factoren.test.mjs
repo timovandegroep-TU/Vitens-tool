@@ -72,3 +72,24 @@ test('validatie factoren', () => {
   for (const x of ['a:naam', 'b:werkt_op', 'b:bediening', 'c:effect', 'c:tot', 'c:beginstand', 'd:cluster', 'e:winning', 'f:winning']) assert.ok(fout.includes(x), x);
   assert.deepEqual(valideer(normaliseer(kopie(voorbeeld))).filter((m) => m.tabel === 'Factoren'), []);
 });
+
+test('factor in procenten: van de vraag van het scenario, de capaciteit van een cluster of van een winning', () => {
+  const w = basis.winningen.find((x) => x.capaciteit >= 5);
+  const d = met(
+    F({ naam: 'temp', eenheid: '%', effect: 6, van: 2030, tot: 2030 }),                                         // vraag, alle
+    F({ naam: 'cl', eenheid: '%', werkt_op: 'aanbod', effect: 10, van: 2030, tot: 2030, cluster: CL[0] }),        // aanbod, cluster
+    F({ naam: 'win', eenheid: '%', werkt_op: 'aanbod', effect: 50, van: 2030, tot: 2030, cluster: '', winning: w.naam }),
+  );
+  const b = bereken(leeg, S, 2040), m = bereken(d, S, 2040, {}, { temp: 0.5, cl: 1, win: 1 });
+  bijna(m.factoren.temp.effect, 0.03 * b.totaal.vraag0, 'vraag: 6% × stand 50% = 3% van de vraag');
+  for (const c of CL) bijna(m.factoren.temp.perCluster[c], 0.03 * b.clusters[c].vraag0, `vraag per cluster ${c}`);
+  bijna(m.factoren.cl.effect, 0.1 * b.clusters[CL[0]].capaciteit, 'aanbod: 10% van de capaciteit van het cluster');
+  bijna(m.factoren.win.effect, 0.5 * w.capaciteit, 'aanbod: 50% van de winning');
+  // ander scenario met hogere vraag: groter effect in Mm³/j
+  const S2 = scenarios(basis).at(-1).id;
+  assert.ok(bereken(d, S2, 2050, {}, { temp: 1 }).factoren.temp.effect > bereken(d, S, 2050, {}, { temp: 1 }).factoren.temp.effect);
+  // validatie: meer dan 100% of een onbekende eenheid
+  const fout = valideer(met(F({ naam: 'x', eenheid: '%', effect: 120 }), F({ naam: 'y', eenheid: 'liter' })))
+    .filter((x) => x.niveau === 'fout').map((x) => `${x.rij}:${x.veld}`);
+  assert.ok(fout.includes('x:effect') && fout.includes('y:eenheid'));
+});

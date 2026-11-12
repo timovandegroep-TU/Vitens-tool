@@ -2,7 +2,7 @@
 // Een scenario verandert alleen de vraag. Een factor verhoogt de vraag of verlaagt het aanbod;
 // beide horen bij de uitgangssituatie en tellen mee in de opgave.
 import { el } from '../dom.js';
-import { VRAAGJAREN, JAAR_MIN, scenarios, ingroei } from '../model.js';
+import { VRAAGJAREN, JAAR_MIN, scenarios, ingroei, isProcent } from '../model.js';
 import { switchBtn } from './maatregelen.js';
 import { attachTip, esc, f1, kv } from './tooltip.js';
 
@@ -26,7 +26,7 @@ function factorTip(app, f) {
   const plek = r.winning ? `winning ${r.winning} (${r.cluster})` : !r.cluster || r.cluster === 'alle' ? 'alle clusters (naar aandeel)' : r.cluster;
   return `<div class="th">${esc(f.naam)}</div>` + (f.toelichting ? `<div class="tm">${esc(f.toelichting)}</div>` : '')
     + kv('Werkt op', f.werkt_op === 'vraag' ? 'vraag (omhoog)' : 'aanbod (omlaag)')
-    + kv('Effect bij 100%', `${teken}${f1(f.effect ?? 0)} Mm³/j`)
+    + kv('Effect bij 100%', isProcent(f) ? `${teken}${f1(f.effect ?? 0)}% van de ${f.werkt_op === 'vraag' ? 'vraag' : 'capaciteit'}` : `${teken}${f1(f.effect ?? 0)} Mm³/j`)
     + kv('Ingroei', f.van === f.tot ? `vanaf ${f.tot}` : `${f.van} → ${f.tot}`)
     + kv('Waar', plek) + kv('Stand', stand)
     + '<div class="sep"></div>' + kv(`Effect in ${jaar}`, `${teken}${f1(r.effect)} Mm³/j`)
