@@ -29,7 +29,9 @@ let timer = null;
 function gewijzigd({ opnieuw = false } = {}) {
   bewaar(data);
   clearTimeout(timer);
-  if (opnieuw) { hervalideer(); renderPaneel(); } else timer = setTimeout(hervalideer, 250);
+  // Bij opnieuw tekenen (rij toegevoegd of verwijderd) eerst de tabel tekenen en dan pas
+  // markeren: de oude tabel heeft dan meer of minder rijen dan de lijst.
+  if (opnieuw) { meldingen = valideer(data); renderTabs(); renderValidatie(); renderPaneel(); } else timer = setTimeout(hervalideer, 250);
 }
 function hervalideer() {
   meldingen = valideer(data);
